@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: '100vh'
   },
   title: {
     flexGrow: 1,
@@ -22,16 +23,15 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
   },
   contentTitle: {
-    padding: '70px',
-    marginTop: '40px'
+    marginTop: '150px',
+    textAlign: 'center',
   },
   content: {
     flexGrow: 1,
-    marginTop: '50px',
-    marginBottom: '5px',
+    marginBottom: '60px',
     textAlign: 'center',
-    color: 'grey'
-  },
+    color: 'grey',
+  }
 }));
 
 export default function Home() {
