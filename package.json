@@ -1,7 +1,7 @@
 {
-  "name": "my-boilerplate",
+  "name": "Piper-Chat",
   "version": "1.0.0",
-  "description": "A boilerplate for my full stack projects using node.js, express.js, mongoDB Atlas  and react.js & redux",
+  "description": "Chat App using MERN stack and Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server",
@@ -9,18 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jashmehta3300/boiler-plate.git"
+    "url": "git+https://github.com/jashmehta3300/Piper-Char.git"
   },
   "author": "Jash Mehta",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jashmehta3300/My-Boilerplate"
+    "url": "https://github.com/jashmehta3300/Piper-Chat"
   },
-  "homepage": "https://github.com/jashmehta3300/My-Boilerplate#readme",
+  "homepage": "https://github.com/jashmehta3300/Piper-Chat#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

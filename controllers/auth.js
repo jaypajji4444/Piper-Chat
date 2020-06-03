@@ -222,3 +222,26 @@ const sendTokenResponse = (user, statusCode, res) => {
       token
     });
 };
+
+// @desc      Send Invite
+// @route     POST /api/v1/auth/sendInvite
+// @access    Public
+exports.sendInvite = asyncHandler(async (req, res, next) =>{
+
+  // Create reset url
+  const resetUrl = 'http://localhost:3000/'
+
+  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`
+
+  try {
+    await sendEmail({
+      email: `${req.body.email}`,
+      subject: 'Invite for Piper Chat',
+      message
+    });
+    res.status(200).json({ success: true, data: 'Email sent' });
+  } catch (err) {
+    console.log(err);
+    return next(new ErrorResponse('Email could not be sent', 500));
+  }
+});
