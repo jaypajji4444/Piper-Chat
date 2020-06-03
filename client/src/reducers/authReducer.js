@@ -1,17 +1,18 @@
-import { DEFAULT_VALUE } from '../actions/types'
+import { LOGGEDIN_VALUE } from '../actions/types'
 
 const initialState = {
     //set your initial state
-    value: null
+    loggedIn: false, 
+    authToken: ''
 }
 
 export default ( state = initialState, action ) => {   
     switch(action.type){
-        case DEFAULT_VALUE:
+        case LOGGEDIN_VALUE:
             return {
                 ...state,
-                value : "default"
-            }
+                loggedIn: true
+            };
         default:
             return state
     }
