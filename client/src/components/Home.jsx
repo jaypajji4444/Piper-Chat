@@ -49,8 +49,7 @@ export default function Home() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    const data = {email: `${mailId}`}
+    const data = {email:mailId.email}
     const reqBody = JSON.stringify(data)
 
     fetch('http://localhost:5000/api/v1/auth/sendInvite', {
@@ -58,15 +57,14 @@ export default function Home() {
       body: reqBody,
       headers: {
         'Content-Type': 'application/json',
-      },
+      }
     })
-      .then((resData) => {
-        console.log(resData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+.then(res=>res.json())
+.then(resData=>console.log(resData))
+.catch(err=>console.log(err))    
+  
   }
+
 
   return (
     <div className={classes.root}>
@@ -94,7 +92,7 @@ export default function Home() {
               required
               id="outlined-required"
               label="Email id"
-              defaultValue="johndoe@gmail.com"
+              
               variant="outlined"
               fullWidth="true"
               onChange={handleChange('email')}

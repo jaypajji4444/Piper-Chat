@@ -23,6 +23,6 @@ router.put('/updatedetails', protect, updateDetails);
 router.put('/updatepassword', protect, updatePassword);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resettoken', resetPassword);
-router.post('/invite', sendInvite);
+router.post('/sendInvite', sendInvite);
 
 module.exports = router;
