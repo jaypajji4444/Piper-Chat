@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Register(props) {
   const classes = useStyles();
-
+  let history=useHistory()
   const [values, setValues] = React.useState({
     name: '',
     email: '',
@@ -96,6 +97,8 @@ function Register(props) {
         console.log(data);
         if (data.success === true) {
             notify('  Registration Successful!!!', 'info');
+            console.log("hi")
+            history.push("/login")
         } else {
             notify('  Incorrect details :(', 'error');
         }

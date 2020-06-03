@@ -27,7 +27,7 @@ function App() {
       <BrowserRouter>
         <React.Fragment>
             <Switch>
-              <Route path="/" component={Home} exact />
+              <Route path="/" component={Register} exact />
               <Layout>
                 <Route path="/register" component={Register} exact />
                 <Route path="/login" component={Login} exact />

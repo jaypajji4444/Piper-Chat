@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Login(props) {
+function Login({loginUser}) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
