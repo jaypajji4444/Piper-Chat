@@ -229,9 +229,9 @@ const sendTokenResponse = (user, statusCode, res) => {
 exports.sendInvite = asyncHandler(async (req, res, next) =>{
 
   // Create reset url
-  const resetUrl = 'http://localhost:3000/'
+  const resetUrl = 'http://localhost:3000/SignUp'
 
-  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`
+  const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
 
   try {
     await sendEmail({

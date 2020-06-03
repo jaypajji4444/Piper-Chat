@@ -1,3 +1,3 @@
 // all your action types go here
 
-export const DEFAULT_VALUE = 'DEFAULT_VALUE';
+export const LOGGEDIN_VALUE = 'LOGGEDIN_VALUE';

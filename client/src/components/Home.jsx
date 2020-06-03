@@ -8,10 +8,12 @@ import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: '100vh'
   },
   title: {
     flexGrow: 1,
@@ -22,24 +24,53 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
   },
   contentTitle: {
-    padding: '70px',
-    marginTop: '40px'
+    marginTop: '150px',
+    textAlign: 'center',
   },
   content: {
     flexGrow: 1,
-    marginTop: '50px',
-    marginBottom: '5px',
+    marginBottom: '60px',
     textAlign: 'center',
-    color: 'grey'
+    color: 'grey',
   },
+  main: {
+    textAlign: 'center',
+    color: 'green'
+  }
 }));
 
-export default function Home() {
+function Home() {
   const classes = useStyles();
 
     const [mailId, setMailId] = React.useState({
-      email: ''
+      email: '',
+      success: false
     });
+
+    function notify(text, type) {
+      switch (type) {
+        case 'info':
+          toast.info(`🦄${text}`, {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          break;
+        case 'error':
+          toast.error(`🦄${text}`, {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          break;
+      }
+    }
 
     const handleChange = (prop) => (event) => {
       setMailId({
@@ -59,9 +90,17 @@ export default function Home() {
         'Content-Type': 'application/json',
       }
     })
-.then(res=>res.json())
-.then(resData=>console.log(resData))
-.catch(err=>console.log(err))    
+    .then(res=>res.json())
+    .then((resData) => {
+      console.log(resData)
+      if(resData.success === true){
+        setMailId({email: '',success: true})
+        notify('  Thankyou for sharing!', 'info');
+      } else {
+        notify('  Please retry', 'error');
+      }
+    })
+    .catch(err=>console.log(err))    
   
   }
 
@@ -92,7 +131,7 @@ export default function Home() {
               required
               id="outlined-required"
               label="Email id"
-              
+              value={mailId.email}
               variant="outlined"
               fullWidth="true"
               onChange={handleChange('email')}
@@ -110,8 +149,15 @@ export default function Home() {
               send
             </Button>
           </Grid>
+          {(mailId.success)?<Grid item xs={12}>
+            <Typography variant="subtitle1" className={classes.main}>
+              We have recorded your response. We will drop a mail as soon as possible ...
+            </Typography>
+          </Grid>: null}
         </Grid>
       </Container>
     </div>
   );
 }
+
+export default Home;
