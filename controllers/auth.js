@@ -235,13 +235,13 @@ exports.sendInvite = asyncHandler(async (req, res, next) =>{
 
   try {
     await sendEmail({
-      email: `${req.body.email}`,
+      email: req.body.email,
       subject: 'Invite for Piper Chat',
       message
     });
     res.status(200).json({ success: true, data: 'Email sent' });
   } catch (err) {
-    console.log(err);
+   console.log(err)
     return next(new ErrorResponse('Email could not be sent', 500));
   }
 });

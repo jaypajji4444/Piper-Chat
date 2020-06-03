@@ -6,6 +6,7 @@ const cookieparser = require('cookie-parser')
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error')
 const cors = require('cors');
+const bodyParser = require("body-parser");
 
 //load env vars
 dotenv.config({
@@ -20,6 +21,9 @@ const auth = require('./routes/auth')
 
 const app = express();
 
+// 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
 //disable cors
 app.use(cors());
 
