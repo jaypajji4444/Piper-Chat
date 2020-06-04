@@ -107,7 +107,7 @@ function Login({loginUser}) {
           notify('  Incorrect details :(', 'error');
         }
       })
-      .catch((err) => console.log);
+      .catch((err) => console.log(err));
   };
 
   return (
