@@ -229,7 +229,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 exports.sendInvite = asyncHandler(async (req, res, next) =>{
 
   // Create reset url
-  const resetUrl = 'http://localhost:3000/SignUp'
+  const resetUrl = 'http://localhost:3000/register'
 
   const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
 
