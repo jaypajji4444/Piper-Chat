@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import { toast } from 'react-toastify';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {connect} from "react-redux";
+import {Redirect} from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Home() {
+function Home({loggedIn}) {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
 
@@ -127,7 +129,9 @@ function Home() {
     .catch(err=>console.log(err))    
   
   }
-
+if(loggedIn){
+  return <Redirect to="/chat" />
+}
 
   return (
     <div className={classes.root}>
@@ -239,4 +243,10 @@ function Home() {
   );
 }
 
-export default Home;
+const mapStateToProps=(state)=>{
+  return{
+    loggedIn:state.auth.loggedIn
+  }
+}
+
+export default connect(mapStateToProps,null)(Home);

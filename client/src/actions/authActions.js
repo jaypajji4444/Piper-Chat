@@ -1,8 +1,30 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED } from './types';
 
-
+// Load User
+export const loadUser = (token) => async dispatch => {
+    try {
+        const res = await fetch("http://localhost:5000/api/v1/auth/me",{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token '+token
+            },
+        });
+        const data=await res.json()
+        
+        console.log(data)
+        dispatch({
+            type: USER_LOADED,
+            user: data.data
+        });
+    } catch (err) {
+        dispatch({
+            type: AUTH_FAIL
+        });
+    }
+};
 
 // Start the auth_Process
 export const authStart = () => {
@@ -67,7 +89,7 @@ export const register = (formData) => dispatch => {
             console.log(data);
             if (data.success === true) {
                 dispatch({
-                    type:REGISTER_SUCCESS
+                    type: REGISTER_SUCCESS
                 })
             } else {
                 dispatch(authFail(data.error));

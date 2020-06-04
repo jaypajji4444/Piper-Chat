@@ -1,15 +1,24 @@
-import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS } from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED} from '../actions/types'
+
 
 const initialState = {
     loggedIn:false,
     token: null,
     error: null,
     loading: false,
-    authRedirectPath: '/register'
+    authRedirectPath: '/register',
+    user:null
 }
 
 export default ( state = initialState, action ) => {   
     switch(action.type){
+        case USER_LOADED:
+            return{
+                ...state,
+                loading:false,
+                loggedIn:true,
+                user:action.user
+            }
         case AUTH_START:
             return {
                 ...state,
