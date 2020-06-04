@@ -7,7 +7,7 @@ import Login from './components/Auth/Login';
 import Layout from './components/Layout/Layout';
 import Home from './components/Home';
 import Register from './components/Auth/Register';
-import Messages from './components/Chat/Messages';
+import Chat from './components/Chat/Chat';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,7 +32,7 @@ function App() {
               <Layout>
                 <Route path="/register" component={Register} exact />
                 <Route path="/login" component={Login} exact />
-                <Route path="/chat" component={Messages} exact />
+                <Route path="/chat" component={Chat} exact />
               </Layout>
             </Switch>
         </React.Fragment>
