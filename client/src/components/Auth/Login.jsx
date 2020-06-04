@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import { loginUser,storeToken } from '../../actions/authActions';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,12 +37,17 @@ const useStyles = makeStyles((theme) => ({
   },
 
   link:{
-      textAlign: 'center'
+      textAlign: 'center',
+  },
+
+  underline: {
+      textDecoration: 'none'
   }
 }));
 
-function Login({loginUser}) {
+function Login({loginUser, storeToken}) {
   const classes = useStyles();
+  let history = useHistory();
 
   const [values, setValues] = React.useState({
     email: '',
@@ -93,16 +99,17 @@ function Login({loginUser}) {
       method: 'POST',
       body: JSON.stringify(reqBody),
       headers: {
-        'Content-Type': 'application/json',
-        'Authentication': ''
+        'Content-Type': 'application/json'
       },
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         if (data.success === true) {
-            loginUser();
+          loginUser();
+          storeToken(data.token);
           notify('  Login Successful!!!', 'info');
+          history.push('/chat');
         } else {
           notify('  Incorrect details :(', 'error');
         }
@@ -156,7 +163,7 @@ function Login({loginUser}) {
           </Button>
           <Grid container>
             <Grid item xs={12} className={classes.link} >
-              <Link href="/register" variant="body2">
+              <Link to="/register" className={classes.underline} >
                 Not yet registered? Sign Up
               </Link>
             </Grid>
@@ -169,6 +176,7 @@ function Login({loginUser}) {
 
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
+  token: state.auth.token
 });
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default connect(mapStateToProps, { loginUser, storeToken })(Login);

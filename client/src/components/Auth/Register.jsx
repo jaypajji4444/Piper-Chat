@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -35,13 +35,18 @@ const useStyles = makeStyles((theme) => ({
   },
 
   link: {
-      textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
+
+  underline: {
+    textDecoration: 'none',
+  },
 }));
 
 function Register(props) {
   const classes = useStyles();
-  let history=useHistory()
+  let history=useHistory();
+  
   const [values, setValues] = React.useState({
     name: '',
     email: '',
@@ -101,7 +106,6 @@ function Register(props) {
         console.log(data);
         if (data.success === true) {
             notify('  Registration Successful!!!', 'info');
-            console.log("hi")
             history.push("/login")
         } else {
             notify('  Incorrect details :(', 'error');
@@ -166,11 +170,11 @@ function Register(props) {
             Register
           </Button>
           <Grid container>
-            <Grid item xs={12} className={classes.link} >
-              <Link href="/login" variant="body2">
-                Registered already? Login Here!
-              </Link>
-            </Grid>
+            <Grid item xs={12} className={classes.link}>
+            <Link to="/login" className={classes.underline}>
+              Registered already? Login Here!
+            </Link>
+          </Grid>
           </Grid>
         </form>
       </div>

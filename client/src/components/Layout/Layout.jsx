@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -8,6 +8,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
+import { logoutUser } from '../../actions/authActions';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,9 +26,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Layout(props) {
+function Layout(props) {
   const classes = useStyles();
+  let history = useHistory();
 
+  const loggingUserOut = (e) => {
+    e.preventDefault();
+    logoutUser();
+    history.push('/login');
+  }
+   
   return (
     <React.Fragment>
       <CssBaseline />
@@ -37,9 +47,15 @@ export default function Layout(props) {
               <Typography className={classes.title}>Piper Chat</Typography>
             </Grid>
           </Grid>
-          <Button color="inherit" href="/login" className={classes.button} >
-            Login
-          </Button>
+          {props.loggedIn ? (
+            <Button color="inherit" href="/login" className={classes.button}>
+              Logout
+            </Button>
+          ) : (
+            <Button color="inherit" href="/login" className={classes.button} onClick={loggingUserOut} >
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <Container>
@@ -58,3 +74,10 @@ export default function Layout(props) {
     </React.Fragment>
   );
 }
+
+const mapStateToProps = (state) => ({
+  loggedIn: state.auth.loggedIn,
+  token: state.auth.token,
+});
+
+export default connect(mapStateToProps, { logoutUser })(Layout);
