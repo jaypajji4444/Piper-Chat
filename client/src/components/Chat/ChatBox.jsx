@@ -8,6 +8,7 @@ import SendIcon from '@material-ui/icons/Send';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = (props) => {
+const ChatBox = ({auth:{loggedIn,user}}) => {
   const classes = useStyles();
 
   return (
@@ -72,7 +73,7 @@ const ChatBox = (props) => {
               variant="h6"
               className={classes.username}
             >
-              User Name
+              {loggedIn?user.email:<div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>
@@ -112,4 +113,9 @@ const ChatBox = (props) => {
   );
 };
 
-export default ChatBox;
+const mapStateToProps=(state)=>{
+  return{
+    auth:state.auth
+  }
+}
+export default connect(mapStateToProps,null)(ChatBox);
