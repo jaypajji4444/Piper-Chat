@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { loginUser,storeToken } from '../../actions/authActions';
+import { authUser} from '../../actions/authActions';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Login({loginUser, storeToken}) {
+function Login({authUser, loggedIn}) {
   const classes = useStyles();
   let history = useHistory();
 
@@ -88,34 +88,12 @@ function Login({loginUser, storeToken}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    const reqBody = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    };
-
-    fetch(`http://localhost:5000/api/v1/auth/login`, {
-      method: 'POST',
-      body: JSON.stringify(reqBody),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.success === true) {
-          loginUser();
-          storeToken(data.token);
-          notify('  Login Successful!!!', 'info');
-          history.push('/chat');
-        } else {
-          notify('  Incorrect details :(', 'error');
-        }
-      })
-      .catch((err) => console.log(err));
+    authUser({email: values.email,password: values.password,});
   };
+
+  if(loggedIn){
+    return <Redirect to="/chat" />
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -174,9 +152,9 @@ function Login({loginUser, storeToken}) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  loggedIn: state.auth.loggedIn,
-  token: state.auth.token
-});
-
-export default connect(mapStateToProps, { loginUser, storeToken })(Login);
+const mapStateToProps=(state)=>{
+  return{
+    loggedIn:state.auth.loggedIn
+  }
+}
+export default connect(mapStateToProps, { authUser })(Login);

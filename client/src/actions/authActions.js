@@ -1,13 +1,8 @@
 
 
-import { LOGGEDIN_VALUE, AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS } from './types';
 
-// set loggedIn value to true
-export const loginUser = () => {
-    return {
-        type: LOGGEDIN_VALUE
-    }
-}
+
 
 // Start the auth_Process
 export const authStart = () => {
@@ -28,20 +23,14 @@ export const authFail = (error) => {
 export const authSuccess = (token, userId) => {
     return {
         type: AUTH_SUCCESS,
-        idToken: token,
-        userId: userId
+        token: token
     };
 };
 
 
-export const auth = (email, password) => {
+export const authUser = (authData) => {
     return dispatch => {
         dispatch(authStart());
-        const authData = {
-            email,
-            password
-        }
-
         fetch(`http://localhost:5000/api/v1/auth/login`, {
             method: 'POST',
             body: JSON.stringify(authData),
@@ -59,18 +48,37 @@ export const auth = (email, password) => {
                     dispatch(authFail(data.error));
                 }
             })
-        
-
     }
 }
 
 
+// Register 
+export const register = (formData) => dispatch => {
+    dispatch(authStart())
+    fetch(`http://localhost:5000/api/v1/auth/register`, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            if (data.success === true) {
+                dispatch({
+                    type:REGISTER_SUCCESS
+                })
+            } else {
+                dispatch(authFail(data.error));
+            }
+        })
+}
 
 
 // Logout
 export const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('userId');
     return {
         type: AUTH_LOGOUT
     };
