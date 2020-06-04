@@ -9,38 +9,62 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { toast } from 'react-toastify';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    height: '100vh'
+    height: '100vh',
   },
   title: {
     flexGrow: 1,
     padding: '20px',
-    marginLeft: '80px',
+    textAlign: 'center',
   },
-  margin: {
+  marginFull: {
     height: '60px',
   },
-  contentTitle: {
+  contentTitleFull: {
     marginTop: '150px',
     textAlign: 'center',
   },
-  content: {
+  contentFull: {
     flexGrow: 1,
     marginBottom: '60px',
     textAlign: 'center',
     color: 'grey',
   },
-  main: {
+  mainFull: {
     textAlign: 'center',
-    color: 'green'
+    color: 'green',
+  },
+  marginSmall: {
+    height: '60px',
+  },
+  contentTitleSmall: {
+    marginTop: '20vh',
+    fontSize: '30px',
+    textAlign: 'center',
+  },
+  contentSmall: {
+    flexGrow: 1,
+    marginTop: '40px',
+    marginBottom: '10px',
+    textAlign: 'center',
+    color: 'grey',
+    fontSize: '15px'
+  },
+  mainSmall: {
+    textAlign: 'center',
+    color: 'green',
+    fontSize: '15px'
   }
 }));
 
 function Home() {
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:800px)');
 
     const [mailId, setMailId] = React.useState({
       email: '',
@@ -107,55 +131,110 @@ function Home() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <CssBaseline />
+      <AppBar position="static" styles={{ xIndex: '1' }}>
         <Toolbar>
-          <Typography variant="h4" className={classes.title}>
-            Piper Chat
-          </Typography>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography className={classes.title}>Piper Chat</Typography>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="sm">
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h4" className={classes.contentTitle}>
-              Sorry, it's invite only.
-            </Typography>
+      {matches ? (
+        <Container maxWidth="sm">
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h4" className={classes.contentTitleFull}>
+                Sorry, it's invite only.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" className={classes.contentFull}>
+                Give us your email address and we will try to get you in!
+              </Typography>
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Email id"
+                value={mailId.email}
+                variant="outlined"
+                fullWidth="true"
+                onChange={handleChange('email')}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                variant="outlined"
+                size="large"
+                color="primary"
+                className={classes.marginFull}
+                endIcon={<SendRoundedIcon>Sign Up</SendRoundedIcon>}
+                onClick={submitHandler}
+              >
+                send
+              </Button>
+            </Grid>
+            {mailId.success ? (
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" className={classes.mainFull}>
+                  We have recorded your response. We will drop a mail as soon as
+                  possible ...
+                </Typography>
+              </Grid>
+            ) : null}
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" className={classes.content}>
-              Give us your email address and we will try to get you in!
-            </Typography>
+        </Container>
+      ) : (
+        <Container fixed>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h4" className={classes.contentTitleSmall}>
+                Sorry, it's invite only.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" className={classes.contentSmall}>
+                Give us your email address and we will try to get you in!
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Email id"
+                value={mailId.email}
+                variant="outlined"
+                fullWidth="true"
+                onChange={handleChange('email')}
+              />
+            </Grid>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={4}>
+              <Button
+                variant="outlined"
+                size="large"
+                color="primary"
+                className={classes.marginSmall}
+                endIcon={<SendRoundedIcon>Sign Up</SendRoundedIcon>}
+                onClick={submitHandler}
+              >
+                send
+              </Button>
+            </Grid>
+            {mailId.success ? (
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" className={classes.mainSmall}>
+                  We have recorded your response. We will drop a mail as soon as
+                  possible ...
+                </Typography>
+              </Grid>
+            ) : null}
           </Grid>
-          <Grid item xs={9}>
-            <TextField
-              required
-              id="outlined-required"
-              label="Email id"
-              value={mailId.email}
-              variant="outlined"
-              fullWidth="true"
-              onChange={handleChange('email')}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="outlined"
-              size="large"
-              color="primary"
-              className={classes.margin}
-              endIcon={<SendRoundedIcon>Sign Up</SendRoundedIcon>}
-              onClick={submitHandler}
-            >
-              send
-            </Button>
-          </Grid>
-          {(mailId.success)?<Grid item xs={12}>
-            <Typography variant="subtitle1" className={classes.main}>
-              We have recorded your response. We will drop a mail as soon as possible ...
-            </Typography>
-          </Grid>: null}
-        </Grid>
-      </Container>
+        </Container>
+      )}
     </div>
   );
 }

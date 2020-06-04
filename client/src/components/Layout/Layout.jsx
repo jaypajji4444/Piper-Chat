@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,8 +17,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     padding: '20px',
-    marginLeft: '80px',
   },
+  button: {
+  textTransform: 'none'
+  }
 }));
 
 export default function Layout(props) {
@@ -28,10 +31,15 @@ export default function Layout(props) {
       <CssBaseline />
       <AppBar position="static" styles={{ xIndex: '1' }}>
         <Toolbar>
-          <Typography variant="h4" className={classes.title}>
-            Piper Chat
-          </Typography>
-          <Button color="inherit" href="/login">Login</Button>
+          <Grid container>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={6} sm={2}>
+              <Typography className={classes.title}>Piper Chat</Typography>
+            </Grid>
+          </Grid>
+          <Button color="inherit" href="/login" className={classes.button} >
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <Container>

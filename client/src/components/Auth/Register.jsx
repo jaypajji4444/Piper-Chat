@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+
+  link: {
+      textAlign: 'center'
+  }
 }));
 
 function Register(props) {
@@ -162,8 +166,7 @@ function Register(props) {
             Register
           </Button>
           <Grid container>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={10}>
+            <Grid item xs={12} className={classes.link} >
               <Link href="/login" variant="body2">
                 Registered already? Login Here!
               </Link>
