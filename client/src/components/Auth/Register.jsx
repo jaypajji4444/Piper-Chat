@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import {connect} from "react-redux"
+import {register} from "../../actions/authActions"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Register(props) {
+function Register({register,authRedirectPath,loggedIn}) {
   const classes = useStyles();
   let history=useHistory();
   
@@ -87,33 +89,16 @@ function Register(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    const reqBody = {
-        name: values.name,
-        email: values.email,
-        password: values.password
-    }
-
-    fetch(`http://localhost:5000/api/v1/auth/register`, {
-      method: 'POST',
-      body: JSON.stringify(reqBody),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.success === true) {
-            notify('  Registration Successful!!!', 'info');
-            history.push("/login")
-        } else {
-            notify('  Incorrect details :(', 'error');
-        }
-      })
-      .catch((err) => console.log);
+    register({name: values.name,email: values.email,password: values.password})
+    
   };
 
+  if(authRedirectPath==="/login"){
+    return <Redirect to="/login"/>
+  }
+  if(loggedIn){
+    return <Redirect to="/chat" />
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -182,4 +167,11 @@ function Register(props) {
   );
 }
 
-export default Register;
+const mapStateToProps=(state)=>{
+  return{
+    authRedirectPath:state.auth.authRedirectPath,
+    loggedIn:state.auth.loggedIn
+  }
+}
+
+export default connect(mapStateToProps,{register})(Register)

@@ -1,29 +1,63 @@
-import { LOGGEDIN_VALUE, STORE_TOKEN, LOGOUT_USER } from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED} from '../actions/types'
+
 
 const initialState = {
-    //set your initial state
-    loggedIn: false, 
-    token: ''
+    loggedIn:false,
+    token: null,
+    error: null,
+    loading: false,
+    authRedirectPath: '/register',
+    user:null
 }
 
 export default ( state = initialState, action ) => {   
     switch(action.type){
-        case LOGGEDIN_VALUE:
-            return {
-                ...state,
-                loggedIn: true
-            };
-        case STORE_TOKEN:
+        case USER_LOADED:
             return{
                 ...state,
-                token: action.payload
+                loading:false,
+                loggedIn:true,
+                user:action.user
             }
-        case LOGOUT_USER:
+        case AUTH_START:
+            return {
+                ...state,
+                loading:true,
+                error:null
+            };
+        case AUTH_SUCCESS:
+            return{
+                ...state,
+                token: action.token,
+                loading:false,
+                error:null,
+                loggedIn:true,
+                authRedirectPath:"/chat"
+            }
+        case AUTH_FAIL:
+            return{
+                ...state,
+                loading:false,
+                error:action.error,
+                loggedIn:false,
+                authRedirectPath:"/register"
+            
+            }
+        case REGISTER_SUCCESS:
+            return{
+                ...state,
+                loading:false,
+                authRedirectPath:"/login"
+            }
+        case AUTH_LOGOUT:
             return{
                 ...state,
                 loggedIn: false,
-                token: ''
+                token: null,
+                loggedIn:false,
+                authRedirectPath:"/register"
             }
+
         default:
             return state
     }
