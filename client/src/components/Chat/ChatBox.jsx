@@ -76,7 +76,7 @@ const ChatBox = ({auth:{loggedIn,user}}) => {
               variant="h6"
               className={classes.username}
             >
-              {loggedIn ? user.email : <div>User</div>}
+              {loggedIn ? user.name : <div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>

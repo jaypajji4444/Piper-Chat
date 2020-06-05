@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER } from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -105,6 +105,30 @@ export const logout = () => {
         type: AUTH_LOGOUT
     };
 };
+
+export const updateUser = ({ name, email, token }) => {
+    return dispatch => {
+        dispatch(authStart());
+        console.log(token)
+        fetch(`http://localhost:5000/api/v1/auth/updatedetails`, {
+            method: 'PUT',
+            body: JSON.stringify({name,email}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': `${token}`
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success === true) {
+                    dispatch(authSuccess(data.token));
+                } else {
+                    dispatch(authFail(data.error));
+                }
+            })
+    }
+}
+
 
 
 
