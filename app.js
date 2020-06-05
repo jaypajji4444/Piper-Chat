@@ -16,7 +16,8 @@ dotenv.config({
 
 
 //Route files
-const auth = require('./routes/auth')
+const auth = require('./routes/auth');
+const chat = require('./routes/chat');
 
 const app = express();
 
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //Mount routers
 app.use('/api/v1/auth', auth)
+app.use('/api/v1/chat',chat)
 app.use(errorHandler);
 
 

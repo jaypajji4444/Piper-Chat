@@ -53,16 +53,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({auth:{loggedIn,user}}) => {
+const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
   useEffect(() => {
     const socket = socketIOClient("http://localhost:5000");
     console.log(socket)
-    socket.on("coolpa",(data)=>{
-      console.log(data)
-    })
+    if(token!==null)
+    {socket.emit("authenticate",token)
+  }
     
-}, []);
+}, [loggedIn,token]);
 
 
   return (
