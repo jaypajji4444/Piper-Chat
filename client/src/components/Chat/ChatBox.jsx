@@ -58,14 +58,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
-  useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
-    console.log(socket)
-    if(token!==null)
-    {socket.emit("authenticate",token)
-  }
+//   useEffect(() => {
+//     const socket = socketIOClient("http://localhost:5000");
     
-}, [loggedIn,token]);
+//   //   if(token!==null)
+//   //   {socket.emit("authenticate",token)
+//   // }
+    
+// }, [loggedIn,token]);
 
 
   return (
@@ -86,7 +86,7 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
               variant="h6"
               
             >
-              {loggedIn ? user.name : <div>User</div>}
+              {loggedIn && user? user.name : <div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>
