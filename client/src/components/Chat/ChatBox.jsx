@@ -42,13 +42,16 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
     backgroundColor: 'white',
-    padding: '10px'
+    padding: '10px',
   },
   avatar: {
     margin: theme.spacing(1, 1.5),
   },
   listItem: {
     width: '80%',
+  },
+  sendIcon: {
+    marginBottom: '10px',
   },
 }));
 
@@ -73,40 +76,40 @@ const ChatBox = ({auth:{loggedIn,user}}) => {
               variant="h6"
               
             >
-              {loggedIn && user?user.email:<div>User</div>}
+              {loggedIn ? user.name : <div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>
       </Grid>
       <Grid item xs={12}>
         <Grid container className={classes.messageContainer}>
-          <Grid item xs={12} className={classes.messagesRow}>
-            
-          </Grid>
-            <Grid item xs={12} className={classes.inputRow}>
-              <form className={classes.form}>
-                <Grid
-                  container
-                  className={classes.newMessageRow}
-                  alignItems="flex-end"
-                >
-                  <Grid item xs={11}>
-                    <TextField
-                      id="message"
-                      label="Message"
-                      variant="outlined"
-                      margin="dense"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <IconButton type="submit">
-                      <SendIcon />
-                    </IconButton>
-                  </Grid>
+          <Grid item xs={12} className={classes.messagesRow}></Grid>
+          <Grid item xs={12} className={classes.inputRow}>
+            <form className={classes.form}>
+              <Grid
+                container
+                className={classes.newMessageRow}
+                alignItems="flex-end"
+              >
+                <Grid item xs={11}>
+                  <TextField
+                    id="message"
+                    label="Message"
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    multiline
+                    rows={2}
+                  />
                 </Grid>
-              </form>
-            </Grid>
+                <Grid item xs={1}>
+                  <IconButton type="submit" className={classes.sendIcon}>
+                    <SendIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

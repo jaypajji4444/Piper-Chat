@@ -1,21 +1,229 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import CloseIcon from '@material-ui/icons/Close';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import DoneIcon from '@material-ui/icons/Done';
+import Avatar from '@material-ui/core/Avatar';
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import TextField from '@material-ui/core/TextField';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+import { updateUser } from '../../actions/authActions';
+
+function iconStyles() {
+  return {
+    successIcon: {
+      color: 'white',
+    },
+    errorIcon: {
+      color: 'white',
+    },
+    camIcon: {
+      color: 'white'
+    }
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
-  }
+  },
+  paper: {
+    padding: theme.spacing(0),
+    textAlign: 'center',
+    backgroundColor: '#2196f3',
+    height: '30vh',
+  },
+  setSize: {
+    height: 100,
+    width: 100,
+  },
+  appbar: {
+    marginTop: 0,
+  },
+  title: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  pic: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cam: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '5px',
+  },
+  form: {
+    marginLeft: theme.spacing(6),
+    marginRight: theme.spacing(6),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(0),
+  },
+  button: {
+    marginTop: '15px'
+  },
 }));
 
-function ProfilePage(props){
+function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
   const classes = useStyles();
+  const classes123 = makeStyles(iconStyles)();
+
+  const [values, setValues] = React.useState({
+    name: user.name,
+    email: user.email
+  });
+
+  const [update, setUpdate] = React.useState(false)
+
+  function notify(text, type) {
+    switch (type) {
+      case 'info':
+        toast.info(`🦄${text}`, {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'error':
+        toast.error(`🦄${text}`, {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+    }
+  }
+
+  const handleChange = (prop) => (event) => {
+    setValues({
+      ...values,
+      [prop]: event.target.value,
+    });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    
+    const word = 'Token ';
+    const token = word.concat(`${localStorage.getItem('token')}`);
+
+    // updateUser({
+    //   name: values.name,
+    //   email: values.email,
+    //   token: token
+    // })
+
+    fetch('http://localhost:5000/api/v1/auth/updatedetails', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify(values)
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((resData) => {
+        console.log(resData);
+        if(resData.success === true){
+            notify('Details updated', 'info')
+        }
+      })
+      .catch((err) => {
+        notify('Failed to update', 'error')
+        console.log(err);
+      });
+  }
 
   return (
     <Grid container className={classes.root}>
-      Profile
+      <Grid item xs={12}>
+        <Paper className={classes.paper}>
+          <Toolbar className={classes.appbar}>
+            <Grid item xs={2}>
+              <CloseIcon fontSize="large" className={classes123.errorIcon} />
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+              <Typography variant="h6" className={classes.title}>
+                Profile
+              </Typography>
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={2}>
+              <DoneIcon fontSize="large" className={classes123.successIcon} />
+            </Grid>
+          </Toolbar>
+          <Grid item xs={12} className={classes.pic}>
+            <Avatar className={classes.setSize} src="/iamges.png" />
+          </Grid>
+          <Grid item xs={12} className={classes.cam}>
+            <CameraAltIcon fontSize="medium" className={classes123.camIcon} />
+            <span className={classes.title}>Add Image</span>
+          </Grid>
+        </Paper>
+        <Grid item xs={12}>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="userName"
+              label="Name"
+              defaultValue={user.name}
+              name="userName"
+              size="small"
+              onChange={handleChange('name')}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="userEmail"
+              label="Email id"
+              id="userEmail"
+              defaultValue={user.email}
+              size="small"
+              onChange={handleChange('email')}
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={submitHandler}
+            >
+              Update
+            </Button>
+          </form>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
 
-export default ProfilePage;
+
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+export default connect(mapStateToProps, {updateUser})(ProfilePage);
