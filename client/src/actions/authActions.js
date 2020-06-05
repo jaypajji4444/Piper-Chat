@@ -66,6 +66,7 @@ export const authUser = (authData) => {
                 if (data.success === true) {
                     localStorage.setItem('token', data.token);
                     dispatch(authSuccess(data.token));
+                    dispatch(loadUser(data.token))
                 } else {
                     dispatch(authFail(data.error));
                 }

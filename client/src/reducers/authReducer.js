@@ -40,7 +40,7 @@ export default ( state = initialState, action ) => {
                 loading:false,
                 error:action.error,
                 loggedIn:false,
-                authRedirectPath:"/register"
+                authRedirectPath:"/register",
             
             }
         case REGISTER_SUCCESS:
@@ -55,7 +55,8 @@ export default ( state = initialState, action ) => {
                 loggedIn: false,
                 token: null,
                 loggedIn:false,
-                authRedirectPath:"/register"
+                authRedirectPath:"/register",
+                user:null
             }
 
         default:
