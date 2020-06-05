@@ -11,7 +11,11 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/authActions';
 import { useHistory, Link, NavLink } from 'react-router-dom';
-
+import GitHubIcon from '@material-ui/icons/GitHub';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import LanguageIcon from '@material-ui/icons/Language';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,27 +27,58 @@ const useStyles = makeStyles((theme) => ({
     padding: '20px',
   },
   button: {
-  padding:"0.5rem",
-  border:"none",
-  color: "#fff",
-  backgroundColor: "#3f51b5",
-  fontSize: "1rem",
-  fontFamily: "Roboto,Helvetica, Arial, sans-serif",
-  fontWeight: "400",
-  lineHeight: "1.5"
-
+    padding: '0.5rem',
+    border: 'none',
+    color: '#fff',
+    backgroundColor: '#3f51b5',
+    fontSize: '1rem',
+    fontFamily: 'Roboto,Helvetica, Arial, sans-serif',
+    fontWeight: '400',
+    lineHeight: '1.5',
   },
-  link:{
-    color:'inherit',
-    textDecoration:"none",
-    padding:"0.5rem"
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+    padding: '0.5rem',
+  },
 
+  footer: {
+    padding: theme.spacing(3, 2),
+    marginTop: 'auto',
+    height: '10px'
+  },
+
+  icons: {
+    marginLeft: '20px',
   }
 }));
+
+function Copyright() {
+  const classes = useStyles();
+  
+  return (
+    <Typography color="textSecondary" align="center">
+      <GitHubIcon color="primary" fontSize="small" className={classes.icons} />
+      <LinkedInIcon
+        color="primary"
+        fontSize="small"
+        className={classes.icons}
+      />
+      <LanguageIcon
+        color="primary"
+        fontSize="small"
+        className={classes.icons}
+      />
+      <TwitterIcon color="primary" fontSize="small" className={classes.icons} />
+    </Typography>
+  );
+}
+
 
 function Layout(props) {
   const classes = useStyles();
   let history = useHistory();
+  const matches = useMediaQuery('(min-width:800px)');
 
   const logout=()=>{
     props.logout();
@@ -62,32 +97,51 @@ function Layout(props) {
             </Grid>
           </Grid>
           {props.loggedIn ? (
-              <button onClick={logout} className={classes.button} >Logout</button>
+            <button onClick={logout} className={classes.button}>
+              Logout
+            </button>
           ) : (
             <Fragment>
-              <NavLink className={classes.link} to='/login'>
-                  <Typography size='large' >Login</Typography>
+              <NavLink className={classes.link} to="/login">
+                <Typography size="large">Login</Typography>
               </NavLink>
-              <NavLink className={classes.link} to='/register'>
-                  <Typography size='large' >Register</Typography>
+              <NavLink className={classes.link} to="/register">
+                <Typography size="large">Register</Typography>
               </NavLink>
-          </Fragment>
+            </Fragment>
           )}
         </Toolbar>
       </AppBar>
       <Container>
-        <Paper
-          elevation={5}
-          style={{
-            backgroundColor: '#f0f0f0',
-            height: '80vh',
-            marginTop: '5vh',
-            zIndex: '2',
-          }}
-        >
-          {props.children}
-        </Paper>
+        {matches ? (
+          <Paper
+            elevation={5}
+            style={{
+              backgroundColor: '#f0f0f0',
+              height: '77vh',
+              marginTop: '5vh',
+              zIndex: '2',
+            }}
+          >
+            {props.children}
+          </Paper>
+        ) : (
+          <Paper
+            elevation={5}
+            style={{
+              backgroundColor: '#f0f0f0',
+              height: '72vh',
+              marginTop: '5vh',
+              zIndex: '2',
+            }}
+          >
+            {props.children}
+          </Paper>
+        )}
       </Container>
+      <footer className={classes.footer}>
+        <Copyright />
+      </footer>
     </React.Fragment>
   );
 }

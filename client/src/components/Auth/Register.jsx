@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
   avatar: {
     margin: theme.spacing(1),
-    marginTop: '55px',
     backgroundColor: theme.palette.secondary.main,
   },
 
@@ -43,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
   underline: {
     textDecoration: 'none',
   },
+
+  register: {
+    marginTop: '55px'
+  }
 }));
 
 function Register({register,authRedirectPath,loggedIn}) {
@@ -103,11 +106,11 @@ function Register({register,authRedirectPath,loggedIn}) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        {/* <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register
+        </Avatar> */}
+        <Typography component="h1" variant="h5" className={classes.register}>
+          Register here!
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -156,10 +159,10 @@ function Register({register,authRedirectPath,loggedIn}) {
           </Button>
           <Grid container>
             <Grid item xs={12} className={classes.link}>
-            <Link to="/login" className={classes.underline}>
-              Registered already? Login Here!
-            </Link>
-          </Grid>
+              <Link to="/login" className={classes.underline}>
+                Registered already? Login Here!
+              </Link>
+            </Grid>
           </Grid>
         </form>
       </div>

@@ -2,7 +2,7 @@ import React,{useEffect} from 'react';
 import './App.css';
 import { Provider } from 'react-redux'
 import store from './store'
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch, Link } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import Layout from './components/Layout/Layout';
 import Home from './components/Home';
@@ -11,7 +11,7 @@ import Chat from './components/Chat/Chat';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
-
+import NoMatchPage from './components/404'
 
 toast.configure({
   position: 'top-right',
@@ -32,7 +32,6 @@ function App() {
     }
   },[])
 
-
   return (
     <Provider store={store} >
       <BrowserRouter>
@@ -40,9 +39,12 @@ function App() {
             <Switch>
               <Route path="/" component={Home} exact />
               <Layout>
-                <Route path="/register" component={Register} exact />
-                <Route path="/login" component={Login} exact />
-                <Route path="/chat" component={Chat} exact />
+                <Switch>
+                  <Route path="/register" component={Register} exact />
+                  <Route path="/login" component={Login} exact />
+                  <Route path="/chat" component={Chat} exact />
+                  <Route path="*" component={ NoMatchPage } />
+              </Switch>
               </Layout>
             </Switch>
         </React.Fragment>
