@@ -3,15 +3,15 @@ const {model,Schema} = require("mongoose");
 const MessageSchema = new Schema({
     conversation:{
         type: Schema.Types.ObjectId,
-        ref: 'conversations',
+        ref: 'Conversation',
     },
     to: {
         type: Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
     },
     from: {
         type: Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
     },
     body: {
         type: String,
@@ -23,4 +23,4 @@ const MessageSchema = new Schema({
     },
 })
 
-module.exports=model("messages",MessageSchema)
+module.exports=model("Message",MessageSchema)

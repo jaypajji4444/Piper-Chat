@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
+import socketIOClient from 'socket.io-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,15 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatBox = ({auth:{loggedIn,user}}) => {
   const classes = useStyles();
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:5000");
+    console.log(socket)
+    socket.on("coolpa",(data)=>{
+      console.log(data)
+    })
+    
+}, []);
+
 
   return (
     <Grid container className={classes.root}>

@@ -5,6 +5,10 @@ const ConversationSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User"
     }],
+    messages:[{
+        type:Schema.Types.ObjectId,
+        ref:"Message"
+    }],
     lastMessage: {
         type: String,
     },
@@ -14,4 +18,4 @@ const ConversationSchema = new Schema({
     },
 })
 
-module.exports=model("conversations",ConversationSchema)
+module.exports=model("Conversation",ConversationSchema)

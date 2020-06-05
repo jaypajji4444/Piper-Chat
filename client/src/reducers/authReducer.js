@@ -54,7 +54,6 @@ export default ( state = initialState, action ) => {
                 ...state,
                 loggedIn: false,
                 token: null,
-                loggedIn:false,
                 authRedirectPath:"/register",
                 user:null
             }
