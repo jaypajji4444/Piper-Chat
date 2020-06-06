@@ -8,13 +8,16 @@ import Layout from './components/Layout/Layout';
 import Home from './components/Home';
 import Register from './components/Auth/Register';
 import Chat from './components/Chat/Chat';
+import ForgotPass from './components/Auth/ForgotPass';
+import ResetPass from './components/Auth/ResetPass';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
-import NoMatchPage from './components/404'
+import NoMatchPage from './components/404';
 
 toast.configure({
-  position: 'top-right',
+  position: 'top-center',
+  autoClose: 5000,
   hideProgressBar: false,
   newestOnTop: false,
   closeOnClick: true,
@@ -42,7 +45,9 @@ function App() {
                 <Switch>
                   <Route path="/register" component={Register} exact />
                   <Route path="/login" component={Login} exact />
+                  <Route path="/forgotpassword" component={ ForgotPass } exact />
                   <Route path="/chat" component={Chat} exact />
+                  <Route path="/resetpassword/:resettoken" component={ResetPass} exact />
                   <Route path="*" component={ NoMatchPage } />
               </Switch>
               </Layout>

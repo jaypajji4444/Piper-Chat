@@ -12,7 +12,7 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { updateUser } from '../../actions/authActions';
+import { updateUser, tabStatus } from '../../actions/authActions';
 import Loader from '../Loader';
 
 function iconStyles() {
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
+function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser , tabStatus}) {
   const classes = useStyles();
   const classes123 = makeStyles(iconStyles)();
 
@@ -96,8 +96,8 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
     switch (type) {
       case 'info':
         toast.info(`🦄${text}`, {
-          position: 'top-right',
-          autoClose: 2000,
+          position: 'top-center',
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -106,8 +106,8 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
         break;
       case 'error':
         toast.error(`🦄${text}`, {
-          position: 'top-right',
-          autoClose: 2000,
+          position: 'top-center',
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -134,7 +134,19 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    updateUser({name: values.name,email: values.email,token: token})
+    const Token = localStorage.getItem('token')
+    updateUser({name: values.name,email: values.email,token: Token})
+    if(error === null){
+      notify('    Details Updated!', 'info');
+    }
+    else{
+      notify('    Error! Try again', 'error');
+    }
+  }
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    tabStatus(0)
   }
 
   return (
@@ -150,7 +162,7 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
           <Paper className={classes.paper}>
             <Toolbar className={classes.appbar}>
               <Grid item xs={2}>
-                <CloseIcon fontSize="large" className={classes123.errorIcon} />
+                <CloseIcon fontSize="large" className={classes123.errorIcon} onClick={handleClick} />
               </Grid>
               <Grid item xs={2}></Grid>
               <Grid item xs={4}>
@@ -160,7 +172,7 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
               </Grid>
               <Grid item xs={2}></Grid>
               <Grid item xs={2}>
-                <DoneIcon fontSize="large" className={classes123.successIcon} />
+                <DoneIcon fontSize="large" className={classes123.successIcon} onClick={submitHandler} />
               </Grid>
             </Toolbar>
             <Grid item xs={12} className={classes.pic}>
@@ -222,4 +234,4 @@ const mapStateToProps = (state) => {
     auth: state.auth,
   };
 };
-export default connect(mapStateToProps, {updateUser})(ProfilePage);
+export default connect(mapStateToProps, {updateUser, tabStatus})(ProfilePage);

@@ -1,4 +1,4 @@
-import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL} from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL,TAB_STATUS, FORGOT_PASS, RESET_PASS} from '../actions/types'
 
 
 const initialState = {
@@ -7,7 +7,9 @@ const initialState = {
     error: null,
     loading: false,
     authRedirectPath: '/register',
-    user:null
+    user:null,
+    tabVal: 0,
+    resetDone: false
 }
 
 export default ( state = initialState, action ) => {   
@@ -70,6 +72,24 @@ export default ( state = initialState, action ) => {
                 authRedirectPath:'/chat',
                 loading:false,
                 error:action.error
+            }
+        case TAB_STATUS:
+            return{
+                ...state,
+                tabVal: action.tabVal
+            }
+        case FORGOT_PASS:
+            return{
+                ...state,
+                authRedirectPath: "/login",
+                loading:false
+            }    
+        case RESET_PASS:
+            return{
+                ...state,
+                authRedirectPath: "login",
+                loading: false,
+                resetDone: true
             }
 
         default:

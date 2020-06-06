@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { authUser} from '../../actions/authActions';
+import { resetPass } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,28 +28,32 @@ const useStyles = makeStyles((theme) => ({
 
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(5),
   },
 
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 
-  link:{
-      textAlign: 'center',
+  link: {
+    textAlign: 'center',
   },
 
   underline: {
-      textDecoration: 'none'
-  }
+    textDecoration: 'none',
+  },
 }));
 
-function Login({authUser, loggedIn, error}) {
+function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
   const classes = useStyles();
 
+  const { resettoken } = useParams();
+
+  const [fetchSuccess, setFetchSuccess] = React.useState(false);
+
   const [values, setValues] = React.useState({
-    email: '',
-    password: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   function notify(text, type) {
@@ -61,12 +65,12 @@ function Login({authUser, loggedIn, error}) {
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: true
+          draggable: true,
         });
         break;
       case 'error':
         toast.error(`🦄${text}`, {
-          position:"top-center",
+          position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -86,17 +90,24 @@ function Login({authUser, loggedIn, error}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    authUser({email: values.email,password: values.password});
-    if(error === null){
-      notify('    Login Successful!', 'info');
-    }
-    else{
-      notify('    Invalid Credentials', 'error');
+    if (values.newPassword === values.confirmPassword) {
+      resetPass({
+        password: values.newPassword,
+        resetToken: resettoken,
+      });
+      if (resetDone === true) {
+        notify('    Login Successful!', 'info');
+        setFetchSuccess(true);
+      } else {
+        notify('    Invalid Credentials', 'error');
+      }
+    } else {
+      notify('    Passwords do not match', 'error');
     }
   };
 
-  if(loggedIn){
-    return <Redirect to="/chat" />
+  if (fetchSuccess) {
+    return <Redirect to={authRedirectPath} />;
   }
 
   return (
@@ -107,7 +118,7 @@ function Login({authUser, loggedIn, error}) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Reset Password
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -115,10 +126,10 @@ function Login({authUser, loggedIn, error}) {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Id"
-            name="email"
-            onChange={handleChange('email')}
+            id="new"
+            label="Set new password"
+            name="new"
+            onChange={handleChange('newPassword')}
             autoFocus
           />
           <TextField
@@ -127,10 +138,10 @@ function Login({authUser, loggedIn, error}) {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Confirm new password"
             type="password"
             id="password"
-            onChange={handleChange('password')}
+            onChange={handleChange('confirmPassword')}
             autoComplete="current-password"
           />
           <Button
@@ -141,32 +152,18 @@ function Login({authUser, loggedIn, error}) {
             className={classes.submit}
             onClick={submitHandler}
           >
-            Login
+            Confirm
           </Button>
-          <Grid container>
-            <Grid item xs={12} className={classes.link}>
-              <Link to="/register" className={classes.underline}>
-                Not yet registered? Sign Up
-              </Link>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={12} className={classes.link}>
-              <Link to="/forgotpassword" className={classes.underline}>
-                Forgot Password?
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
   );
 }
 
-const mapStateToProps=(state)=>{
-  return{
-    loggedIn:state.auth.loggedIn,
-    error: state.auth.error
-  }
-}
-export default connect(mapStateToProps, { authUser })(Login);
+const mapStateToProps = (state) => {
+  return {
+    loggedIn: state.auth.loggedIn,
+    error: state.auth.error,
+  };
+};
+export default connect(mapStateToProps, { resetPass })(ResetPass);
