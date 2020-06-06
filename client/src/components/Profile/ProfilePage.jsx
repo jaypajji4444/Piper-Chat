@@ -172,7 +172,7 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
               </Grid>
               <Grid item xs={2}></Grid>
               <Grid item xs={2}>
-                <DoneIcon fontSize="large" className={classes123.successIcon} onClick={submitHandler} />
+                <DoneIcon fontSize="large" className={classes123.successIcon} onClick={handleClick} />
               </Grid>
             </Toolbar>
             <Grid item xs={12} className={classes.pic}>

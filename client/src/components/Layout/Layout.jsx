@@ -104,9 +104,6 @@ function Layout(props) {
               <NavLink className={classes.link} to="/login">
                 <Typography size="large">Login</Typography>
               </NavLink>
-              <NavLink className={classes.link} to="/register">
-                <Typography size="large">Register</Typography>
-              </NavLink>
             </Fragment>
           )}
         </Toolbar>

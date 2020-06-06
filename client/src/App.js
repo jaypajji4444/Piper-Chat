@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
 import NoMatchPage from './components/404';
+import ProtectedRoute from './components/ProtectedRoute';
 
 toast.configure({
   position: 'top-center',
@@ -46,7 +47,7 @@ function App() {
                   <Route path="/register" component={Register} exact />
                   <Route path="/login" component={Login} exact />
                   <Route path="/forgotpassword" component={ ForgotPass } exact />
-                  <Route path="/chat" component={Chat} exact />
+                  <ProtectedRoute path="/chat" component={Chat} exact />
                   <Route path="/resetpassword/:resettoken" component={ResetPass} exact />
                   <Route path="*" component={ NoMatchPage } />
               </Switch>
@@ -59,4 +60,3 @@ function App() {
 }
 
 export default App;
-
