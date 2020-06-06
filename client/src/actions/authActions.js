@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL } from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -136,11 +136,19 @@ export const updateUser = ({ name, email, token }) => {
     }
 }
 
-// set tab status
+// set tab status (chat)
 export const tabStatus = (val) => {
     return{
         type: TAB_STATUS,
         tabVal: val
+    }
+}
+
+// set tab status (social)
+export const tabSocial = (val) => {
+    return {
+        type: TAB_SOCIAL,
+        tabValSocial: val
     }
 }
 
@@ -197,3 +205,4 @@ export const resetPass = (payload) => {
       });
   };
 };
+

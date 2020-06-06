@@ -18,3 +18,4 @@ export const FORGOT_PASS="FORGOT_PASS";
 export const RESET_PASS="RESET_PASS";
 
 export const TAB_STATUS= "TAB_STATUS";
+export const TAB_SOCIAL="TAB_SOCIAL";

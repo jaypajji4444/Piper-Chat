@@ -12,8 +12,8 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { updateUser, tabStatus } from '../../actions/authActions';
-import Loader from '../Loader';
+import { updateUser, tabStatus } from '../../../actions/authActions';
+import Loader from '../../Loader';
 
 function iconStyles() {
   return {
@@ -77,6 +77,13 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: '15px',
   },
+  input: {
+    display: 'none',
+  },
+  upload: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 }));
 
 function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser , tabStatus}) {
@@ -121,7 +128,7 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
       if(user){
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        }, 2500);
       }
   }, [user])
 
@@ -162,7 +169,11 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
           <Paper className={classes.paper}>
             <Toolbar className={classes.appbar}>
               <Grid item xs={2}>
-                <CloseIcon fontSize="large" className={classes123.errorIcon} onClick={handleClick} />
+                <CloseIcon
+                  fontSize="large"
+                  className={classes123.errorIcon}
+                  onClick={handleClick}
+                />
               </Grid>
               <Grid item xs={2}></Grid>
               <Grid item xs={4}>
@@ -172,7 +183,11 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
               </Grid>
               <Grid item xs={2}></Grid>
               <Grid item xs={2}>
-                <DoneIcon fontSize="large" className={classes123.successIcon} onClick={handleClick} />
+                <DoneIcon
+                  fontSize="large"
+                  className={classes123.successIcon}
+                  onClick={handleClick}
+                />
               </Grid>
             </Toolbar>
             <Grid item xs={12} className={classes.pic}>
@@ -180,7 +195,18 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
             </Grid>
             <Grid item xs={12} className={classes.cam}>
               <CameraAltIcon fontSize="medium" className={classes123.camIcon} />
-              <span className={classes.title}>Add Image</span>
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+              />
+              <label htmlFor="contained-button-file">
+                <Button size="small" component="span" className={classes.upload} >
+                  Upload
+                </Button>
+              </label>
             </Grid>
           </Paper>
           <Grid item xs={12}>

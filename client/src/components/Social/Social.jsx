@@ -6,12 +6,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import ChatBox from './ChatBox';
-import Friends from './Conversations/Friends';
-import ProfilePage from './Conversations/ProfilePage';
+import ChatBox from '../Chat/ChatBox';
+import MyFriends from './MyFriends';
+import AllUsers from './AllUsers';
 
 import { connect } from 'react-redux';
-import { tabStatus } from '../../actions/authActions';
+import { tabSocial } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,32 +20,31 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     height: '100%',
     borderRadius: 0,
-    width: '100%'
+    width: '100%',
   },
   sidebar: {
     zIndex: 8,
   },
   tabs: {
     borderRadius: 0,
-    height: '60px'
+    height: '60px',
   },
   labels: {
-      padding: '15px',
-      fontWeight: 'bold'
-  }
+    padding: '15px',
+    fontWeight: 'bold',
+  },
 }));
 
-function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
+function Social({ auth: { loggedIn, tabValSocial }, tabSocial }) {
   const classes = useStyles();
 
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
-    if(tabVal == 0){
-      tabStatus(1)
-    }
-    else{
-      tabStatus(0)
+    if (tabValSocial == 0) {
+      tabSocial(1);
+    } else {
+      tabSocial(0);
     }
   };
 
@@ -59,17 +58,17 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
                 <Tabs
                   onChange={handleChange}
                   variant="fullWidth"
-                  value={tabVal}
+                  value={tabValSocial}
                   indicatorColor="primary"
                   textColor="primary"
                   className={classes.tabs}
                 >
-                  <Tab label="Chats" className={classes.labels} />
-                  <Tab label="Profile" className={classes.labels} />
+                  <Tab label="My Friends" className={classes.labels} />
+                  <Tab label="All Users" className={classes.labels} />
                 </Tabs>
               </Paper>
-              {tabVal === 0 && <Friends />}
-              {tabVal === 1 && <ProfilePage />}
+              {tabValSocial === 0 && <MyFriends />}
+              {tabValSocial === 1 && <AllUsers />}
             </Paper>
           </Grid>
           <Grid item md={8}>
@@ -83,17 +82,17 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
               <Tabs
                 onChange={handleChange}
                 variant="fullWidth"
-                value={tabVal}
+                value={tabValSocial}
                 indicatorColor="primary"
                 textColor="primary"
                 className={classes.tabs}
               >
-                <Tab label="Chats" className={classes.labels} />
-                <Tab label="Profile" className={classes.labels} />
+                <Tab label="My Friends" className={classes.labels} />
+                <Tab label="All Users" className={classes.labels} />
               </Tabs>
             </Paper>
-            {tabVal === 0 && <Friends />}
-            {tabVal === 1 && <ProfilePage />}
+            {tabValSocial === 0 && <MyFriends />}
+            {tabValSocial === 1 && <AllUsers />}
           </Paper>
         </Grid>
       )}
@@ -106,4 +105,4 @@ const mapStateToProps = (state) => {
     auth: state.auth,
   };
 };
-export default connect(mapStateToProps, { tabStatus })(Chat);
+export default connect(mapStateToProps, { tabSocial })(Social);

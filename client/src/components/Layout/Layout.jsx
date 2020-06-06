@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     color: '#fff',
     backgroundColor: '#3f51b5',
-    fontSize: '1rem',
+    fontSize: '0.75rem',
+    marginLeft: '25px',
     fontFamily: 'Roboto,Helvetica, Arial, sans-serif',
     fontWeight: '400',
     lineHeight: '1.5',
@@ -79,6 +81,14 @@ function Layout(props) {
   let history = useHistory();
   const matches = useMediaQuery('(min-width:800px)');
 
+  const chats = () => {
+    history.push("chat")
+  }
+
+  const socialCenter = () => {
+    history.push("social")
+  }
+
   const logout=()=>{
     props.logout();
     history.push("/login")
@@ -96,9 +106,17 @@ function Layout(props) {
             </Grid>
           </Grid>
           {props.loggedIn ? (
-            <button onClick={logout} className={classes.button}>
-              Logout
-            </button>
+            <Fragment>
+              <Button size="small" onClick={chats} className={classes.button}>
+                Chats
+              </Button>
+              <Button size="small" onClick={socialCenter} className={classes.button}>
+                Friends
+              </Button>
+              <Button size="small" onClick={logout} className={classes.button}>
+                Logout
+              </Button>
+            </Fragment>
           ) : (
             <Fragment>
               <NavLink className={classes.link} to="/login">

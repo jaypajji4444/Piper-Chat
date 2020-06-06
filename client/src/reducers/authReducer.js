@@ -1,4 +1,4 @@
-import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL,TAB_STATUS, FORGOT_PASS, RESET_PASS} from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL,TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL} from '../actions/types'
 
 
 const initialState = {
@@ -9,6 +9,7 @@ const initialState = {
     authRedirectPath: '/register',
     user:null,
     tabVal: 0,
+    tabValSocial: 0,
     resetDone: false
 }
 
@@ -77,6 +78,11 @@ export default ( state = initialState, action ) => {
             return{
                 ...state,
                 tabVal: action.tabVal
+            }
+        case TAB_SOCIAL:
+            return{
+                ...state,
+                tabValSocial: action.tabValSocial
             }
         case FORGOT_PASS:
             return{
