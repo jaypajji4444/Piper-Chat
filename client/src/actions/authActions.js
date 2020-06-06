@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS } from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -107,6 +107,7 @@ export const logout = () => {
     };
 };
 
+// Update user creds
 export const updateUser = ({ name, email, token }) => {
     return dispatch => {
         dispatch(authStart());
@@ -135,6 +136,12 @@ export const updateUser = ({ name, email, token }) => {
     }
 }
 
-
+// set tab status
+export const tabStatus = (val) => {
+    return{
+        type: TAB_STATUS,
+        tabVal: val
+    }
+}
 
 

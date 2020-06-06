@@ -8,7 +8,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import ChatBox from './ChatBox';
 import Friends from './Friends';
-import ProfilePage from '../Profile/ProfilePage'
+import ProfilePage from '../Profile/ProfilePage';
+
+import { connect } from 'react-redux';
+import { tabStatus } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,15 +35,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Chat() {
-
+function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
   const classes = useStyles();
-  const [tab, setTab] = React.useState(0);
 
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
-    setTab(newVal);
+    if(tabVal == 0){
+      tabStatus(1)
+    }
+    else{
+      tabStatus(0)
+    }
   };
 
   return (
@@ -53,7 +59,7 @@ function Chat() {
                 <Tabs
                   onChange={handleChange}
                   variant="fullWidth"
-                  value={tab}
+                  value={tabVal}
                   indicatorColor="primary"
                   textColor="primary"
                   className={classes.tabs}
@@ -62,8 +68,8 @@ function Chat() {
                   <Tab label="Profile" className={classes.labels} />
                 </Tabs>
               </Paper>
-              {tab === 0 && <Friends />}
-              {tab === 1 && <ProfilePage />}
+              {tabVal === 0 && <Friends />}
+              {tabVal === 1 && <ProfilePage />}
             </Paper>
           </Grid>
           <Grid item md={8}>
@@ -72,27 +78,32 @@ function Chat() {
         </Grid>
       ) : (
         <Grid container className={classes.root}>
-            <Paper className={classes.paper} square elevation={5}>
-              <Paper square elevation={5} className={classes.tabs}>
-                <Tabs
-                  onChange={handleChange}
-                  variant="fullWidth"
-                  value={tab}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  className={classes.tabs}
-                >
-                  <Tab label="Chats" className={classes.labels} />
-                  <Tab label="Profile" className={classes.labels} />
-                </Tabs>
-              </Paper>
-              {tab === 0 && <Friends />}
-              {tab === 1 && <ProfilePage />}
+          <Paper className={classes.paper} square elevation={5}>
+            <Paper square elevation={5} className={classes.tabs}>
+              <Tabs
+                onChange={handleChange}
+                variant="fullWidth"
+                value={tabVal}
+                indicatorColor="primary"
+                textColor="primary"
+                className={classes.tabs}
+              >
+                <Tab label="Chats" className={classes.labels} />
+                <Tab label="Profile" className={classes.labels} />
+              </Tabs>
             </Paper>
+            {tabVal === 0 && <Friends />}
+            {tabVal === 1 && <ProfilePage />}
+          </Paper>
         </Grid>
       )}
     </React.Fragment>
   );
 }
 
-export default Chat;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+export default connect(mapStateToProps, { tabStatus })(Chat);
