@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
+function ProfilePage({ auth: { loggedIn, user,token, error }, updateUser }) {
   const classes = useStyles();
   const classes123 = makeStyles(iconStyles)();
 
@@ -134,7 +134,15 @@ function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    updateUser({name: values.name,email: values.email,token: token})
+    const Token = localStorage.getItem('token')
+    updateUser({name: values.name,email: values.email,token: Token})
+    console.log(error)
+    if(error === null){
+      notify('    Details Updated!', 'info');
+    }
+    else{
+      notify('    Error! Try again', 'error');
+    }
   }
 
   return (

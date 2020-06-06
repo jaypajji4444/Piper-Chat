@@ -110,7 +110,6 @@ export const logout = () => {
 export const updateUser = ({ name, email, token }) => {
     return dispatch => {
         dispatch(authStart());
-        console.log(token)
         fetch(`http://localhost:5000/api/v1/auth/updatedetails`, {
             method: 'PUT',
             body: JSON.stringify({name,email}),
