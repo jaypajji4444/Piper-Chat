@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { authUser } from '../../actions/authActions';
+import { resetPass } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,12 +44,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResetPass({ authUser, loggedIn, error }) {
+function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
   const classes = useStyles();
 
+  const { resettoken } = useParams();
+
+  const [fetchSuccess, setFetchSuccess] = React.useState(false);
+
   const [values, setValues] = React.useState({
-    email: '',
-    password: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   function notify(text, type) {
@@ -86,16 +90,24 @@ function ResetPass({ authUser, loggedIn, error }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    authUser({ email: values.email, password: values.password });
-    if (error === null) {
-      notify('    Login Successful!', 'info');
+    if (values.newPassword === values.confirmPassword) {
+      resetPass({
+        password: values.newPassword,
+        resetToken: resettoken,
+      });
+      if (resetDone === true) {
+        notify('    Login Successful!', 'info');
+        setFetchSuccess(true);
+      } else {
+        notify('    Invalid Credentials', 'error');
+      }
     } else {
-      notify('    Invalid Credentials', 'error');
+      notify('    Passwords do not match', 'error');
     }
   };
 
-  if (loggedIn) {
-    return <Redirect to="/chat" />;
+  if (fetchSuccess) {
+    return <Redirect to={authRedirectPath} />;
   }
 
   return (
@@ -154,4 +166,4 @@ const mapStateToProps = (state) => {
     error: state.auth.error,
   };
 };
-export default connect(mapStateToProps, { authUser })(ResetPass);
+export default connect(mapStateToProps, { resetPass })(ResetPass);
