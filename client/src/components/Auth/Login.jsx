@@ -140,9 +140,16 @@ function Login({authUser, loggedIn}) {
             Login
           </Button>
           <Grid container>
-            <Grid item xs={12} className={classes.link} >
-              <Link to="/register" className={classes.underline} >
+            <Grid item xs={12} className={classes.link}>
+              <Link to="/register" className={classes.underline}>
                 Not yet registered? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} className={classes.link}>
+              <Link to="/forgotpassword" className={classes.underline}>
+                Forgot Password?
               </Link>
             </Grid>
           </Grid>

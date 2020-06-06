@@ -8,6 +8,7 @@ import Layout from './components/Layout/Layout';
 import Home from './components/Home';
 import Register from './components/Auth/Register';
 import Chat from './components/Chat/Chat';
+import ForgotPass from './components/Auth/ForgotPass'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
@@ -42,6 +43,7 @@ function App() {
                 <Switch>
                   <Route path="/register" component={Register} exact />
                   <Route path="/login" component={Login} exact />
+                  <Route path="/forgotpassword" component={ ForgotPass } exact />
                   <Route path="/chat" component={Chat} exact />
                   <Route path="*" component={ NoMatchPage } />
               </Switch>
