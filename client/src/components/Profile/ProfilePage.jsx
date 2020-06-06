@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
+function ProfilePage({ auth: { loggedIn, user,token }, updateUser }) {
   const classes = useStyles();
   const classes123 = makeStyles(iconStyles)();
 
@@ -134,37 +134,7 @@ function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    
-    const word = 'Token ';
-    const token = word.concat(`${localStorage.getItem('token')}`);
-
-    // updateUser({
-    //   name: values.name,
-    //   email: values.email,
-    //   token: token
-    // })
-
-    fetch('http://localhost:5000/api/v1/auth/updatedetails', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${token}`,
-      },
-      body: JSON.stringify(values)
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((resData) => {
-        console.log(resData);
-        if(resData.success === true){
-            notify('Details updated', 'info')
-        }
-      })
-      .catch((err) => {
-        notify('Failed to update', 'error')
-        console.log(err);
-      });
+    updateUser({name: values.name,email: values.email,token: token})
   }
 
   return (

@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL } from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -66,6 +66,7 @@ export const authUser = (authData) => {
                 if (data.success === true) {
                     localStorage.setItem('token', data.token);
                     dispatch(authSuccess(data.token));
+                    dispatch(loadUser(data.token))
                 } else {
                     dispatch(authFail(data.error));
                 }
@@ -115,15 +116,21 @@ export const updateUser = ({ name, email, token }) => {
             body: JSON.stringify({name,email}),
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `${token}`
+                'Authorization': 'Token '+token
             },
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.success === true) {
-                    dispatch(authSuccess(data.token));
+                    dispatch({
+                        type:UPDATE_USER,
+                        user:data.data
+                    })
                 } else {
-                    dispatch(authFail(data.error));
+                    dispatch({
+                        type:UPDATE_FAIL,
+                        error:data.data
+                    });
                 }
             })
     }

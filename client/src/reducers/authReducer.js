@@ -1,4 +1,4 @@
-import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER} from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL} from '../actions/types'
 
 
 const initialState = {
@@ -40,7 +40,7 @@ export default ( state = initialState, action ) => {
                 loading:false,
                 error:action.error,
                 loggedIn:false,
-                authRedirectPath:"/register"
+                authRedirectPath:"/register",
             
             }
         case REGISTER_SUCCESS:
@@ -54,14 +54,23 @@ export default ( state = initialState, action ) => {
                 ...state,
                 loggedIn: false,
                 token: null,
-                loggedIn:false,
-                authRedirectPath:"/register"
+                authRedirectPath:"/register",
+                user:null
             }
         case UPDATE_USER:
             return{
                 ...state,
-                authRedirectPath:'/chat'
-            }    
+                authRedirectPath:'/chat',
+                user:action.user,
+                loading:false
+            } 
+        case UPDATE_FAIL:
+            return{
+                ...state,
+                authRedirectPath:'/chat',
+                loading:false,
+                error:action.error
+            }
 
         default:
             return state

@@ -2,7 +2,7 @@ import React,{useEffect} from 'react';
 import './App.css';
 import { Provider } from 'react-redux'
 import store from './store'
-import { BrowserRouter, Route, Redirect, Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import Layout from './components/Layout/Layout';
 import Home from './components/Home';

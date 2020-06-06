@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
+import socketIOClient from 'socket.io-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,8 +56,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({auth:{loggedIn,user}}) => {
+const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
+//   useEffect(() => {
+//     const socket = socketIOClient("http://localhost:5000");
+    
+//   //   if(token!==null)
+//   //   {socket.emit("authenticate",token)
+//   // }
+    
+// }, [loggedIn,token]);
+
 
   return (
     <Grid container className={classes.root}>
@@ -74,9 +84,9 @@ const ChatBox = ({auth:{loggedIn,user}}) => {
             <Typography
               color="inherit"
               variant="h6"
-              className={classes.username}
+              
             >
-              {loggedIn ? user.name : <div>User</div>}
+              {loggedIn && user? user.name : <div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>
