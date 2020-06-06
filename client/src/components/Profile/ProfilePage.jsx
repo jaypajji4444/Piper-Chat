@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { updateUser } from '../../actions/authActions';
+import Loader from '../Loader';
 
 function iconStyles() {
   return {
@@ -37,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     backgroundColor: '#2196f3',
     height: '30vh',
+  },
+  loaderPaper: {
+    padding: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '60vh',
   },
   setSize: {
     height: 100,
@@ -67,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0),
   },
   button: {
-    marginTop: '15px'
+    marginTop: '15px',
   },
 }));
 
@@ -81,6 +89,8 @@ function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
   });
 
   const [update, setUpdate] = React.useState(false)
+
+  const [loading, setLoading] = React.useState(true)
 
   function notify(text, type) {
     switch (type) {
@@ -106,6 +116,14 @@ function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
         break;
     }
   }
+
+  React.useEffect(() => {
+      if(user){
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
+      }
+  }, [user])
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -151,71 +169,79 @@ function ProfilePage({ auth: { loggedIn, user }, updateUser }) {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={12}>
-        <Paper className={classes.paper}>
-          <Toolbar className={classes.appbar}>
-            <Grid item xs={2}>
-              <CloseIcon fontSize="large" className={classes123.errorIcon} />
-            </Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={4}>
-              <Typography variant="h6" className={classes.title}>
-                Profile
-              </Typography>
-            </Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2}>
-              <DoneIcon fontSize="large" className={classes123.successIcon} />
-            </Grid>
-          </Toolbar>
-          <Grid item xs={12} className={classes.pic}>
-            <Avatar className={classes.setSize} src="/iamges.png" />
-          </Grid>
-          <Grid item xs={12} className={classes.cam}>
-            <CameraAltIcon fontSize="medium" className={classes123.camIcon} />
-            <span className={classes.title}>Add Image</span>
-          </Grid>
-        </Paper>
+      {loading ? (
         <Grid item xs={12}>
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="userName"
-              label="Name"
-              defaultValue={user.name}
-              name="userName"
-              size="small"
-              onChange={handleChange('name')}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="userEmail"
-              label="Email id"
-              id="userEmail"
-              defaultValue={user.email}
-              size="small"
-              onChange={handleChange('email')}
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={submitHandler}
-            >
-              Update
-            </Button>
-          </form>
+          <Paper className={classes.loaderPaper} elevation={0}>
+            <Loader />
+          </Paper>
         </Grid>
-      </Grid>
+      ) : (
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Toolbar className={classes.appbar}>
+              <Grid item xs={2}>
+                <CloseIcon fontSize="large" className={classes123.errorIcon} />
+              </Grid>
+              <Grid item xs={2}></Grid>
+              <Grid item xs={4}>
+                <Typography variant="h6" className={classes.title}>
+                  Profile
+                </Typography>
+              </Grid>
+              <Grid item xs={2}></Grid>
+              <Grid item xs={2}>
+                <DoneIcon fontSize="large" className={classes123.successIcon} />
+              </Grid>
+            </Toolbar>
+            <Grid item xs={12} className={classes.pic}>
+              <Avatar className={classes.setSize} src="/iamges.png" />
+            </Grid>
+            <Grid item xs={12} className={classes.cam}>
+              <CameraAltIcon fontSize="medium" className={classes123.camIcon} />
+              <span className={classes.title}>Add Image</span>
+            </Grid>
+          </Paper>
+          <Grid item xs={12}>
+            <form className={classes.form} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="userName"
+                label="Name"
+                defaultValue={user.name}
+                name="userName"
+                size="small"
+                onChange={handleChange('name')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="userEmail"
+                label="Email id"
+                id="userEmail"
+                defaultValue={user.email}
+                size="small"
+                onChange={handleChange('email')}
+                autoComplete="current-password"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={submitHandler}
+              >
+                Update
+              </Button>
+            </form>
+          </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };
