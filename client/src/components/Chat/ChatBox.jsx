@@ -59,6 +59,10 @@ const useStyles = makeStyles((theme) => ({
 const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
   let socket = socketIOClient("http://localhost:5000");
+  // This is just for testing
+  // authenticate => registers current user socket (while login)
+  // open chat => a(current)'s and b(other)'s chat object and prev msg if any
+  // privateMessage => send new message
   useEffect(() => {
     if(token!==null){
       console.log("col")
