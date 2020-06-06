@@ -58,14 +58,35 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
-//   useEffect(() => {
-//     const socket = socketIOClient("http://localhost:5000");
-    
-//   //   if(token!==null)
-//   //   {socket.emit("authenticate",token)
-//   // }
-    
-// }, [loggedIn,token]);
+  let socket = socketIOClient("http://localhost:5000");
+  useEffect(() => {
+    if(token!==null){
+      console.log("col")
+      socket.emit("authenticate",token)
+    }
+    socket.on("chat hist",(data)=>{
+      console.log(data)
+    })
+    socket.on("privateMessage",(data)=>{
+      console.log(data)
+    })
+    socket.emit("open chat",("5edb978490dba34cecf6f8df"))
+  
+
+}, [loggedIn,token]);
+
+const sendMessage=(e)=>{
+  e.preventDefault()
+  console.log("hwllo")
+ 
+  socket.emit("privateMessage",{
+    message:{
+      from:user._id,
+      to:"5edb9367492a523a786480e5",
+      body:"hello from "+user._id
+  }
+})
+}
 
 
   return (
@@ -113,9 +134,9 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
                   />
                 </Grid>
                 <Grid item xs={1}>
-                  <IconButton type="submit" className={classes.sendIcon}>
-                    <SendIcon />
-                  </IconButton>
+                  
+                    <button onClick={sendMessage}>send</button>
+          
                 </Grid>
               </Grid>
             </form>
