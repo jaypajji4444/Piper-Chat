@@ -14,4 +14,6 @@ export const USER_LOADED= "USER_LOADED";
 export const UPDATE_USER= "UPDATE_USER";
 export const UPDATE_FAIL="UPDATE_FAIL";
 
-export const TAB_STATUS= "TAB_STATUS"
+export const FORGOT_PASS="FORGOT_PASS";
+
+export const TAB_STATUS= "TAB_STATUS";

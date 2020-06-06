@@ -9,10 +9,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-//import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { authUser} from '../../actions/authActions';
-//import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,39 +44,38 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Login({authUser, loggedIn}) {
+function Login({authUser, loggedIn, error}) {
   const classes = useStyles();
-
 
   const [values, setValues] = React.useState({
     email: '',
     password: '',
   });
 
-  // function notify(text, type) {
-  //   switch (type) {
-  //     case 'info':
-  //       toast.info(`🦄${text}`, {
-  //         position: 'top-right',
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //       });
-  //       break;
-  //     case 'error':
-  //       toast.error(`🦄${text}`, {
-  //         position: 'top-right',
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //       });
-  //       break;
-  //   }
-  // }
+  function notify(text, type) {
+    switch (type) {
+      case 'info':
+        toast.info(`🦄${text}`, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
+        break;
+      case 'error':
+        toast.error(`🦄${text}`, {
+          position:"top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+    }
+  }
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -88,7 +86,13 @@ function Login({authUser, loggedIn}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    authUser({email: values.email,password: values.password,});
+    authUser({email: values.email,password: values.password});
+    if(error === null){
+      notify('    Login Successful!', 'info');
+    }
+    else{
+      notify('    Invalid Credentials', 'error');
+    }
   };
 
   if(loggedIn){
@@ -161,7 +165,8 @@ function Login({authUser, loggedIn}) {
 
 const mapStateToProps=(state)=>{
   return{
-    loggedIn:state.auth.loggedIn
+    loggedIn:state.auth.loggedIn,
+    error: state.auth.error
   }
 }
 export default connect(mapStateToProps, { authUser })(Login);

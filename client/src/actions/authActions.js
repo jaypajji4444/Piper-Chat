@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS } from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -144,4 +144,29 @@ export const tabStatus = (val) => {
     }
 }
 
-
+// forgot password
+export const forgotPass = (email) => {
+  return (dispatch) => {
+    dispatch(authStart());
+    fetch(`http://localhost:5000/api/v1/auth/forgotpassword`, {
+      method: 'POST',
+      body: JSON.stringify({email: email}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success === true) {
+          dispatch({
+            type: FORGOT_PASS
+          });
+        } else {
+          dispatch({
+            type: UPDATE_FAIL,
+            error: data.data,
+          });
+        }
+      });
+  };
+};

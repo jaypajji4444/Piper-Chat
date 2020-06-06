@@ -12,10 +12,11 @@ import ForgotPass from './components/Auth/ForgotPass'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
-import NoMatchPage from './components/404'
+import NoMatchPage from './components/404';
 
 toast.configure({
-  position: 'top-right',
+  position: 'top-center',
+  autoClose: 5000,
   hideProgressBar: false,
   newestOnTop: false,
   closeOnClick: true,

@@ -9,10 +9,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-//import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { authUser } from '../../actions/authActions';
-//import { useHistory } from 'react-router-dom';
+import { forgotPass } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,49 +44,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ForgotPass({ authUser, loggedIn }) {
+function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
-    email: '',
-    password: '',
+    email: ''
   });
 
-  // function notify(text, type) {
-  //   switch (type) {
-  //     case 'info':
-  //       toast.info(`🦄${text}`, {
-  //         position: 'top-right',
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //       });
-  //       break;
-  //     case 'error':
-  //       toast.error(`🦄${text}`, {
-  //         position: 'top-right',
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //       });
-  //       break;
-  //   }
-  // }
+  function notify(text, type) {
+    switch (type) {
+      case 'info':
+        toast.info(`🦄${text}`, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+      case 'error':
+        toast.error(`🦄${text}`, {
+          position: 'top-center',
+          autoClose: 8000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        break;
+    }
+  }
 
   const handleChange = (prop) => (event) => {
     setValues({
-      ...values,
-      [prop]: event.target.value,
+      email: event.target.value,
     });
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    authUser({ email: values.email, password: values.password });
+    forgotPass(values.email);
+    if (error === null) {
+      notify('    Check you mail!', 'info');
+    } else {
+      notify('    This email does not exist', 'error');
+    }
   };
 
   if (loggedIn) {
@@ -148,7 +150,7 @@ function ForgotPass({ authUser, loggedIn }) {
 
 const mapStateToProps = (state) => {
   return {
-    loggedIn: state.auth.loggedIn,
+    auth: state.auth
   };
 };
-export default connect(mapStateToProps, { authUser })(ForgotPass);
+export default connect(mapStateToProps, { forgotPass })(ForgotPass);

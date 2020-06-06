@@ -96,8 +96,8 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
     switch (type) {
       case 'info':
         toast.info(`🦄${text}`, {
-          position: 'top-right',
-          autoClose: 2000,
+          position: 'top-center',
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -106,8 +106,8 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
         break;
       case 'error':
         toast.error(`🦄${text}`, {
-          position: 'top-right',
-          autoClose: 2000,
+          position: 'top-center',
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
