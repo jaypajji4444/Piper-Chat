@@ -8,7 +8,8 @@ const {
     resetPassword,
     updateDetails,
     updatePassword,
-    sendInvite
+    sendInvite,
+    reqInvite
 } = require('../controllers/auth');
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.put('/updatedetails', protect, updateDetails);
 router.put('/updatepassword', protect, updatePassword);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resettoken', resetPassword);
-router.post('/sendInvite', sendInvite);
+router.post('/reqInvite', reqInvite);
+router.put('/sendInvite/:id', sendInvite);
 
 module.exports = router;

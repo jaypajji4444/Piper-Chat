@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { authUser} from '../../actions/authActions';
+import { authUser } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,23 +35,21 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 
-  link:{
-      textAlign: 'center',
+  link: {
+    textAlign: 'center',
   },
 
   underline: {
-      textDecoration: 'none'
-  }
+    textDecoration: 'none',
+  },
 }));
 
-function Login({authUser, loggedIn, error}) {
+function Admin({ authUser, loggedIn, error }) {
   const classes = useStyles();
-
-  const [admin, setAdmin] = React.useState(false)
 
   const [values, setValues] = React.useState({
     email: '',
-    password: '',
+    by: '',
   });
 
   function notify(text, type) {
@@ -63,12 +61,12 @@ function Login({authUser, loggedIn, error}) {
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
-          draggable: true
+          draggable: true,
         });
         break;
       case 'error':
         toast.error(`🦄${text}`, {
-          position:"top-center",
+          position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -88,25 +86,36 @@ function Login({authUser, loggedIn, error}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if(values.email === "iamdmin@gmail.com" && values.password === "admin123"){
-      setAdmin(true)
+
+    const data = { email: values.email, by: values.by };
+    const reqBody = JSON.stringify(data);
+
+    if(values.by === "Jash" || values.by === "Jay" || values.by === "jash" || values.by === "jay"){
+        fetch(`http://localhost:5000/api/v1/auth/sendInvite/${values.email}`, {
+          method: 'PUT',
+          body: reqBody,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json())
+          .then((resData) => {
+            if(resData.success === true){
+                notify('    Accepted!', 'info');
+            }
+            else{
+                notify('    Something went wrong', 'error');
+            }
+          })
+          .catch((err) => console.log(err));
     }
     else{
-      authUser({ email: values.email, password: values.password });
-      if (error === null) {
-        notify('    Login Successful!', 'info');
-      } else {
-        notify('    Invalid Credentials', 'error');
-      }
+        notify('    You are not an admin', 'error');
     }
   };
 
-  if(loggedIn){
-    return <Redirect to="/chat" />
-  }
-
-  if(admin){
-    return <Redirect to="/admin" />
+  if (loggedIn) {
+    return <Redirect to="/chat" />;
   }
 
   return (
@@ -117,7 +126,7 @@ function Login({authUser, loggedIn, error}) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Accept Invites
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -137,10 +146,10 @@ function Login({authUser, loggedIn, error}) {
             required
             fullWidth
             name="password"
-            label="Password"
-            type="password"
+            label="Accepted by"
+            type="text"
             id="password"
-            onChange={handleChange('password')}
+            onChange={handleChange('by')}
             autoComplete="current-password"
           />
           <Button
@@ -151,25 +160,18 @@ function Login({authUser, loggedIn, error}) {
             className={classes.submit}
             onClick={submitHandler}
           >
-            Login
+            Accept
           </Button>
-          <Grid container>
-            <Grid item xs={12} className={classes.link}>
-              <Link to="/forgotpassword" className={classes.underline}>
-                Forgot Password?
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
   );
 }
 
-const mapStateToProps=(state)=>{
-  return{
-    loggedIn:state.auth.loggedIn,
-    error: state.auth.error
-  }
-}
-export default connect(mapStateToProps, { authUser })(Login);
+const mapStateToProps = (state) => {
+  return {
+    loggedIn: state.auth.loggedIn,
+    error: state.auth.error,
+  };
+};
+export default connect(mapStateToProps, { authUser })(Admin);
