@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL} from './types';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -14,7 +14,6 @@ export const loadUser = (token) => async dispatch => {
         });
         const data=await res.json()
         
-        console.log(data)
         dispatch({
             type: USER_LOADED,
             user: data.data

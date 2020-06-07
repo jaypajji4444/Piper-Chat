@@ -27,6 +27,10 @@ const UserSchema = new mongoose.Schema({
     type:mongoose.Types.ObjectId,
     ref:"User"
   }],
+  role:{
+    type:String,
+    default:"user"
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {

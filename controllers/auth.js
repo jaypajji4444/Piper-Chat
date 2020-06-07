@@ -4,6 +4,70 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const User = require('../models/User');
+const Invites = require('../models/Invites');
+
+// @desc      Request for invite
+// @route     POST /api/v1/auth/reqInvite
+// @access    Public
+exports.reqInvite = async (req, res, next) => {
+
+  const message = `Hey, we have received your request! \n\nWelcome to Piper Chat, a secure and reliable platform for messaging. We are currently running version 1.0.0 which supports text messages only. Stay tuned for the next version with cool features :) \n\nFor making sure your request gets accepted immediately, please leave a message on LinkedIn profile: https://www.linkedin.com/in/jash-mehta-045665190 `;
+
+  try {
+    await sendEmail({
+      email: req.body.email,
+      subject: 'Welcome to Piper Chat',
+      message,
+    });
+
+    // create invite req
+    const invite = await Invites.create({
+      email: req.body.email,
+      accepted: false,
+      acceptedBy: req.body.by
+    });
+
+    res.status(200).json({ success: true, data: 'Email sent' });
+  } catch (err) {
+    console.log(err);
+    return next(new ErrorResponse('Email could not be sent', 500));
+  }
+};
+
+// @desc      Send Invite
+// @route     PUT /api/v1/auth/sendInvite/:id
+// @access    Admin
+exports.sendInvite = async (req, res, next) =>{
+
+  const emailId = req.params.id;
+
+  // Create reset url
+  const resetUrl = `http://localhost:3000/register/${emailId}`
+
+  const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
+
+  try {
+    await sendEmail({
+      email: emailId,
+      subject: 'Invite for Piper Chat',
+      message
+    });
+
+    // update user invite
+    const fieldsToUpdate = {
+      acceptedBy: req.body.by,
+      accepted: true
+    };
+    const invite = await Invites.findOneAndUpdate({email: emailId}, fieldsToUpdate, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({ success: true, data: 'Email sent', user: invite });
+  } catch (err) {
+    return next(new ErrorResponse('Email could not be sent', 500));
+  }
+};
 
 // @desc      Register User
 // @route     POST /api/v1/auth/register
@@ -27,7 +91,7 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  // Validate emil & password
+  // Validate email & password
   if (!email || !password) {
     return next(
       res.status(400).json({

@@ -2,13 +2,13 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import { toast } from 'react-toastify';
-// import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {connect} from "react-redux"
 import {register} from "../../actions/authActions"
 
@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Register({register,authRedirectPath,loggedIn}) {
   const classes = useStyles();
+  const { id } = useParams();
   
   const [values, setValues] = React.useState({
     name: '',
@@ -55,30 +56,30 @@ function Register({register,authRedirectPath,loggedIn}) {
     password: '',
   });
 
-      // function notify(text, type) {
-      //   switch (type) {
-      //     case 'info':
-      //       toast.info(`🦄${text}`, {
-      //         position: 'top-right',
-      //         autoClose: 2000,
-      //         hideProgressBar: false,
-      //         closeOnClick: true,
-      //         pauseOnHover: true,
-      //         draggable: true,
-      //       });
-      //       break;
-      //     case 'error':
-      //       toast.error(`🦄${text}`, {
-      //         position: 'top-right',
-      //         autoClose: 2000,
-      //         hideProgressBar: false,
-      //         closeOnClick: true,
-      //         pauseOnHover: true,
-      //         draggable: true,
-      //       });
-      //       break;
-      //   }
-      // }
+      function notify(text, type) {
+        switch (type) {
+          case 'info':
+            toast.info(`🦄${text}`, {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+            break;
+          case 'error':
+            toast.error(`🦄${text}`, {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+            break;
+        }
+      }
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -89,7 +90,7 @@ function Register({register,authRedirectPath,loggedIn}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    register({name: values.name,email: values.email,password: values.password})
+    register({name: values.name,email: id,password: values.password})
     
   };
 
@@ -103,9 +104,6 @@ function Register({register,authRedirectPath,loggedIn}) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */}
         <Typography component="h1" variant="h5" className={classes.register}>
           Register here!
         </Typography>
@@ -126,10 +124,13 @@ function Register({register,authRedirectPath,loggedIn}) {
             margin="normal"
             required
             fullWidth
+            defaultValue={id}
+            InputProps={{
+              readOnly: true,
+            }}
             id="email"
             label="Email Id"
             name="email"
-            onChange={handleChange('email')}
             autoFocus
           />
           <TextField
