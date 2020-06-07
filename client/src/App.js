@@ -54,7 +54,7 @@ function App() {
                   <Route path="/login" component={Login} exact />
                   <Route path="/forgotpassword" component={ ForgotPass } exact />
                   <Route path="/resetpassword/:resettoken" component={ ResetPass } exact />
-                  <Route path="/admin" component={Admin} exact />
+                  <ProtectedRoute path="/admin" component={Admin} exact />
                   <ProtectedRoute path="/chat" component={Chat} exact />
                   <ProtectedRoute path="/social" component={Social} exact />
                   <Route path="*" component={ NoMatchPage } />
