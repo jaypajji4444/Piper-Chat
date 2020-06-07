@@ -1,13 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
-// import TextField from '@material-ui/core/TextField';
-// import IconButton from '@material-ui/core/IconButton';
-// import SendIcon from '@material-ui/icons/Send';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Checkbox from '@material-ui/core/Checkbox';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,16 +50,47 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 1.5),
   },
   listItem: {
-    width: '80%',
+    height: '10vh',
+  },
+  list: {
+    width: '100%',
   },
 }));
 
 const MyFriends = (props) => {
   const classes = useStyles();
 
+  const [deleted, setDeleted] = React.useState(0);
+
+  const handleToggle = (value) => () => {};
+
   return (
     <Grid container className={classes.root}>
-      My friends
+      <List dense className={classes.list}>
+        {[0, 1, 2, 3].map((value) => {
+          const labelId = `checkbox-list-secondary-label-${value}`;
+          return (
+            <React.Fragment>
+              <ListItem key={value} className={classes.listItem}>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={`Avatar n°${value + 1}`}
+                    src={`/static/images/avatar/${value + 1}.jpg`}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  id={labelId}
+                  primary={`User name of person ${value + 1}`}
+                />
+                <ListItemSecondaryAction>
+                  <DeleteIcon color="primary" />
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </React.Fragment>
+          );
+        })}
+      </List>
     </Grid>
   );
 };

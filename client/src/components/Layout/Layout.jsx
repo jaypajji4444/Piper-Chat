@@ -117,7 +117,7 @@ function Copyright() {
       </span>
       <span> and </span>
       <span>
-        <Link underline="none">Jash Mehta</Link>
+        <Link underline="none">Jay Mehta</Link>
       </span>
     </Typography>
   );

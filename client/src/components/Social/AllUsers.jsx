@@ -1,13 +1,19 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
-// import TextField from '@material-ui/core/TextField';
-// import IconButton from '@material-ui/core/IconButton';
-// import SendIcon from '@material-ui/icons/Send';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
+import Fab from '@material-ui/core/Fab';
+import CheckIcon from '@material-ui/icons/Check';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,16 +54,113 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 1.5),
   },
   listItem: {
-    width: '80%',
+    height: '10vh',
+  },
+  list: {
+    width: '100%',
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonSuccess: {
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+    height: '36px',
+    width: '36px',
+  },
+  buttonPrev: {
+    height: '36px',
+    width: '36px'
+  },
+  fabProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: -3,
+    left: -3,
+    zIndex: 1,
+  },
+  addIcon: {
+    height: '22px',
+    width: '22px',
   },
 }));
 
 const AllUsers = (props) => {
+
   const classes = useStyles();
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const timer = React.useRef();
+
+  const buttonClassname = clsx({
+    [classes.buttonSuccess]: success,
+    [classes.buttonPrev]: !success
+  });
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+      }, 2000);
+    }
+  };
+
+  const handleToggle = (value) => () => {};
 
   return (
     <Grid container className={classes.root}>
-      AllUsers
+      <List dense className={classes.list}>
+        {[0, 1, 2, 3].map((value) => {
+          const labelId = `checkbox-list-secondary-label-${value}`;
+          return (
+            <React.Fragment>
+              <ListItem key={value} className={classes.listItem}>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={`Avatar n°${value + 1}`}
+                    src={`/static/images/avatar/${value + 1}.jpg`}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  id={labelId}
+                  primary={`User name of person ${value + 1}`}
+                />
+                <ListItemSecondaryAction>
+                  <div className={classes.wrapper}>
+                    <Fab
+                      aria-label="save"
+                      color="primary"
+                      className={buttonClassname}
+                      onClick={handleButtonClick}
+                    >
+                      {success ? <CheckIcon className={classes.addIcon} /> : <AddIcon className={classes.addIcon} />}
+                    </Fab>
+                    {loading && (
+                      <CircularProgress
+                        size={42}
+                        className={classes.fabProgress}
+                      />
+                    )}
+                  </div>
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </React.Fragment>
+          );
+        })}
+      </List>
     </Grid>
   );
 };
