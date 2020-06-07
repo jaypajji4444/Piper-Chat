@@ -58,38 +58,38 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatBox = ({auth:{loggedIn,user,token}}) => {
   const classes = useStyles();
-  let socket = socketIOClient("http://localhost:5000");
+ // let socket = socketIOClient("http://localhost:5000");
   // This is just for testing
   // authenticate => registers current user socket (while login)
   // open chat => a(current)'s and b(other)'s chat object and prev msg if any
   // privateMessage => send new message
   useEffect(() => {
-    if(token!==null){
-      console.log("col")
-      socket.emit("authenticate",token)
-    }
-    socket.on("chat hist",(data)=>{
-      console.log(data)
-    })
-    socket.on("privateMessage",(data)=>{
-      console.log(data)
-    })
-    socket.emit("open chat",("5edb978490dba34cecf6f8df"))
+    // if(token!==null){
+    //   console.log("col")
+    //   socket.emit("authenticate",token)
+    // }
+    // socket.on("chat hist",(data)=>{
+    //   console.log(data)
+    // })
+    // socket.on("privateMessage",(data)=>{
+    //   console.log(data)
+    // })
+    // socket.emit("open chat",("5edb978490dba34cecf6f8df"))
   
 
 }, [loggedIn,token]);
 
-const sendMessage=(e)=>{
-  e.preventDefault()
-  console.log("hwllo")
+ const sendMessage=(e)=>{
+//   e.preventDefault()
+//   console.log("hwllo")
  
-  socket.emit("privateMessage",{
-    message:{
-      from:user._id,
-      to:"5edb9367492a523a786480e5",
-      body:"hello from "+user._id
-  }
-})
+//   socket.emit("privateMessage",{
+//     message:{
+//       from:user._id,
+//       to:"5edb9367492a523a786480e5",
+//       body:"hello from "+user._id
+//   }
+// })
 }
 
 

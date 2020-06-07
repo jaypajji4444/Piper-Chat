@@ -86,8 +86,7 @@ export const register = (formData) => dispatch => {
         }
     })
         .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
+        .then((data) => {       
             if (data.success === true) {
                 dispatch({
                     type: REGISTER_SUCCESS
