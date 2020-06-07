@@ -10,6 +10,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useEffect } from 'react';
+import {connect} from "react-redux"
+import {fetchUser} from "../../../actions/chatActions"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,14 +60,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Friends = (props) => {
+const Friends = ({fetchUser,users}) => {
   const classes = useStyles();
+
+  useEffect(async()=>{
+    fetchUser()
+    
+  },[users])
+
+  
 
   const [deleted, setDeleted] = React.useState(0);
 
   const handleToggle = (value) => () => {
   
   };
+
 
   return (
     <Grid container className={classes.root}>
@@ -93,5 +104,10 @@ const Friends = (props) => {
     </Grid>
   );
 };
+const mapStateToProps=(state)=>{
+  return{
+    users:state.chat.users
+  }
+}
 
-export default Friends;
+export default connect(mapStateToProps,{fetchUser})(Friends);

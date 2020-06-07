@@ -10,7 +10,8 @@ const initialState = {
     user:null,
     tabVal: 0,
     tabValSocial: 0,
-    resetDone: false
+    resetDone: false,
+    
 }
 
 export default ( state = initialState, action ) => {   

@@ -248,3 +248,13 @@ exports.sendInvite = asyncHandler(async (req, res, next) =>{
     return next(new ErrorResponse('Email could not be sent', 500));
   }
 });
+
+
+// @desc      Get all users
+// @route     GET /api/v1/auth/users
+// @access    Public
+exports.getUser = asyncHandler(async(req,res,next)=>{
+  const users =await User.find({})
+  if(!users)return res.status(404).json({success:false,data:"No User found"})
+  return res.status(200).json({success:true,data:users})
+})
