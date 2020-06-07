@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -15,6 +16,11 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LanguageIcon from '@material-ui/icons/Language';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import SpeedDial from '@material-ui/lab/SpeedDial';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     color: '#fff',
     backgroundColor: '#3f51b5',
-    fontSize: '1rem',
+    fontSize: '0.75rem',
+    marginLeft: '25px',
     fontFamily: 'Roboto,Helvetica, Arial, sans-serif',
     fontWeight: '400',
     lineHeight: '1.5',
@@ -44,31 +51,74 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
-    height: '10px'
+    height: '10px',
   },
 
   icons: {
     marginLeft: '20px',
+  },
+
+  speedDialLarge: {
+    position: 'absolute',
+    bottom: '5vh',
+    right: '5vh',
+  },
+
+  speedDialSmall: {
+    position: 'absolute',
+    bottom: '2vh',
+    right: '5vh'
+  },
+
+  exampleWrapper:{
+    height: '16px',
+    width: '16px'
+  },
+
+  copyright: {
+    fontSize: '0.7rem',
+    marginRight: '7vh'
   }
 }));
+
+const actions = [
+  {
+    icon: <GitHubIcon color="primary" fontSize="small" />,
+    name: 'Github',
+  },
+  {
+    icon: <LinkedInIcon color="primary" fontSize="small" />,
+    name: 'LinkedIn',
+  },
+  {
+    icon: <LanguageIcon color="primary" fontSize="small" />,
+    name: 'Website',
+  },
+  {
+    icon: (
+      <TwitterIcon color="primary" fontSize="small" />
+    ),
+    name: 'Twitter',
+  }
+];
 
 function Copyright() {
   const classes = useStyles();
   
   return (
-    <Typography color="textSecondary" align="center">
-      <GitHubIcon color="primary" fontSize="small" className={classes.icons} />
-      <LinkedInIcon
-        color="primary"
-        fontSize="small"
-        className={classes.icons}
-      />
-      <LanguageIcon
-        color="primary"
-        fontSize="small"
-        className={classes.icons}
-      />
-      <TwitterIcon color="primary" fontSize="small" className={classes.icons} />
+    <Typography
+      color="textSecondary"
+      align="center"
+      className={classes.copyright}
+    >
+      <span> Made by: </span>
+      <span>
+        <Link underline="none">Jash Mehta</Link>
+      </span>
+      <span> and </span>
+      <span>
+        <Link underline="none">Jay Mehta</Link>
+      </span>
     </Typography>
   );
 }
@@ -78,6 +128,34 @@ function Layout(props) {
   const classes = useStyles();
   let history = useHistory();
   const matches = useMediaQuery('(min-width:800px)');
+
+  const [direction, setDirection] = React.useState('up');
+  const [open, setOpen] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
+
+  const handleDirectionChange = (event) => {
+    setDirection(event.target.value);
+  };
+
+  const handleHiddenChange = (event) => {
+    setHidden(event.target.checked);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const chats = () => {
+    history.push("chat")
+  }
+
+  const socialCenter = () => {
+    history.push("social")
+  }
 
   const logout=()=>{
     props.logout();
@@ -96,16 +174,25 @@ function Layout(props) {
             </Grid>
           </Grid>
           {props.loggedIn ? (
-            <button onClick={logout} className={classes.button}>
-              Logout
-            </button>
+            <Fragment>
+              <Button size="small" onClick={chats} className={classes.button}>
+                Chats
+              </Button>
+              <Button
+                size="small"
+                onClick={socialCenter}
+                className={classes.button}
+              >
+                Friends
+              </Button>
+              <Button size="small" onClick={logout} className={classes.button}>
+                Logout
+              </Button>
+            </Fragment>
           ) : (
             <Fragment>
               <NavLink className={classes.link} to="/login">
                 <Typography size="large">Login</Typography>
-              </NavLink>
-              <NavLink className={classes.link} to="/register">
-                <Typography size="large">Register</Typography>
               </NavLink>
             </Fragment>
           )}
@@ -113,29 +200,73 @@ function Layout(props) {
       </AppBar>
       <Container>
         {matches ? (
-          <Paper
-            elevation={5}
-            style={{
-              backgroundColor: '#f0f0f0',
-              height: '77vh',
-              marginTop: '5vh',
-              zIndex: '2',
-            }}
-          >
-            {props.children}
-          </Paper>
+          <React.Fragment>
+            <Paper
+              elevation={5}
+              style={{
+                backgroundColor: '#f0f0f0',
+                height: '77vh',
+                marginTop: '5vh',
+                zIndex: '2',
+              }}
+            >
+              {props.children}
+            </Paper>
+            <div className={classes.exampleWrapper}>
+              <SpeedDial
+                ariaLabel="SpeedDial example"
+                className={classes.speedDialLarge}
+                icon={<SpeedDialIcon />}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                open={open}
+                direction={direction}
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={handleClose}
+                  />
+                ))}
+              </SpeedDial>
+            </div>
+          </React.Fragment>
         ) : (
-          <Paper
-            elevation={5}
-            style={{
-              backgroundColor: '#f0f0f0',
-              height: '72vh',
-              marginTop: '5vh',
-              zIndex: '2',
-            }}
-          >
-            {props.children}
-          </Paper>
+          <React.Fragment>
+            <Paper
+              elevation={5}
+              style={{
+                backgroundColor: '#f0f0f0',
+                height: '72vh',
+                marginTop: '5vh',
+                zIndex: '2',
+              }}
+            >
+              {props.children}
+            </Paper>
+            <div className={classes.exampleWrapper}>
+              <SpeedDial
+                ariaLabel="SpeedDial example"
+                className={classes.speedDialSmall}
+                icon={<SpeedDialIcon />}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                open={open}
+                direction={direction}
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={handleClose}
+                  />
+                ))}
+              </SpeedDial>
+            </div>
+          </React.Fragment>
         )}
       </Container>
       <footer className={classes.footer}>
