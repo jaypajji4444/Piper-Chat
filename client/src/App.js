@@ -16,6 +16,7 @@ import { loadUser } from './actions/authActions';
 import NoMatchPage from './components/404';
 import ProtectedRoute from './components/ProtectedRoute';
 import Social from './components/Social/Social';
+import Admin from './components/Auth/Admin';
 
 toast.configure({
   position: 'top-center',
@@ -45,10 +46,11 @@ function App() {
               <Route path="/" component={Home} exact />
               <Layout>
                 <Switch>
-                  <Route path="/register" component={Register} exact />
+                  <Route path="/register/:id" component={Register} exact />
                   <Route path="/login" component={Login} exact />
                   <Route path="/forgotpassword" component={ ForgotPass } exact />
                   <Route path="/resetpassword/:resettoken" component={ ResetPass } exact />
+                  <Route path="/admin" component={Admin} exact />
                   <ProtectedRoute path="/chat" component={Chat} exact />
                   <ProtectedRoute path="/social" component={Social} exact />
                   <Route path="*" component={ NoMatchPage } />

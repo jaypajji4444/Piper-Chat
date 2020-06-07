@@ -106,10 +106,10 @@ function Home({loggedIn}) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const data = {email:mailId.email}
+    const data = {email:mailId.email, by: "anonymous"}
     const reqBody = JSON.stringify(data)
 
-    fetch('http://localhost:5000/api/v1/auth/sendInvite', {
+    fetch('http://localhost:5000/api/v1/auth/reqInvite', {
       method: 'POST',
       body: reqBody,
       headers: {
@@ -184,8 +184,7 @@ if(loggedIn){
             {mailId.success ? (
               <Grid item xs={12}>
                 <Typography variant="subtitle1" className={classes.mainFull}>
-                  We have recorded your response. We will drop a mail as soon as
-                  possible ...
+                  We have recorded your response. Please check your inbox ...
                 </Typography>
               </Grid>
             ) : null}

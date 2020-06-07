@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   speedDialSmall: {
     position: 'absolute',
     bottom: '2vh',
-    right: '5vh'
+    right: '2vh'
   },
 
   exampleWrapper:{
