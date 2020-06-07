@@ -2,15 +2,14 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const ProtectedRoute = (props, loggedIn) => {
+const ProtectedRoute = ({ component: Component, ...rest }) => {
+    console.log(rest.loggedIn)
   return (
     <Route
-      {...props}
+      {...rest}
       render={(props) => {
-        if (
-          loggedIn
-        ) {
-          return <props.component.Component {...props} />;
+        if (rest.loggedIn) {
+          return <Component {...props} />;
         } else {
           return (
             <Redirect
