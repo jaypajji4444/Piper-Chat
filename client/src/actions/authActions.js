@@ -14,7 +14,6 @@ export const loadUser = (token) => async dispatch => {
         });
         const data=await res.json()
         
-        console.log(data)
         dispatch({
             type: USER_LOADED,
             user: data.data
