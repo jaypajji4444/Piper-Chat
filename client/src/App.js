@@ -17,6 +17,11 @@ import NoMatchPage from './components/404';
 import ProtectedRoute from './components/ProtectedRoute';
 import Social from './components/Social/Social';
 import Admin from './components/Auth/Admin';
+import dotenv from 'dotenv'
+
+dotenv.config({
+  path: '../config/config.env',
+});
 
 toast.configure({
   position: 'top-center',
@@ -37,7 +42,6 @@ function App() {
       store.dispatch(loadUser(localStorage.token))
     }
   },[])
-
   return (
     <Provider store={store} >
       <BrowserRouter>

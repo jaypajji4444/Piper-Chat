@@ -100,18 +100,17 @@ function Admin({ authUser, loggedIn, error }) {
         })
           .then((res) => res.json())
           .then((resData) => {
-            console.log(resData);
-            console.log(resData)
+            if(resData.success === true){
+                notify('    Accepted!', 'info');
+            }
+            else{
+                notify('    Something went wrong', 'error');
+            }
           })
           .catch((err) => console.log(err));
     }
     else{
         notify('    You are not an admin', 'error');
-    }
-    if (error === null) {
-      notify('    Accepted!', 'info');
-    } else {
-      notify('    Something went wrong', 'error');
     }
   };
 
