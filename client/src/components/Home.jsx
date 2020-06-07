@@ -95,6 +95,7 @@ function Home({loggedIn}) {
             draggable: true,
           });
           break;
+          default:break
       }
     }
 

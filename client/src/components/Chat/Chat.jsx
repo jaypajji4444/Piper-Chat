@@ -41,7 +41,7 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
-    if(tabVal == 0){
+    if(tabVal === 0){
       tabStatus(1)
     }
     else{

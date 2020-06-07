@@ -117,7 +117,6 @@ const AllUsers = (props) => {
     }
   };
 
-  const handleToggle = (value) => () => {};
 
   return (
     <Grid container className={classes.root}>

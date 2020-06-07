@@ -129,17 +129,11 @@ function Layout(props) {
   let history = useHistory();
   const matches = useMediaQuery('(min-width:800px)');
 
-  const [direction, setDirection] = React.useState('up');
+  const [direction] = React.useState('up');
   const [open, setOpen] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
 
-  const handleDirectionChange = (event) => {
-    setDirection(event.target.value);
-  };
 
-  const handleHiddenChange = (event) => {
-    setHidden(event.target.checked);
-  };
+
 
   const handleClose = () => {
     setOpen(false);

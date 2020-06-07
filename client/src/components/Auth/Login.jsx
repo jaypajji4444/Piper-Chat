@@ -74,6 +74,8 @@ function Login({authUser, loggedIn, error}) {
           draggable: true,
         });
         break;
+        default :
+          break;
     }
   }
 

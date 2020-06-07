@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Checkbox from '@material-ui/core/Checkbox';
+
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -59,10 +59,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MyFriends = (props) => {
   const classes = useStyles();
-
-  const [deleted, setDeleted] = React.useState(0);
-
-  const handleToggle = (value) => () => {};
 
   return (
     <Grid container className={classes.root}>
