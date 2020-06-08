@@ -59,7 +59,7 @@ function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
   function notify(text, type) {
     switch (type) {
       case 'info':
-        toast.info(`🦄${text}`, {
+        toast.info(`${text}`, {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
@@ -69,7 +69,7 @@ function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
         });
         break;
       case 'error':
-        toast.error(`🦄${text}`, {
+        toast.error(`${text}`, {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,

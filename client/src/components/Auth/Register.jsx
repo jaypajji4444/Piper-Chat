@@ -59,7 +59,7 @@ function Register({register,authRedirectPath,loggedIn}) {
       function notify(text, type) {
         switch (type) {
           case 'info':
-            toast.info(`🦄${text}`, {
+            toast.info(`${text}`, {
               position: 'top-center',
               autoClose: 5000,
               hideProgressBar: false,
@@ -69,7 +69,7 @@ function Register({register,authRedirectPath,loggedIn}) {
             });
             break;
           case 'error':
-            toast.error(`🦄${text}`, {
+            toast.error(`${text}`, {
               position: 'top-center',
               autoClose: 5000,
               hideProgressBar: false,
@@ -91,7 +91,11 @@ function Register({register,authRedirectPath,loggedIn}) {
   const submitHandler = (e) => {
     e.preventDefault();
     register({name: values.name,email: id,password: values.password})
-    
+    if (error === null) {
+      notify('    Registered successfully', 'info');
+    } else {
+      notify('    Connection error', 'error');
+    }
   };
 
   if(authRedirectPath==="/login"){
