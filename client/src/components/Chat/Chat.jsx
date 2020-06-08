@@ -12,8 +12,9 @@ import ProfilePage from './Conversations/ProfilePage';
 
 import { connect } from 'react-redux';
 import { tabStatus } from '../../actions/authActions';
+import { newChat } from "../../actions/chatActions"
+import chatSocket from "../../utils/webSockets"
 
-import socketIOClient from 'socket.io-client';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus }) {
+function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus , newChat ,chat : {chat}}) {
   const classes = useStyles();
-  let socket = socketIOClient("http://localhost:5000");
-  socket.on("connection",()=>{
-    console.log("gi")
-  })
+  // let socket = socketIOClient("http://localhost:5000");
+  // socket.on("connection",()=>{
+  //   console.log("gi")
+  // })
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
@@ -54,20 +55,29 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus }) {
       tabStatus(0)
     }
   };
-  useEffect(()=>{
-    socket.on("privateMessage",(message)=>{
-      console.log("From Server:",message)
-    })
+  // useEffect(()=>{
+  //   socket.on("privateMessage",(message)=>{
+  //     console.log("From Server:",message)
+  //   })
     
-  },[socket])
-    const openChat=async(otherUser)=>{
+  // },[socket])
+
+  useEffect(()=>{
+    
+    chatSocket.establishConnection()
+    chatSocket.receiveChat()
+    chatSocket.receiveMessage()
+  
+  },[])
+  const openChat=async(otherUser)=>{
       console.log(otherUser._id)
       console.log("current:",user._id)
       const dataObj = {
         to:user._id,
         from:otherUser._id
       }
-      socket.emit("authenticate",token)
+      //socket.emit("authenticate",token)
+      chatSocket.authenticate(token)
 
       const res = await fetch("http://localhost:5000/api/v1/chat",{
         method:"POST",
@@ -78,16 +88,18 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus }) {
       })
       
       const chat = await res.json()
-      socket.emit("open chat",chat._id)
-     
-    }
+      newChat(chat)
+      //socket.emit("open chat",chat._id)
+      chatSocket.openChat(chat._id)
+  }
 
     const sendMessage=(message)=>event=>{
-    
     event.preventDefault()
     console.log(message)
-      
-    socket.emit("privateMessage",message)
+    //socket.emit("privateMessage",message)
+    chatSocket.sendMessage(message)
+
+    
     }
   return (
     <React.Fragment>
@@ -144,6 +156,7 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus }) {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    chat: state.chat
   };
 };
-export default connect(mapStateToProps, { tabStatus })(Chat);
+export default connect(mapStateToProps, { tabStatus , newChat })(Chat);

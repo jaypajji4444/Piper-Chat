@@ -22,6 +22,9 @@ export  const fetchUsers = () => async dispatch => {
     }
 }
 
-// export const openChat =()=>async dispatch=>{
-
-// }
+ export const newChat =(chat)=>async dispatch=>{
+    dispatch({
+        type:actions.CHAT_OPEN,
+        chat:chat
+    })
+}

@@ -1,4 +1,4 @@
-import {FETCH_FAIL,FETCH_USERS} from "../actions/types"
+import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN} from "../actions/types"
 const initialState={
     chat:null,
     chats:null,
@@ -22,6 +22,13 @@ const chatReducer = (state=initialState,action)=>{
                 loading:false,
                 error:action.error,
                 users:null
+            }
+        case CHAT_OPEN:
+            return{
+                ...state,
+                chat:action.chat,
+                error:null,
+                loading:false
             }
         default:
             return state;

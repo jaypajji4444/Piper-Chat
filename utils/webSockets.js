@@ -2,7 +2,7 @@ const http = require("http")
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken")
 const Conversation = require("../models/Conversations");
-const mongoose=require("mongoose")
+// @@@@@@@@@@@@@ Working @@@@@@@@@@@@@@
 
 const attactChatApp = (app) => {
     const server = http.createServer(app)
@@ -13,14 +13,14 @@ const attactChatApp = (app) => {
     const socketUserMap = {};
 
     io.on("connection", (socket) => {
-        //console.log(`Socket ${socket.id} connected !!!`)
+        console.log(`Socket ${socket.id} connected !!!`)
         // Authenticate user
         socket.on('authenticate', async (token) => {
             try {
                 const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-                socketUserMap[socket] = decoded.id
-                console.log("@@@@@@@@@@@@@@@@@@2")
-
+                socketUserMap[socket.id] = decoded.id
+                console.log("AuthenticateUser:",socketUserMap[socket.id])
+                console.log("AuthenticateSocket:",socket.id)
             } catch (err) {
                 console.log('error', err);
                 socket.emit('status', {
@@ -34,7 +34,8 @@ const attactChatApp = (app) => {
         socket.on('open chat', async (id) => {
             const chat = await Conversation.findOne({ _id:id});
 
-            console.log("Chat:",chat!==undefined);
+            console.log("ChatID",chat._id)
+            
             if (!chat) {
                 console.log("chat not found")
                 return socket.emit('status', {
@@ -42,23 +43,37 @@ const attactChatApp = (app) => {
                     msg: 'Chat not found',
                 });
             }
-            if (socketUserMap[socket] != chat.recipents[0] && socketUserMap[socket] != chat.recipents[1]) {
+            if (socketUserMap[socket.id] !== chat.recipents[0].toString() && socketUserMap[socket.id] !== chat.recipents[1].toString()) {
                 console.log("user not found")
                 return socket.emit('status', {
                     code: 403,
                     msg: 'User not found in the chats',
                 });
             }
-            socket.join(id);
-            //socket.leave(socketChatMap[socket]);
-            socketChatMap[socket] = id;
+        
+            console.log("Room Joined:",id)  
+            // @@@@ join @@@@@@@@@@@@@@
+            socket.join(id)
+            console.log("Room join Socket:",socket.id)
+            console.log("Room Leave",socketChatMap[socket.id])
+            console.log("Room Leave Socket",socket.id)
+            console.log("Room Leave user:",socketUserMap[socket.id])
+            // @@@@@@ leave @@@@@@@@@@@
+            socket.leave(socketChatMap[socket.id]);
+            // @@ add @@@@@@@@@@@@@@
+            socketChatMap[socket.id] = id;
+            console.log("socket Chat socket",socket.id)
+            console.log("socket Chat room",socketChatMap[socket.id])
             socket.emit('open chat success', id);
-            return socket.emit('history', chat.messages); // Sending in the old messages saved using the chatId in the db
+             socket.emit('history', chat.messages); // Sending in the old messages saved using the chatId in the db
         });
 
 
         socket.on('privateMessage', async(message) => {
-            if (!socketUserMap[socket]) {
+            console.log("Msg Sockeet",socket.id)
+            console.log("msg user:",socketUserMap[socket.id])
+            
+            if (!socketUserMap[socket.id]) {
                 console.log("not auth")
                 socket.emit('status', {
                     code: 403,
@@ -66,7 +81,7 @@ const attactChatApp = (app) => {
                 });
             }
             // No chat openned
-            if (!socketChatMap[socket]) {
+            if (!socketChatMap[socket.id]) {
                 console.log("No chat")
                 socket.emit('status', {
                     code: 400,
@@ -76,26 +91,32 @@ const attactChatApp = (app) => {
 
             console.log('Received: ', message);
             const messageObject ={
-                from:socketUserMap[socket],
+                from:socketUserMap[socket.id],
                 body:message,
                 date: new Date().toISOString()
             }
             console.log("MESSAGE",message)
-            const conversation = await Conversation.findByIdAndUpdate(socketChatMap[socket],{
+            const conversation = await Conversation.findByIdAndUpdate(socketChatMap[socket.id],{
                 $push:{messages:messageObject},
             })
             conversation.lastMessage=message
             await conversation.save()
             
             console.log("@@@@@@@@@@@@ Chat @@@@@@@@@@@")
-            io.to(socketChatMap[socket]).emit("privateMessage", messageObject)
+            console.log("current scoket",socket.id)
+            console.log("current user:",socketUserMap[socket.id])
+            console.log("To ROOM",socketChatMap[socket.id])
+           // console.log(io.sockets.clients(socketChatMap[socket.id]))
+            //io.to(socketChatMap[socket.id]).emit("privateMessage", messageObject)
+            io.to(socketChatMap[socket.id]).emit("privateMessage", messageObject)
             //io.sockets.sockets[socket.id].emit("privateMessage", { msg: chat.lastMessage })
             
         })
         socket.on('disconnect', () => {
             // Delete user and chat info from cache table
-            delete socketUserMap[socket];
-            delete socketChatMap[socket];
+            console.log(socket.id," disconnected")
+            delete socketUserMap[socket.id];
+            delete socketChatMap[socket.id];
         });
     })
 

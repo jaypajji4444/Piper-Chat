@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -90,7 +90,16 @@ const ChatBox = ({auth:{loggedIn,user,token},sendMessage}) => {
 // //   }
 // // })
 // }
-
+const [formData,setFormdata]=useState({
+  message:""
+})
+const {message} = formData;
+const changeHandler=(e)=>{
+  console.log(e.target.value)
+  setFormdata({
+    message:e.target.value
+  })
+}
 
   return (
     <Grid container className={classes.root}>
@@ -130,6 +139,8 @@ const ChatBox = ({auth:{loggedIn,user,token},sendMessage}) => {
                     id="message"
                     label="Message"
                     variant="outlined"
+                    onChange={changeHandler}
+                    value={message}
                     margin="dense"
                     fullWidth
                     multiline
@@ -137,7 +148,7 @@ const ChatBox = ({auth:{loggedIn,user,token},sendMessage}) => {
                   />
                 </Grid>
                 <Grid item xs={1}>
-                    <button onClick={sendMessage("message")}>send</button>
+                    <button onClick={sendMessage(message)}>send</button>
                 </Grid>
               </Grid>
             </form>
