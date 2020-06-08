@@ -7,6 +7,7 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
+    "test": "mocha || true",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
@@ -22,6 +23,7 @@
   "dependencies": {
     "@material-ui/lab": "^4.0.0-alpha.55",
     "bcryptjs": "^2.4.3",
+    "chai": "^4.2.0",
     "colors": "^1.4.0",
     "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
@@ -37,6 +39,7 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "mocha": "^7.2.0",
     "nodemon": "^2.0.2"
   }
 }
