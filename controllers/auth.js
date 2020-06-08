@@ -13,25 +13,30 @@ exports.reqInvite = async (req, res, next) => {
 
   const message = `Hey, we have received your request! \n\nWelcome to Piper Chat, a secure and reliable platform for messaging. We are currently running version 1.0.0 which supports text messages only. Stay tuned for the next version with cool features :) \n\nFor making sure your request gets accepted immediately, please leave a message on LinkedIn profile: https://www.linkedin.com/in/jash-mehta-045665190 `;
 
-  try {
-    await sendEmail({
-      email: req.body.email,
-      subject: 'Welcome to Piper Chat',
-      message,
-    });
-
+  try{
     // create invite req
     const invite = await Invites.create({
       email: req.body.email,
       accepted: false,
       acceptedBy: req.body.by
     });
+      try {
+        await sendEmail({
+          email: req.body.email,
+          subject: 'Welcome to Piper Chat',
+          message,
+        });
+      } catch (err) {
+        console.log(err);
+        return next(new ErrorResponse('Email could not be sent', 500));
+      }
 
     res.status(200).json({ success: true, data: 'Email sent' });
-  } catch (err) {
+  }catch(err) {
     console.log(err);
-    return next(new ErrorResponse('Email could not be sent', 500));
+    return next(new ErrorResponse('Duplicate entry', 500));
   }
+  
 };
 
 // @desc      Send Invite
