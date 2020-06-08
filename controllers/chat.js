@@ -23,7 +23,7 @@ exports.create=asyncHandler(async (req,res,next)=>{
             
         },
         { upsert: true, new: true, setDefaultsOnInsert: true })
-    
+        console.log(conversation.id)
     return res.status(200).json(conversation)
 })
 

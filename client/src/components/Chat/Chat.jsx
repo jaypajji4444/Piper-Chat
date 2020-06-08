@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,6 +12,9 @@ import ProfilePage from './Conversations/ProfilePage';
 
 import { connect } from 'react-redux';
 import { tabStatus } from '../../actions/authActions';
+
+import socketIOClient from 'socket.io-client';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,9 +38,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
+function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus }) {
   const classes = useStyles();
-
+  let socket = socketIOClient("http://localhost:5000");
+  socket.on("connection",()=>{
+    console.log("gi")
+  })
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
@@ -48,7 +54,41 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
       tabStatus(0)
     }
   };
+  useEffect(()=>{
+    socket.on("privateMessage",(message)=>{
+      console.log("From Server:",message)
+    })
+    
+  },[socket])
+    const openChat=async(otherUser)=>{
+      console.log(otherUser._id)
+      console.log("current:",user._id)
+      const dataObj = {
+        to:user._id,
+        from:otherUser._id
+      }
+      socket.emit("authenticate",token)
 
+      const res = await fetch("http://localhost:5000/api/v1/chat",{
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify(dataObj)
+      })
+      
+      const chat = await res.json()
+      socket.emit("open chat",chat._id)
+     
+    }
+
+    const sendMessage=(message)=>event=>{
+    
+    event.preventDefault()
+    console.log(message)
+      
+    socket.emit("privateMessage",message)
+    }
   return (
     <React.Fragment>
       {matches ? (
@@ -68,12 +108,12 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
                   <Tab label="Profile" className={classes.labels} />
                 </Tabs>
               </Paper>
-              {tabVal === 0 && <Friends />}
+              {tabVal === 0 && <Friends openChat={openChat}/>}
               {tabVal === 1 && <ProfilePage />}
             </Paper>
           </Grid>
           <Grid item md={8}>
-            <ChatBox />
+            <ChatBox sendMessage={sendMessage} />
           </Grid>
         </Grid>
       ) : (

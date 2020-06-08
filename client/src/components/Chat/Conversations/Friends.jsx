@@ -59,13 +59,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Friends = ({fetchUsers,users}) => {
+const Friends = ({fetchUsers,users,openChat}) => {
   const classes = useStyles();
-//   const [deleted, setDeleted] = React.useState(0);
 
-//   const handleToggle = (value) => () => {
-  
-//   };
 
   useEffect(()=>{
     console.log("hello")
@@ -80,7 +76,7 @@ const Friends = ({fetchUsers,users}) => {
           const labelId = `checkbox-list-secondary-label-${value}`;
           return (
             <React.Fragment key={value}>
-              <ListItem  className={classes.listItem} >
+              <ListItem  className={classes.listItem} onClick={()=>openChat(element)} >
                 <ListItemAvatar>
                   <Avatar
                     alt={`Avatar n°${value + 1}`}

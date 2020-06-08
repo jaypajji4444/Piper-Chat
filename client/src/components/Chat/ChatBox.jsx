@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token}}) => {
+const ChatBox = ({auth:{loggedIn,user,token},sendMessage}) => {
   const classes = useStyles();
  // let socket = socketIOClient("http://localhost:5000");
   // This is just for testing
@@ -78,18 +78,18 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
 
 }, [loggedIn,token]);
 
- const sendMessage=(e)=>{
-//   e.preventDefault()
-//   console.log("hwllo")
+//  const sendMessage=(e)=>{
+// //   e.preventDefault()
+// //   console.log("hwllo")
  
-//   socket.emit("privateMessage",{
-//     message:{
-//       from:user._id,
-//       to:"5edb9367492a523a786480e5",
-//       body:"hello from "+user._id
-//   }
-// })
-}
+// //   socket.emit("privateMessage",{
+// //     message:{
+// //       from:user._id,
+// //       to:"5edb9367492a523a786480e5",
+// //       body:"hello from "+user._id
+// //   }
+// // })
+// }
 
 
   return (
@@ -137,9 +137,7 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
                   />
                 </Grid>
                 <Grid item xs={1}>
-                  
-                    <button onClick={sendMessage}>send</button>
-          
+                    <button onClick={sendMessage("message")}>send</button>
                 </Grid>
               </Grid>
             </form>

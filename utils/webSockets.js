@@ -33,6 +33,7 @@ const attactChatApp = (app) => {
 
         socket.on('open chat', async (id) => {
             const chat = await Conversation.findOne({ _id:id});
+
             console.log("Chat:",chat!==undefined);
             if (!chat) {
                 console.log("chat not found")
@@ -48,15 +49,15 @@ const attactChatApp = (app) => {
                     msg: 'User not found in the chats',
                 });
             }
-            socket.join(chatId);
-            socket.leave(socketChatMap[socket]);
-            socketChatMap[socket] = chatId;
-            socket.emit('open chat success', chatId);
+            socket.join(id);
+            //socket.leave(socketChatMap[socket]);
+            socketChatMap[socket] = id;
+            socket.emit('open chat success', id);
             return socket.emit('history', chat.messages); // Sending in the old messages saved using the chatId in the db
         });
 
 
-        socket.on('privateMessage', async(data) => {
+        socket.on('privateMessage', async(message) => {
             if (!socketUserMap[socket]) {
                 console.log("not auth")
                 socket.emit('status', {
@@ -73,14 +74,21 @@ const attactChatApp = (app) => {
                 });
             }
 
-            console.log('Received ', data.message);
+            console.log('Received: ', message);
+            const messageObject ={
+                from:socketUserMap[socket],
+                body:message,
+                date: new Date().toISOString()
+            }
+            console.log("MESSAGE",message)
             const conversation = await Conversation.findByIdAndUpdate(socketChatMap[socket],{
-                $push:{messages:data.message},
-                lastMessage:data.message.body
+                $push:{messages:messageObject},
             })
-
+            conversation.lastMessage=message
+            await conversation.save()
+            
             console.log("@@@@@@@@@@@@ Chat @@@@@@@@@@@")
-            io.to(socketChatMap[socket]).emit("privateMessage", { msg: conversation.lastMessage })
+            io.to(socketChatMap[socket]).emit("privateMessage", messageObject)
             //io.sockets.sockets[socket.id].emit("privateMessage", { msg: chat.lastMessage })
             
         })

@@ -21,3 +21,7 @@ export  const fetchUsers = () => async dispatch => {
         })
     }
 }
+
+// export const openChat =()=>async dispatch=>{
+
+// }

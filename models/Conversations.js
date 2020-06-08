@@ -1,10 +1,7 @@
 const {model,Schema} = require("mongoose")
 
 const MessageSchema = new Schema({
-    to: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    },
+
     from: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -14,7 +11,7 @@ const MessageSchema = new Schema({
         required: true,
     },
     date: {
-        type: String,
+        type: Date,
         default: Date.now,
     }
 })
