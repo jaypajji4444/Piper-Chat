@@ -57,7 +57,7 @@ function Login({authUser, loggedIn, error}) {
   function notify(text, type) {
     switch (type) {
       case 'info':
-        toast.info(`🦄${text}`, {
+        toast.info(`${text}`, {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
@@ -67,7 +67,7 @@ function Login({authUser, loggedIn, error}) {
         });
         break;
       case 'error':
-        toast.error(`🦄${text}`, {
+        toast.error(`${text}`, {
           position:"top-center",
           autoClose: 5000,
           hideProgressBar: false,

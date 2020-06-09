@@ -76,7 +76,7 @@ function Home({loggedIn}) {
     function notify(text, type) {
       switch (type) {
         case 'info':
-          toast.info(`🦄${text}`, {
+          toast.info(`${text}`, {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
@@ -86,7 +86,7 @@ function Home({loggedIn}) {
           });
           break;
         case 'error':
-          toast.error(`🦄${text}`, {
+          toast.error(`${text}`, {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
@@ -124,7 +124,12 @@ function Home({loggedIn}) {
         setMailId({email: '',success: true})
         notify('  Thankyou for sharing!', 'info');
       } else {
-        notify('  Please retry', 'error');
+        if(resData.error === 'Duplicate entry'){
+          notify('   There is an existing account with same mailId', 'error')
+        }
+        if(resData.error === 'Email could not be sent'){
+          notify('   Connection error, try again','error')
+        }
       }
     })
     .catch(err=>console.log(err))    

@@ -54,7 +54,7 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
   function notify(text, type) {
     switch (type) {
       case 'info':
-        toast.info(`🦄${text}`, {
+        toast.info(`${text}`, {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
@@ -64,7 +64,7 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
         });
         break;
       case 'error':
-        toast.error(`🦄${text}`, {
+        toast.error(`${text}`, {
           position: 'top-center',
           autoClose: 8000,
           hideProgressBar: false,
