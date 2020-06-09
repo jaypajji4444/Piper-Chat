@@ -7,7 +7,7 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
-    "test": "mocha || true",
+    "test": "mocha 'test/**/*.test.js' --timeout 1000000",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
@@ -24,12 +24,14 @@
     "@material-ui/lab": "^4.0.0-alpha.55",
     "bcryptjs": "^2.4.3",
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "colors": "^1.4.0",
     "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
     "glamor": "^2.20.40",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.6",

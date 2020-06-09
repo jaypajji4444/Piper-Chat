@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Register({register,authRedirectPath,loggedIn}) {
+function Register({register,authRedirectPath,loggedIn, error}) {
   const classes = useStyles();
   const { id } = useParams();
   
@@ -80,7 +80,7 @@ function Register({register,authRedirectPath,loggedIn}) {
             break;
         }
       }
-
+    
   const handleChange = (prop) => (event) => {
     setValues({
       ...values,
@@ -107,67 +107,67 @@ function Register({register,authRedirectPath,loggedIn}) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5" className={classes.register}>
-          Register here!
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            onChange={handleChange('name')}
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            defaultValue={id}
-            InputProps={{
-              readOnly: true,
-            }}
-            id="email"
-            label="Email Id"
-            name="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            onChange={handleChange('password')}
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={submitHandler}
-          >
-            Register
-          </Button>
-          <Grid container>
-            <Grid item xs={12} className={classes.link}>
-              <Link to="/login" className={classes.underline}>
-                Registered already? Login Here!
-              </Link>
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5" className={classes.register}>
+            Register here!
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              onChange={handleChange('name')}
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              defaultValue={id}
+              InputProps={{
+                readOnly: true,
+              }}
+              id="email"
+              label="Email Id"
+              name="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={handleChange('password')}
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={submitHandler}
+            >
+              Register
+            </Button>
+            <Grid container>
+              <Grid item xs={12} className={classes.link}>
+                <Link to="/login" className={classes.underline}>
+                  Registered already? Login Here!
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
+          </form>
+        </div>
     </Container>
   );
 }
@@ -175,7 +175,8 @@ function Register({register,authRedirectPath,loggedIn}) {
 const mapStateToProps=(state)=>{
   return{
     authRedirectPath:state.auth.authRedirectPath,
-    loggedIn:state.auth.loggedIn
+    loggedIn:state.auth.loggedIn,
+    error: state.auth.error
   }
 }
 

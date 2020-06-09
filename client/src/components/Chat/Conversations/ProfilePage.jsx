@@ -24,8 +24,8 @@ function iconStyles() {
       color: 'white',
     },
     camIcon: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 }
 
@@ -86,18 +86,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser , tabStatus}) {
+function ProfilePage({
+  auth: { loggedIn, user, token, error, tabVal },
+  updateUser,
+  tabStatus,
+}) {
   const classes = useStyles();
   const classes123 = makeStyles(iconStyles)();
 
   const [values, setValues] = React.useState({
     name: user.name,
-    email: user.email
+    email: user.email,
   });
 
-  const [update, setUpdate] = React.useState(false)
+  const [update, setUpdate] = React.useState(false);
 
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = React.useState(true);
 
   function notify(text, type) {
     switch (type) {
@@ -125,12 +129,12 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
   }
 
   React.useEffect(() => {
-      if(user){
-        setTimeout(() => {
-          setLoading(false);
-        }, 2500);
-      }
-  }, [user])
+    if (user) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2500);
+    }
+  }, [user]);
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -140,21 +144,20 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
   };
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    const Token = localStorage.getItem('token')
-    updateUser({name: values.name,email: values.email,token: Token})
-    if(error === null){
+    e.preventDefault();
+    const Token = localStorage.getItem('token');
+    updateUser({ name: values.name, email: values.email, token: Token });
+    if (error === null) {
       notify('    Details Updated!', 'info');
-    }
-    else{
+    } else {
       notify('    Error! Try again', 'error');
     }
-  }
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
-    tabStatus(0)
-  }
+    tabStatus(0);
+  };
 
   return (
     <Grid container className={classes.root}>
@@ -203,7 +206,11 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
                 type="file"
               />
               <label htmlFor="contained-button-file">
-                <Button size="small" component="span" className={classes.upload} >
+                <Button
+                  size="small"
+                  component="span"
+                  className={classes.upload}
+                >
                   Upload
                 </Button>
               </label>
@@ -252,12 +259,11 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
       )}
     </Grid>
   );
-};
-
+}
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
   };
 };
-export default connect(mapStateToProps, {updateUser, tabStatus})(ProfilePage);
+export default connect(mapStateToProps, { updateUser, tabStatus })(ProfilePage);

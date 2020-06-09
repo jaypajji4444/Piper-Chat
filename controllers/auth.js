@@ -11,7 +11,7 @@ const Invites = require('../models/Invites');
 // @access    Public
 exports.reqInvite = async (req, res, next) => {
 
-  const message = `Hey, we have received your request! \n\nWelcome to Piper Chat, a secure and reliable platform for messaging. We are currently running version 1.0.0 which supports text messages only. Stay tuned for the next version with cool features :) \n\nFor making sure your request gets accepted immediately, please leave a message on LinkedIn profile: https://www.linkedin.com/in/jash-mehta-045665190 `;
+  const message = `Hey, we have received your request! \n\nWelcome to Piper Chat, a secure and reliable platform for messaging. We are currently running version 1.0.0 which supports text messages only. Stay tuned for the next version with cool features :) \n\nFor making sure your request gets accepted immediately, please leave a message on LinkedIn profile: https://www.linkedin.com/in/jash-mehta-045665190 `;  
 
   try{
     // create invite req

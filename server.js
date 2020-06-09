@@ -21,7 +21,7 @@ main().then((server)=>{
 const PORT = process.env.PORT || 5000;
   server.listen(PORT,()=>{
     console.log(
-      `\nThe server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
+      `The server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
         .brightBlue.bold
     )
   })
