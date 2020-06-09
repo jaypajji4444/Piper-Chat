@@ -204,7 +204,7 @@ const sendMessage=(message)=>event=>{
                   />
                 </Grid>
                 <Grid item xs={1}>
-                <button onClick={sendMessage(message)}>send</button>
+                <button onClick={sendMessage(message)} disabled={message.length===0}>send</button>
                 </Grid>
               </Grid>
             </form>

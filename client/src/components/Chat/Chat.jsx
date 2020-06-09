@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
  
 
-  
-  
-
 
 }));
 
@@ -62,7 +59,6 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, chat:{chat} , tabStat
 
 
   useEffect(()=>{
-
     chatSocket.establishConnection()
     chatSocket.receiveChat()
     chatSocket.receiveMessage()
@@ -72,29 +68,7 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, chat:{chat} , tabStat
     })
   
   },[])
-  // const openChat=async(otherUser)=>{
-  //     console.log(otherUser._id)
-  //     console.log("current:",user._id)
-  //     const dataObj = {
-  //       to:user._id,
-  //       from:otherUser._id
-  //     }
-  //     //socket.emit("authenticate",token)
-  //     chatSocket.authenticate(token)
-
-  //     const res = await fetch("http://localhost:5000/api/v1/chat",{
-  //       method:"POST",
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //     },
-  //     body:JSON.stringify(dataObj)
-  //     })
-      
-  //     const chat = await res.json()
-  //     newChat(chat)
-  //     //socket.emit("open chat",chat._id)
-  //     chatSocket.openChat(chat._id)
-  // }
+  
   const openChat =async(otherUser)=>{
     newChat(user,otherUser,token)
     setChat(1)
