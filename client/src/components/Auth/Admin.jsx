@@ -3,15 +3,14 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link, Redirect } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { authUser } from '../../actions/authActions';
+import { loadUser } from '../../actions/authActions';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,13 +43,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Admin({ authUser, loggedIn, error }) {
+function Admin({ auth : {user} }) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
     email: '',
     by: '',
   });
+
+ 
 
   function notify(text, type) {
     switch (type) {
@@ -74,6 +75,7 @@ function Admin({ authUser, loggedIn, error }) {
           draggable: true,
         });
         break;
+      default: break
     }
   }
 
@@ -90,7 +92,6 @@ function Admin({ authUser, loggedIn, error }) {
     const data = { email: values.email, by: values.by };
     const reqBody = JSON.stringify(data);
 
-    if(values.by === "Jash" || values.by === "Jay" || values.by === "jash" || values.by === "jay"){
         fetch(`http://localhost:5000/api/v1/auth/sendInvite/${values.email}`, {
           method: 'PUT',
           body: reqBody,
@@ -108,15 +109,9 @@ function Admin({ authUser, loggedIn, error }) {
             }
           })
           .catch((err) => console.log(err));
-    }
-    else{
-        notify('    You are not an admin', 'error');
-    }
+
   };
 
-  if (loggedIn) {
-    return <Redirect to="/chat" />;
-  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -126,7 +121,7 @@ function Admin({ authUser, loggedIn, error }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Accept Invites
+  {user?<div>{user.role}</div>:<div>Accept INvitess</div>}
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -170,8 +165,7 @@ function Admin({ authUser, loggedIn, error }) {
 
 const mapStateToProps = (state) => {
   return {
-    loggedIn: state.auth.loggedIn,
-    error: state.auth.error,
+   auth:state.auth
   };
 };
-export default connect(mapStateToProps, { authUser })(Admin);
+export default connect(mapStateToProps, { loadUser })(Admin);

@@ -41,7 +41,7 @@ function Social({ auth: { loggedIn, tabValSocial }, tabSocial }) {
   const matches = useMediaQuery('(min-width:800px)');
 
   const handleChange = (e, newVal) => {
-    if (tabValSocial == 0) {
+    if (tabValSocial === 0) {
       tabSocial(1);
     } else {
       tabSocial(0);

@@ -110,12 +110,11 @@ exports.login = async (req, res, next) => {
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
-    return next(
-      res.status(401).json({
+    return res.status(401).json({
         success: false,
         error: 'Invalid Credentials',
       })
-    );
+    
   }
 
   // Check if password matches
@@ -295,3 +294,35 @@ const sendTokenResponse = (user, statusCode, res) => {
     });
 };
 
+// @desc      Send Invite
+// @route     POST /api/v1/auth/sendInvite
+// @access    Public
+exports.sendInvite = asyncHandler(async (req, res, next) =>{
+
+  // Create reset url
+  const resetUrl = 'http://localhost:3000/register'
+
+  const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
+
+  try {
+    await sendEmail({
+      email: req.body.email,
+      subject: 'Invite for Piper Chat',
+      message
+    });
+    res.status(200).json({ success: true, data: 'Email sent' });
+  } catch (err) {
+   console.log(err)
+    return next(new ErrorResponse('Email could not be sent', 500));
+  }
+});
+
+
+// @desc      Get all users
+// @route     GET /api/v1/auth/users
+// @access    Public
+exports.getUser = asyncHandler(async(req,res,next)=>{
+  const users =await User.find({})
+  if(!users)return res.status(404).json({success:false,data:"No User found"})
+  return res.status(200).json({success:true,data:users})
+})

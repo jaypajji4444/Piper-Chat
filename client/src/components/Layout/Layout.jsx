@@ -22,6 +22,7 @@ import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import Link from '@material-ui/core/Link';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -43,9 +44,14 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1.5',
   },
   link: {
-    color: 'inherit',
+    color: '#fff',
     textDecoration: 'none',
     padding: '0.5rem',
+    fontSize: '0.75rem',
+    marginLeft: '25px',
+    fontFamily: 'Roboto,Helvetica, Arial, sans-serif',
+
+    lineHeight: '1.5',
   },
 
   footer: {
@@ -124,22 +130,16 @@ function Copyright() {
 }
 
 
-function Layout(props) {
+function Layout({auth:{loggedIn,user},logout,children}) {
   const classes = useStyles();
   let history = useHistory();
   const matches = useMediaQuery('(min-width:800px)');
 
-  const [direction, setDirection] = React.useState('up');
+  const [direction] = React.useState('up');
   const [open, setOpen] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
 
-  const handleDirectionChange = (event) => {
-    setDirection(event.target.value);
-  };
 
-  const handleHiddenChange = (event) => {
-    setHidden(event.target.checked);
-  };
+
 
   const handleClose = () => {
     setOpen(false);
@@ -157,8 +157,8 @@ function Layout(props) {
     history.push("social")
   }
 
-  const logout=()=>{
-    props.logout();
+  const logoutUser=()=>{
+    logout();
     history.push("/login")
   }
 
@@ -173,7 +173,7 @@ function Layout(props) {
               <Typography className={classes.title}>Piper Chat</Typography>
             </Grid>
           </Grid>
-          {props.loggedIn ? (
+          {loggedIn ? (
             <Fragment>
               <Button size="small" onClick={chats} className={classes.button}>
                 Chats
@@ -185,9 +185,12 @@ function Layout(props) {
               >
                 Friends
               </Button>
-              <Button size="small" onClick={logout} className={classes.button}>
+              <Button size="small" onClick={logoutUser} className={classes.button}>
                 Logout
               </Button>
+              {user && user.role==="admin"?(<NavLink className={classes.link} to="/admin">
+                ADMIN
+              </NavLink>):null}
             </Fragment>
           ) : (
             <Fragment>
@@ -210,10 +213,10 @@ function Layout(props) {
                 zIndex: '2',
               }}
             >
-              {props.children}
+              {children}
             </Paper>
             <div className={classes.exampleWrapper}>
-              <SpeedDial
+              {/* <SpeedDial
                 ariaLabel="SpeedDial example"
                 className={classes.speedDialLarge}
                 icon={<SpeedDialIcon />}
@@ -230,7 +233,7 @@ function Layout(props) {
                     onClick={handleClose}
                   />
                 ))}
-              </SpeedDial>
+              </SpeedDial> */}
             </div>
           </React.Fragment>
         ) : (
@@ -244,7 +247,7 @@ function Layout(props) {
                 zIndex: '2',
               }}
             >
-              {props.children}
+              {children}
             </Paper>
             <div className={classes.exampleWrapper}>
               <SpeedDial
@@ -277,7 +280,7 @@ function Layout(props) {
 }
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.auth.loggedIn
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { logout })(Layout);

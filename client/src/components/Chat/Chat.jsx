@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect , useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -11,7 +11,10 @@ import Friends from './Conversations/Friends';
 import ProfilePage from './Conversations/ProfilePage';
 
 import { connect } from 'react-redux';
-import { tabStatus } from '../../actions/authActions';
+import { newChat , addMessage } from "../../actions/chatActions"
+import chatSocket from "../../utils/webSockets"
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,22 +35,42 @@ const useStyles = makeStyles((theme) => ({
   labels: {
       padding: '15px',
       fontWeight: 'bold'
-  }
+  },
+ 
+
+
 }));
 
-function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
+function Chat({ auth: { loggedIn, user , token }, chat:{chat} , newChat , addMessage}) {
   const classes = useStyles();
 
   const matches = useMediaQuery('(min-width:800px)');
 
+  const [showChat,setShowChat] = useState(0);
+  const [otherUser,setOtherUser] = useState("");
+  const [tab, setTab] = useState(0);
+
   const handleChange = (e, newVal) => {
-    if(tabVal == 0){
-      tabStatus(1)
-    }
-    else{
-      tabStatus(0)
-    }
+    setTab(newVal);
   };
+
+
+  useEffect(()=>{
+    chatSocket.establishConnection()
+    chatSocket.receiveChat()
+    chatSocket.receiveMessage()
+    chatSocket.eventEmitter.on('add-message-response',(data)=>{
+      addMessage(data)
+    })
+  
+  },[])
+  
+  const openChat =async(otherUser)=>{
+    newChat(user,otherUser,token)
+    setShowChat(1)
+    setOtherUser(otherUser.name)
+  }
+
 
   return (
     <React.Fragment>
@@ -59,7 +82,7 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
                 <Tabs
                   onChange={handleChange}
                   variant="fullWidth"
-                  value={tabVal}
+                  value={tab}
                   indicatorColor="primary"
                   textColor="primary"
                   className={classes.tabs}
@@ -68,32 +91,40 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
                   <Tab label="Profile" className={classes.labels} />
                 </Tabs>
               </Paper>
-              {tabVal === 0 && <Friends />}
-              {tabVal === 1 && <ProfilePage />}
+              {tab === 0 && <Friends openChat={openChat} />}
+              {tab === 1 && <ProfilePage />}
             </Paper>
           </Grid>
           <Grid item md={8}>
-            <ChatBox />
+            {showChat ? (
+              <ChatBox otherUser={otherUser} chat={chat} />
+            ) : (
+              <h1>Welcome to Piper-Chat</h1>
+            )}
           </Grid>
         </Grid>
       ) : (
         <Grid container className={classes.root}>
           <Paper className={classes.paper} square elevation={5}>
-            <Paper square elevation={5} className={classes.tabs}>
-              <Tabs
-                onChange={handleChange}
-                variant="fullWidth"
-                value={tabVal}
-                indicatorColor="primary"
-                textColor="primary"
-                className={classes.tabs}
-              >
-                <Tab label="Chats" className={classes.labels} />
-                <Tab label="Profile" className={classes.labels} />
-              </Tabs>
-            </Paper>
-            {tabVal === 0 && <Friends />}
-            {tabVal === 1 && <ProfilePage />}
+            {showChat ? (
+              <ChatBox otherUser={otherUser} chat={chat} />
+            ) : (
+              <Paper square elevation={5} className={classes.tabs}>
+                <Tabs
+                  onChange={handleChange}
+                  variant="fullWidth"
+                  value={tab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  className={classes.tabs}
+                >
+                  <Tab label="Chats" className={classes.labels} />
+                  <Tab label="Profile" className={classes.labels} />
+                </Tabs>
+              </Paper>
+            )}
+            {tab === 0 && <Friends openChat={openChat} />}
+            {tab === 1 && <ProfilePage />}
           </Paper>
         </Grid>
       )}
@@ -104,6 +135,7 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    chat: state.chat
   };
 };
-export default connect(mapStateToProps, { tabStatus })(Chat);
+export default connect(mapStateToProps, { newChat , addMessage })(Chat);

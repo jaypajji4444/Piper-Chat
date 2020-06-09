@@ -35,9 +35,9 @@ app.use(cookieparser())
 
 
 //Dev middleware Morgan (request logger)
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
 
 //Mount routers
 app.use('/api/v1/auth', auth)

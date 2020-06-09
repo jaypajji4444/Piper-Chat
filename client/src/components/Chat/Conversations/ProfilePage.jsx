@@ -125,6 +125,7 @@ function ProfilePage({
           draggable: true,
         });
         break;
+      default: break;
     }
   }
 

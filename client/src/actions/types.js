@@ -19,3 +19,13 @@ export const RESET_PASS="RESET_PASS";
 
 export const TAB_STATUS= "TAB_STATUS";
 export const TAB_SOCIAL="TAB_SOCIAL";
+
+export const FETCH_USERS="FETCH_USERS";
+export const FETCH_FAIL="FETCH_FAIL";
+
+export const CHAT_AUTH="CHAT_AUTH";
+export const CHAT_OPEN="CHAT_OPEN";
+export const CHAT_OPEN_ERROR="CHAT_OPEN_ERROR";
+export const CHAT_AUTH_ERROR="CHAT_AUTH_ERROR";
+export const ADD_PRIVATE_MESSAGE="PRIVATE_MESSAGE";
+export const ADD_PRIVATE_MESSAGE_FAIL="PRIVATE_MESSAGE_FAIL";
