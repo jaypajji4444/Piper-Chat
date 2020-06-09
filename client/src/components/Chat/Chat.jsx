@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,7 +12,7 @@ import ProfilePage from './Conversations/ProfilePage';
 
 import { connect } from 'react-redux';
 import { tabStatus } from '../../actions/authActions';
-import { newChat } from "../../actions/chatActions"
+import { newChat , addMessage } from "../../actions/chatActions"
 import chatSocket from "../../utils/webSockets"
 
 
@@ -36,17 +36,21 @@ const useStyles = makeStyles((theme) => ({
   labels: {
       padding: '15px',
       fontWeight: 'bold'
-  }
+  },
+ 
+
+  
+  
+
+
 }));
 
-function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus , newChat ,chat : {chat}}) {
+function Chat({ auth: { loggedIn, tabVal , user , token }, chat:{chat} , tabStatus , newChat , addMessage}) {
   const classes = useStyles();
-  // let socket = socketIOClient("http://localhost:5000");
-  // socket.on("connection",()=>{
-  //   console.log("gi")
-  // })
-  const matches = useMediaQuery('(min-width:800px)');
 
+  const matches = useMediaQuery('(min-width:800px)');
+  const [showChat,setChat] = useState(0);
+  const [otherUser,setOtherUser] = useState("");
   const handleChange = (e, newVal) => {
     if(tabVal === 0){
       tabStatus(1)
@@ -55,52 +59,49 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus , newChat ,
       tabStatus(0)
     }
   };
-  // useEffect(()=>{
-  //   socket.on("privateMessage",(message)=>{
-  //     console.log("From Server:",message)
-  //   })
-    
-  // },[socket])
+
 
   useEffect(()=>{
-    
+
     chatSocket.establishConnection()
     chatSocket.receiveChat()
     chatSocket.receiveMessage()
+    chatSocket.eventEmitter.on('add-message-response',(data)=>{
+      addMessage(data)
+    
+    })
   
   },[])
-  const openChat=async(otherUser)=>{
-      console.log(otherUser._id)
-      console.log("current:",user._id)
-      const dataObj = {
-        to:user._id,
-        from:otherUser._id
-      }
-      //socket.emit("authenticate",token)
-      chatSocket.authenticate(token)
+  // const openChat=async(otherUser)=>{
+  //     console.log(otherUser._id)
+  //     console.log("current:",user._id)
+  //     const dataObj = {
+  //       to:user._id,
+  //       from:otherUser._id
+  //     }
+  //     //socket.emit("authenticate",token)
+  //     chatSocket.authenticate(token)
 
-      const res = await fetch("http://localhost:5000/api/v1/chat",{
-        method:"POST",
-        headers: {
-          'Content-Type': 'application/json',
-      },
-      body:JSON.stringify(dataObj)
-      })
+  //     const res = await fetch("http://localhost:5000/api/v1/chat",{
+  //       method:"POST",
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //     },
+  //     body:JSON.stringify(dataObj)
+  //     })
       
-      const chat = await res.json()
-      newChat(chat)
-      //socket.emit("open chat",chat._id)
-      chatSocket.openChat(chat._id)
+  //     const chat = await res.json()
+  //     newChat(chat)
+  //     //socket.emit("open chat",chat._id)
+  //     chatSocket.openChat(chat._id)
+  // }
+  const openChat =async(otherUser)=>{
+    newChat(user,otherUser,token)
+    setChat(1)
+    setOtherUser(otherUser.name)
   }
 
-    const sendMessage=(message)=>event=>{
-    event.preventDefault()
-    console.log(message)
-    //socket.emit("privateMessage",message)
-    chatSocket.sendMessage(message)
 
-    
-    }
   return (
     <React.Fragment>
       {matches ? (
@@ -125,7 +126,10 @@ function Chat({ auth: { loggedIn, tabVal , user , token }, tabStatus , newChat ,
             </Paper>
           </Grid>
           <Grid item md={8}>
-            <ChatBox sendMessage={sendMessage} />
+          {showChat?
+          (<ChatBox otherUser={otherUser} chat={chat} />):
+          ( <h1>Welcome to Piper-Chat</h1>)
+          }
           </Grid>
         </Grid>
       ) : (
@@ -159,4 +163,4 @@ const mapStateToProps = (state) => {
     chat: state.chat
   };
 };
-export default connect(mapStateToProps, { tabStatus , newChat })(Chat);
+export default connect(mapStateToProps, { tabStatus , newChat , addMessage })(Chat);

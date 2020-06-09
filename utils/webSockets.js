@@ -33,7 +33,7 @@ const attactChatApp = (app) => {
 
         socket.on('open chat', async (id) => {
             const chat = await Conversation.findOne({ _id:id});
-
+        
             console.log("ChatID",chat._id)
             
             if (!chat) {
@@ -108,7 +108,7 @@ const attactChatApp = (app) => {
             console.log("To ROOM",socketChatMap[socket.id])
            // console.log(io.sockets.clients(socketChatMap[socket.id]))
             //io.to(socketChatMap[socket.id]).emit("privateMessage", messageObject)
-            io.to(socketChatMap[socket.id]).emit("privateMessage", messageObject)
+            io.to(socketChatMap[socket.id]).emit("privateMessage", {message:messageObject,chatID:conversation._id})
             //io.sockets.sockets[socket.id].emit("privateMessage", { msg: chat.lastMessage })
             
         })

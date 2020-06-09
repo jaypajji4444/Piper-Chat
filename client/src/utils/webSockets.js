@@ -1,8 +1,10 @@
 import * as io from 'socket.io-client';
+const events = require("events")
 
 class SocketChat{
     constructor(){
-        this.socket=null
+        this.socket=null;
+        this.eventEmitter = new events.EventEmitter()
     }
 
     establishConnection(){
@@ -25,7 +27,7 @@ class SocketChat{
 
     receiveMessage(){
         this.socket.on("privateMessage",(data)=>{
-            console.log(data)
+            this.eventEmitter.emit('add-message-response', data);
         })
     }
 

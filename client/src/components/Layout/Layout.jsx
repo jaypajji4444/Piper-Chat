@@ -216,7 +216,7 @@ function Layout({auth:{loggedIn,user},logout,children}) {
               {children}
             </Paper>
             <div className={classes.exampleWrapper}>
-              <SpeedDial
+              {/* <SpeedDial
                 ariaLabel="SpeedDial example"
                 className={classes.speedDialLarge}
                 icon={<SpeedDialIcon />}
@@ -233,7 +233,7 @@ function Layout({auth:{loggedIn,user},logout,children}) {
                     onClick={handleClose}
                   />
                 ))}
-              </SpeedDial>
+              </SpeedDial> */}
             </div>
           </React.Fragment>
         ) : (
