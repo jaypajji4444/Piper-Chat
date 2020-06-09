@@ -9,6 +9,7 @@ const {
     updateDetails,
     updatePassword,
     sendInvite,
+    getUser,
     reqInvite
 } = require('../controllers/auth');
 
@@ -24,6 +25,8 @@ router.put('/updatedetails', protect, updateDetails);
 router.put('/updatepassword', protect, updatePassword);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resettoken', resetPassword);
+router.post('/sendInvite', sendInvite);
+router.get("/users", getUser)
 router.post('/reqInvite', reqInvite);
 router.put('/sendInvite/:id', sendInvite);
 

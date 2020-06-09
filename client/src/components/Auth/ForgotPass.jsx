@@ -73,6 +73,8 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
           draggable: true,
         });
         break;
+        default:
+          break;
     }
   }
 

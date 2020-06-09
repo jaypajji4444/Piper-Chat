@@ -1,15 +1,16 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
-import SendIcon from '@material-ui/icons/Send';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
 import socketIOClient from 'socket.io-client';
+import { ListItem, ListItemText } from '@material-ui/core';
+import chatSocket from "../../utils/webSockets"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,25 +49,86 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     margin: theme.spacing(1, 1.5),
   },
-  listItem: {
-    width: '80%',
-  },
   sendIcon: {
     marginBottom: '10px',
   },
+  chatMessages: {
+    borderTop: "1px solid rgba(0, 0, 0, .05)",
+    padding: "10px",
+    overflow: "auto",
+    display: "flex",
+    flexFlow: "row wrap",
+    alignContent: "flex-start",
+    flex: "1"
+  },
+  messageBoxHolder :{
+    width: "100%",
+    margin: "0 0 15px",
+    display:"flex",
+    flexFlow: "column",
+    alignItems: "flex-end"
+  },
+  messageBox :{
+    padding: "6px 10px",
+    borderRadius: "6px 0 6px 0",
+    position: "relative",
+    background: "rgba(100, 170, 0, .1)",
+    border: "2px solid rgba(100, 170, 0, .1)",
+    color:" #6c6c6c",
+    fontSize: "12px"
+  },
+
+  messagePartner :{
+    padding: "6px 10px",
+    borderRadius: "6px 0 6px 0",
+    position: "relative",
+    background: "rgba(0, 114, 135, .1)",
+    border: "2px solid rgba(0, 114, 135, .1)",
+    alignSelf: "flex-start",
+    color:" #6c6c6c",
+    fontSize: "12px",
+  },
+
+
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token}}) => {
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat} , otherUser}) => {
   const classes = useStyles();
-//   useEffect(() => {
-//     const socket = socketIOClient("http://localhost:5000");
-    
-//   //   if(token!==null)
-//   //   {socket.emit("authenticate",token)
-//   // }
-    
-// }, [loggedIn,token]);
 
+const [formData,setFormdata]=useState({
+  message:""
+})
+const {message} = formData;
+const [ChatMessages,setMessages]=useState({
+  messages:chat?chat.messages:[]
+})
+const changeHandler=(e)=>{
+    setFormdata({
+      message:e.target.value
+    })
+}
+
+
+useEffect(()=>{
+console.log(chat)
+  if(chat!==null){
+    console.log(chat.messages)
+  chatSocket.eventEmitter.on('add-message-response',(data)=>{
+    setMessages({
+      messages:chat.messages
+    })
+  
+})
+  }
+},[chat])
+
+const sendMessage=(message)=>event=>{
+  event.preventDefault()
+
+  //socket.emit("privateMessage",message)
+  chatSocket.sendMessage(message)
+
+}
 
   return (
     <Grid container className={classes.root}>
@@ -86,14 +148,41 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
               variant="h6"
               
             >
-              {loggedIn && user? user.name : <div>User</div>}
+              {loggedIn && otherUser? otherUser : <div>User</div>}
             </Typography>
           </Toolbar>
         </Paper>
       </Grid>
       <Grid item xs={12}>
         <Grid container className={classes.messageContainer}>
-          <Grid item xs={12} className={classes.messagesRow}></Grid>
+          <Grid item xs={12} className={classes.messagesRow}>
+                  <div className={classes.chatMessages}>
+                    {chat && chat.messages.length>0?
+                    chat.messages.map((message)=>{
+                      return (
+                        <div className={classes.messageBoxHolder} key={message._id}>
+                          <div className={user._id===message.from?classes.messageBox:classes.messagePartner}>
+                          {message.body}
+                          </div>
+                      </div>
+                      )
+                    }):null
+                    }
+            {
+              
+              // ChatMessages.messages.length>0?(ChatMessages.messages.map(message=>{
+              //   console.log(message)
+              //   return(
+              //     <div className={classes.messageBoxHolder} key={message._id}>
+              //       <div className={user._id===message.from?classes.messageBox:classes.messagePartner}>
+              //       {message.body}
+              //       </div>
+              //     </div>
+              //   )
+              // })):null
+            }
+            </div>
+          </Grid>
           <Grid item xs={12} className={classes.inputRow}>
             <form className={classes.form}>
               <Grid
@@ -106,6 +195,8 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
                     id="message"
                     label="Message"
                     variant="outlined"
+                    onChange={changeHandler}
+                    value={message}
                     margin="dense"
                     fullWidth
                     multiline
@@ -113,9 +204,7 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
                   />
                 </Grid>
                 <Grid item xs={1}>
-                  <IconButton type="submit" className={classes.sendIcon}>
-                    <SendIcon />
-                  </IconButton>
+                <button onClick={sendMessage(message)} disabled={message.length===0}>send</button>
                 </Grid>
               </Grid>
             </form>
@@ -128,7 +217,8 @@ const ChatBox = ({auth:{loggedIn,user,token}}) => {
 
 const mapStateToProps=(state)=>{
   return{
-    auth:state.auth
+    auth:state.auth,
+    chat : state.chat
   }
 }
 export default connect(mapStateToProps,null)(ChatBox);

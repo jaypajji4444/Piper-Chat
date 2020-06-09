@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  friends:[{
+    type:mongoose.Types.ObjectId,
+    ref:"User"
+  }],
   role:{
     type:String,
     default:"user"

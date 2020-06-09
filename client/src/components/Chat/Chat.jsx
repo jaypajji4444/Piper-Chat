@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect , useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,6 +12,10 @@ import ProfilePage from './Conversations/ProfilePage';
 
 import { connect } from 'react-redux';
 import { tabStatus } from '../../actions/authActions';
+import { newChat , addMessage } from "../../actions/chatActions"
+import chatSocket from "../../utils/webSockets"
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,22 +36,45 @@ const useStyles = makeStyles((theme) => ({
   labels: {
       padding: '15px',
       fontWeight: 'bold'
-  }
+  },
+ 
+
+
 }));
 
-function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
+function Chat({ auth: { loggedIn, tabVal , user , token }, chat:{chat} , tabStatus , newChat , addMessage}) {
   const classes = useStyles();
 
   const matches = useMediaQuery('(min-width:800px)');
-
+  const [showChat,setChat] = useState(0);
+  const [otherUser,setOtherUser] = useState("");
   const handleChange = (e, newVal) => {
-    if(tabVal == 0){
+    if(tabVal === 0){
       tabStatus(1)
     }
     else{
       tabStatus(0)
     }
   };
+
+
+  useEffect(()=>{
+    chatSocket.establishConnection()
+    chatSocket.receiveChat()
+    chatSocket.receiveMessage()
+    chatSocket.eventEmitter.on('add-message-response',(data)=>{
+      addMessage(data)
+    
+    })
+  
+  },[])
+  
+  const openChat =async(otherUser)=>{
+    newChat(user,otherUser,token)
+    setChat(1)
+    setOtherUser(otherUser.name)
+  }
+
 
   return (
     <React.Fragment>
@@ -68,12 +95,15 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
                   <Tab label="Profile" className={classes.labels} />
                 </Tabs>
               </Paper>
-              {tabVal === 0 && <Friends />}
+              {tabVal === 0 && <Friends openChat={openChat}/>}
               {tabVal === 1 && <ProfilePage />}
             </Paper>
           </Grid>
           <Grid item md={8}>
-            <ChatBox />
+          {showChat?
+          (<ChatBox otherUser={otherUser} chat={chat} />):
+          ( <h1>Welcome to Piper-Chat</h1>)
+          }
           </Grid>
         </Grid>
       ) : (
@@ -104,6 +134,7 @@ function Chat({ auth: { loggedIn, tabVal }, tabStatus }) {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    chat: state.chat
   };
 };
-export default connect(mapStateToProps, { tabStatus })(Chat);
+export default connect(mapStateToProps, { tabStatus , newChat , addMessage })(Chat);

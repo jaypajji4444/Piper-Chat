@@ -3,7 +3,7 @@ import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOA
 
 const initialState = {
     loggedIn:false,
-    token: null,
+    token: localStorage.getItem("token")?localStorage.getItem("token"):null,
     error: null,
     loading: false,
     authRedirectPath: '/register',
@@ -11,6 +11,7 @@ const initialState = {
     tabVal: 0,
     tabValSocial: 0,
     resetDone: false,
+    
 }
 
 export default ( state = initialState, action ) => {   

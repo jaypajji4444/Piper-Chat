@@ -95,7 +95,7 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
     email: user.email
   });
 
-  const [update, setUpdate] = React.useState(false)
+
 
   const [loading, setLoading] = React.useState(true)
 
@@ -121,6 +121,7 @@ function ProfilePage({ auth: { loggedIn, user,token, error, tabVal }, updateUser
           draggable: true,
         });
         break;
+      default: break;
     }
   }
 

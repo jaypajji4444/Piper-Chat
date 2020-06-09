@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/jashmehta3300/Piper-Chat#readme",
   "dependencies": {
-    "@material-ui/lab": "^4.0.0-alpha.55",
     "bcryptjs": "^2.4.3",
     "chai": "^4.2.0",
     "colors": "^1.4.0",

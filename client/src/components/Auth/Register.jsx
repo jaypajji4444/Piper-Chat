@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Register({register,authRedirectPath,loggedIn}) {
+function Register({register,authRedirectPath,loggedIn,error }) {
   const classes = useStyles();
   const { id } = useParams();
   
@@ -175,7 +175,8 @@ function Register({register,authRedirectPath,loggedIn}) {
 const mapStateToProps=(state)=>{
   return{
     authRedirectPath:state.auth.authRedirectPath,
-    loggedIn:state.auth.loggedIn
+    loggedIn:state.auth.loggedIn,
+    error:state.auth.error
   }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -6,10 +6,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
+import {connect} from "react-redux"
+import {fetchUsers} from "../../../actions/chatActions"
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,30 +59,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Friends = (props) => {
+const Friends = ({fetchUsers,users,openChat}) => {
   const classes = useStyles();
 
-  const [deleted, setDeleted] = React.useState(0);
 
-  const handleToggle = (value) => () => {
-  
-  };
+  useEffect(()=>{
+    console.log("hello")
+    fetchUsers()
+  },[fetchUsers])
 
   return (
     <Grid container className={classes.root}>
       <List dense className={classes.list}>
-        {[0, 1, 2, 3].map((value) => {
+        {users?
+        users.map((element,value) => {
           const labelId = `checkbox-list-secondary-label-${value}`;
           return (
-            <React.Fragment>
-              <ListItem key={value} className={classes.listItem} >
+            <React.Fragment key={value}>
+              <ListItem  className={classes.listItem} onClick={()=>openChat(element)} >
                 <ListItemAvatar>
                   <Avatar
                     alt={`Avatar n°${value + 1}`}
                     src={`/static/images/avatar/${value + 1}.jpg`}
                   />
                 </ListItemAvatar>
-                <ListItemText id={labelId} primary={`User name of person ${value + 1}`} />
+                <ListItemText id={labelId} primary={element.name} />
                 <ListItemSecondaryAction>
                   <DeleteIcon color="primary" />
                 </ListItemSecondaryAction>
@@ -88,10 +91,18 @@ const Friends = (props) => {
               <Divider variant="inset" component="li" />
             </React.Fragment>
           );
-        })}
+        })
+        :<div><h1>Loading....</h1></div>
+      }
       </List>
     </Grid>
   );
 };
 
-export default Friends;
+const mapStateToProps = (state)=>{
+  return{
+    users : state.chat.users
+  }
+}
+
+export default connect(mapStateToProps,{fetchUsers})(Friends);
