@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
 import { useHistory } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { openBox } from '../../actions/chatActions';
 import socketIOClient from 'socket.io-client';
 import { ListItem, ListItemText } from '@material-ui/core';
 import chatSocket from "../../utils/webSockets"
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token},chat:{chat} , otherUser}) => {
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat}, displayBox , otherUser}) => {
 
 const classes = useStyles();
 const history = useHistory();
@@ -109,9 +110,9 @@ const [ChatMessages,setMessages]=useState({
   messages:chat?chat.messages:[]
 })
 
-const goBackToChats = (e) => {
+const goBackToFriends = (e) => {
   e.preventDefault();
-  history.push("/social")
+  openBox(0);
 }
 
 const changeHandler=(e)=>{
@@ -139,9 +140,7 @@ const sendMessage=(message)=>event=>{
 
   //socket.emit("privateMessage",message)
   chatSocket.sendMessage(message)
-
 }
-
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12} className={classes.headerRow}>
@@ -153,7 +152,7 @@ const sendMessage=(message)=>event=>{
               aria-haspopup="true"
               color="inherit"
             >
-              <ArrowBackIcon onClick={goBackToChats} />
+              <ArrowBackIcon onClick={goBackToFriends} />
             </IconButton>
             <IconButton
               aria-label="account of current user"
@@ -164,7 +163,7 @@ const sendMessage=(message)=>event=>{
               <AccountCircle />
             </IconButton>
             <Typography color="inherit" variant="h6">
-              {loggedIn && otherUser ? otherUser : <div>User</div>}
+              {loggedIn && otherUser ? otherUser : <div>User name</div>}
             </Typography>
           </Toolbar>
         </Paper>
@@ -247,7 +246,8 @@ const sendMessage=(message)=>event=>{
 const mapStateToProps=(state)=>{
   return{
     auth:state.auth,
-    chat : state.chat
+    chat : state.chat,
+    displayBox: state.chat.displayBox
   }
 }
-export default connect(mapStateToProps,null)(ChatBox);
+export default connect(mapStateToProps, {openBox})(ChatBox);
