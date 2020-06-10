@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token},chat:{chat}, displayBox , otherUser}) => {
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat}, displayBox , otherUser, openBox}) => {
 
 const classes = useStyles();
 const history = useHistory();
