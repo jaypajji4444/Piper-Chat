@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import SendIcon from '@material-ui/icons/Send';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,6 +11,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
 import { useHistory } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { openBox } from '../../actions/chatActions';
 import socketIOClient from 'socket.io-client';
@@ -33,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   messagesRow: {
-    maxHeight: '70vh',
+    maxHeight: '50vh',
     overflowY: 'auto',
   },
   newMessageRow: {
@@ -56,43 +61,41 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '10px',
   },
   chatMessages: {
-    borderTop: "1px solid rgba(0, 0, 0, .05)",
-    padding: "10px",
-    overflow: "auto",
-    display: "flex",
-    flexFlow: "row wrap",
-    alignContent: "flex-start",
-    flex: "1"
+    borderTop: '1px solid rgba(0, 0, 0, .05)',
+    padding: '10px',
+    overflow: 'auto',
+    display: 'flex',
+    flexFlow: 'row wrap',
+    alignContent: 'flex-start',
+    flex: '1',
   },
-  messageBoxHolder :{
-    width: "100%",
-    margin: "0 0 15px",
-    display:"flex",
-    flexFlow: "column",
-    alignItems: "flex-end"
+  messageBoxHolder: {
+    width: '100%',
+    margin: '0 0 15px',
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'flex-end',
   },
-  messageBox :{
-    padding: "6px 10px",
-    borderRadius: "6px 0 6px 0",
-    position: "relative",
-    background: "rgba(100, 170, 0, .1)",
-    border: "2px solid rgba(100, 170, 0, .1)",
-    color:" #6c6c6c",
-    fontSize: "12px"
-  },
-
-  messagePartner :{
-    padding: "6px 10px",
-    borderRadius: "6px 0 6px 0",
-    position: "relative",
-    background: "rgba(0, 114, 135, .1)",
-    border: "2px solid rgba(0, 114, 135, .1)",
-    alignSelf: "flex-start",
-    color:" #6c6c6c",
-    fontSize: "12px",
+  messageBox: {
+    padding: '6px 20px',
+    borderRadius: '6px 0 6px 0',
+    position: 'relative',
+    background: 'rgba(137, 207, 240, .3)',
+    border: '2px solid rgba(25, 181, 254, .3)',
+    color: 'black',
+    fontSize: '19px',
   },
 
-
+  messagePartner: {
+    padding: '6px 20px',
+    borderRadius: '6px 0 6px 0',
+    position: 'relative',
+    background: 'white',
+    border: '2px solid rgba(0, 0, 0, .15)',
+    alignSelf: 'flex-start',
+    color: 'black',
+    fontSize: '19px',
+  },
 }));
 
 const ChatBox = ({auth:{loggedIn,user,token},chat:{chat}, displayBox , otherUser, openBox}) => {
@@ -110,6 +113,12 @@ const [ChatMessages,setMessages]=useState({
   messages:chat?chat.messages:[]
 })
 
+const messagesEndRef = React.useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
 const goBackToFriends = (e) => {
   e.preventDefault();
   openBox(0);
@@ -121,6 +130,7 @@ const changeHandler=(e)=>{
     })
 }
 
+useEffect(()=>{scrollToBottom()}, [chat]);
 
 useEffect(()=>{
 console.log(chat)
@@ -130,7 +140,8 @@ console.log(chat)
     setMessages({
       messages:chat.messages
     })
-  
+
+    scrollToBottom()
 })
   }
 },[chat])
@@ -140,6 +151,10 @@ const sendMessage=(message)=>event=>{
 
   //socket.emit("privateMessage",message)
   chatSocket.sendMessage(message)
+
+  scrollToBottom()
+
+  setFormdata({message: ""})
 }
   return (
     <Grid container className={classes.root}>
@@ -172,9 +187,10 @@ const sendMessage=(message)=>event=>{
         <Grid container className={classes.messageContainer}>
           <Grid item xs={12} className={classes.messagesRow}>
             <div className={classes.chatMessages}>
-              {chat && chat.messages.length > 0
-                ? chat.messages.map((message) => {
-                    return (
+              {chat && chat.messages.length > 0 ? (
+                chat.messages.map((message) => {
+                  return (
+                    <React.Fragment>
                       <div
                         className={classes.messageBoxHolder}
                         key={message._id}
@@ -189,9 +205,13 @@ const sendMessage=(message)=>event=>{
                           {message.body}
                         </div>
                       </div>
-                    );
-                  })
-                : null}
+                      <div ref={messagesEndRef} />
+                    </React.Fragment>
+                  );
+                })
+              ) : (
+                <div ref={messagesEndRef} />
+              )}
               {
                 // ChatMessages.messages.length>0?(ChatMessages.messages.map(message=>{
                 //   console.log(message)
@@ -227,12 +247,14 @@ const sendMessage=(message)=>event=>{
                   />
                 </Grid>
                 <Grid item xs={1}>
-                  <button
+                  <IconButton
+                    type="submit"
+                    className={classes.sendIcon}
                     onClick={sendMessage(message)}
                     disabled={message.length === 0}
                   >
-                    send
-                  </button>
+                    <SendIcon color="primary" />
+                  </IconButton>
                 </Grid>
               </Grid>
             </form>
