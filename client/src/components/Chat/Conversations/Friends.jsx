@@ -11,11 +11,13 @@ import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {connect} from "react-redux"
 import {fetchUsers} from "../../../actions/chatActions"
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
+    maxHeight: '67vh',
+    overflowY: 'auto',
   },
   headerRow: {
     maxHeight: 60,
@@ -51,18 +53,23 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     margin: theme.spacing(1, 1.5),
   },
-  listItem: {
-    height: '10vh'
+  listItemBig: {
+    height: '70px',
+  },
+  listItemSmall: {
+    height: '65px',
   },
   list: {
-    width: '100%'
-  }
+    width: '100%',
+    maxHeight: '65vh',
+  },
 }));
 
 const Friends = ({fetchUsers,users,openChat}) => {
   const classes = useStyles();
 
-
+  const matches = useMediaQuery('(min-width:800px)');
+  
   useEffect(()=>{
     console.log("hello")
     fetchUsers()
@@ -76,7 +83,7 @@ const Friends = ({fetchUsers,users,openChat}) => {
           const labelId = `checkbox-list-secondary-label-${value}`;
           return (
             <React.Fragment key={value}>
-              <ListItem  className={classes.listItem} onClick={()=>openChat(element)} >
+              {matches? (<ListItem  className={classes.listItemBig} onClick={()=>openChat(element)} >
                 <ListItemAvatar>
                   <Avatar
                     alt={`Avatar n°${value + 1}`}
@@ -88,6 +95,19 @@ const Friends = ({fetchUsers,users,openChat}) => {
                   <DeleteIcon color="primary" />
                 </ListItemSecondaryAction>
               </ListItem>
+              ): (<ListItem  className={classes.listItemSmall} onClick={()=>openChat(element)} >
+                <ListItemAvatar>
+                  <Avatar
+                    alt={`Avatar n°${value + 1}`}
+                    src={`/static/images/avatar/${value + 1}.jpg`}
+                  />
+                </ListItemAvatar>
+                <ListItemText id={labelId} primary={element.name} />
+                <ListItemSecondaryAction>
+                  <DeleteIcon color="primary" />
+                </ListItemSecondaryAction>
+              </ListItem>
+              )}
               <Divider variant="inset" component="li" />
             </React.Fragment>
           );

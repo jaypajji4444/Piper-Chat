@@ -1,10 +1,11 @@
-import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN, CHAT_OPEN_ERROR, ADD_PRIVATE_MESSAGE} from "../actions/types"
+import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN, CHAT_OPEN_ERROR, ADD_PRIVATE_MESSAGE, OPEN_CHATBOX} from "../actions/types"
 const initialState={
     chat:null,
     chats:null,
     users:null,
     loading:false,
-    error:null
+    error:null,
+    displayBox: 0
 }
 
 const addPrivateMessage=(state,action)=>{
@@ -52,6 +53,11 @@ const chatReducer = (state=initialState,action)=>{
                 otherUser:null,
                 error:action.error,
                 loading:false
+            }
+        case OPEN_CHATBOX:
+            return{
+                ...state,
+                displayBox: action.value
             }
         case ADD_PRIVATE_MESSAGE:addPrivateMessage(state,action)
         default:
