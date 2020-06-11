@@ -114,11 +114,11 @@ const {message} = formData;
 //   messages:chat?chat.messages:[]
 // })
 
-const messagesEndRef = React.useRef(null)
+// const messagesEndRef = React.useRef(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-  }
+//   const scrollToBottom = () => {
+//     messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+//   }
 
 const goBackToFriends = (e) => {
   e.preventDefault();
@@ -131,7 +131,7 @@ const changeHandler=(e)=>{
     })
 }
 
-useEffect(()=>{scrollToBottom()}, [chat]);
+//useEffect(()=>{scrollToBottom()}, [chat]);
 
 // useEffect(()=>{
 // console.log(chat)
@@ -154,7 +154,7 @@ const sendMessage=(message)=>event=>{
   //socket.emit("privateMessage",message)
   chatSocket.sendMessage(message)
 
-  scrollToBottom()
+ // scrollToBottom()
 
   setFormdata({message: ""})
 }
@@ -198,7 +198,7 @@ const sendMessage=(message)=>event=>{
                         </div>
                       </div>
                   );
-                }): (<div ref={messagesEndRef} />)
+                }): (<h1>Chat</h1>)
           }
               {
                 // ChatMessages.messages.length>0?(ChatMessages.messages.map(message=>{
