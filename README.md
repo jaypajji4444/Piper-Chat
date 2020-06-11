@@ -4,7 +4,8 @@
 ## Made with
  Node.js <br />
  Express.js <br />
- MongoDB Atlas React.js <br />
+ MongoDB Atlas <br /> 
+ React.js <br />
  Socket.io <br />
  Redux <br />
  Mocha and chai
