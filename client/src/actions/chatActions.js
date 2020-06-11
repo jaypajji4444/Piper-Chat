@@ -3,7 +3,7 @@ import chatSocket from "../utils/webSockets";
 
 export const fetchUsers = () => async dispatch => {
     try {
-        const response = await fetch("http://localhost:5000/api/v1/auth/users", {
+        const response = await fetch("/api/v1/auth/users", {
             method: 'GET'
         })
         const res = await response.json();
@@ -34,7 +34,7 @@ export const newChat = (user,otherUser,token) => async dispatch => {
         }
         //socket.emit("authenticate",token)
         chatSocket.authenticate(token)
-        const res = await fetch("http://localhost:5000/api/v1/chat", {
+        const res = await fetch("/api/v1/chat", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

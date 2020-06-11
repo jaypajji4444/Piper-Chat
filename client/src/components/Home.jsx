@@ -110,7 +110,7 @@ function Home({loggedIn}) {
     const data = {email:mailId.email, by: "anonymous"}
     const reqBody = JSON.stringify(data)
 
-    fetch('http://localhost:5000/api/v1/auth/reqInvite', {
+    fetch('/api/v1/auth/reqInvite', {
       method: 'POST',
       body: reqBody,
       headers: {
