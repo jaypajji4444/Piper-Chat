@@ -27,6 +27,7 @@ class SocketChat{
 
     receiveMessage(){
         this.socket.on("privateMessage",(data)=>{
+            console.log(data)
             this.eventEmitter.emit('add-message-response', data);
         })
     }

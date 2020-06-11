@@ -92,16 +92,16 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token},chat:{chat} , otherUser}) => {
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat,messages} , otherUser}) => {
   const classes = useStyles();
 
 const [formData,setFormdata]=useState({
   message:""
 })
 const {message} = formData;
-const [ChatMessages,setMessages]=useState({
-  messages:chat?chat.messages:[]
-})
+// const [ChatMessages,setMessages]=useState({
+//   messages:chat?chat.messages:[]
+// })
 const changeHandler=(e)=>{
     setFormdata({
       message:e.target.value
@@ -109,22 +109,24 @@ const changeHandler=(e)=>{
 }
 
 
-useEffect(()=>{
-console.log(chat)
-  if(chat!==null){
-    console.log(chat.messages)
-  chatSocket.eventEmitter.on('add-message-response',(data)=>{
-    setMessages({
-      messages:chat.messages
-    })
+// useEffect(()=>{
+// console.log(chat)
+//   //if(chat!==null){
+//    // console.log(chat.messages)
+//   chatSocket.eventEmitter.on('add-message-response',(data)=>{
+//     // setMessages({
+//     //   messages:chat.messages
+//     // })
+//     setMessages({
+//       messages:data
+//     })
   
-})
-  }
-},[chat])
+// })
+  
+// },[])
 
 const sendMessage=(message)=>event=>{
   event.preventDefault()
-
   //socket.emit("privateMessage",message)
   chatSocket.sendMessage(message)
 
@@ -157,8 +159,8 @@ const sendMessage=(message)=>event=>{
         <Grid container className={classes.messageContainer}>
           <Grid item xs={12} className={classes.messagesRow}>
                   <div className={classes.chatMessages}>
-                    {chat && chat.messages.length>0?
-                    chat.messages.map((message)=>{
+                    {messages && messages.length>0?
+                    messages.map((message)=>{
                       return (
                         <div className={classes.messageBoxHolder} key={message._id}>
                           <div className={user._id===message.from?classes.messageBox:classes.messagePartner}>
