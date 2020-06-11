@@ -10,7 +10,7 @@
  Redux <br />
  Mocha and chai
 
-## Intallation 
+## Installation 
 ```
 npm install
 cd client 
