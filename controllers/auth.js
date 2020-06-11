@@ -47,7 +47,7 @@ exports.sendInvite = async (req, res, next) =>{
   const emailId = req.params.id;
 
   // Create reset url
-  const resetUrl = `http://localhost:3000/register/${emailId}`
+  const resetUrl = `http://localhost:3000/register/${req.body.email}`
 
   const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
 

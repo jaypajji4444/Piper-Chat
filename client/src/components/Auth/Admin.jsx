@@ -89,8 +89,10 @@ function Admin({ auth : {user} }) {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const data = { email: values.email, by: values.by };
+    const data = { email: values.email, by: values.by };   
     const reqBody = JSON.stringify(data);
+
+    console.log(reqBody)
 
         fetch(`http://localhost:5000/api/v1/auth/sendInvite/${values.email}`, {
           method: 'PUT',

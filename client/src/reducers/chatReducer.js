@@ -4,6 +4,7 @@ const initialState={
     chats:null,
     users:null,
     loading:false,
+    messages: [],
     error:null,
     displayBox: 0
 }

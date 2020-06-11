@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token},chat:{chat}, displayBox , otherUser, openBox}) => {
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat, messages},displayBox , otherUser, openBox}) => {
 
 const classes = useStyles();
 const history = useHistory();
@@ -132,19 +132,18 @@ const changeHandler=(e)=>{
 
 useEffect(()=>{scrollToBottom()}, [chat]);
 
-useEffect(()=>{
-console.log(chat)
-  if(chat!==null){
-    console.log(chat.messages)
-  chatSocket.eventEmitter.on('add-message-response',(data)=>{
-    setMessages({
-      messages:chat.messages
-    })
+// useEffect(()=>{
+//   if(chat!==null){
+//     console.log(chat.messages)
+//   chatSocket.eventEmitter.on('add-message-response',(data)=>{
+//     setMessages({
+//       messages:chat.messages
+//     })
 
-    scrollToBottom()
-})
-  }
-},[chat])
+//     scrollToBottom()
+// })
+//   }
+// },[chat])
 
 const sendMessage=(message)=>event=>{
   event.preventDefault()
@@ -187,8 +186,8 @@ const sendMessage=(message)=>event=>{
         <Grid container className={classes.messageContainer}>
           <Grid item xs={12} className={classes.messagesRow}>
             <div className={classes.chatMessages}>
-              {chat && chat.messages.length > 0 ? (
-                chat.messages.map((message) => {
+              {messages && messages.length > 0 ? (
+                messages.map((message) => {
                   return (
                     <React.Fragment>
                       <div
