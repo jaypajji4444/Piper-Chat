@@ -50,7 +50,8 @@ export const newChat = (user,otherUser,token) => async dispatch => {
         dispatch({
             type: actions.CHAT_OPEN,
             chat: chat,
-            otherUser:otherUser
+            otherUser:otherUser,
+            messages:chat.messages
         })
     
     }
@@ -66,7 +67,8 @@ export const newChat = (user,otherUser,token) => async dispatch => {
 export const addMessage = (data) => dispatch=>{
     dispatch({
         type:actions.ADD_PRIVATE_MESSAGE,
-        message:data.message,
-        chatID:data.chatID
+        messages:data.messages
+        // message:data.message,
+        // chatID:data.chatID
     })
 }
