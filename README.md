@@ -11,7 +11,7 @@ npm run dev
 ```
 ## ScreenShots
 ![](https://github.com/jaypajji4444/Screenshots/blob/master/Piper/inviteOnly.PNG)
-![](https://github.com/jaypajji4444/Screenshots/blob/master/Piper/homeChat.PNG)
+![](https://github.com/jaypajji4444/Screenshots/blob/master/Piper/home%20chat.PNG)
 ![](https://github.com/jaypajji4444/Screenshots/blob/master/Piper/Capture.PNG)
 
 ## Made By
