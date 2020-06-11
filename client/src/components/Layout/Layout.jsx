@@ -77,8 +77,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   exampleWrapper:{
-    height: '16px',
-    width: '16px'
+    height: '2px',
+    width: '2px'
   },
 
   copyright: {

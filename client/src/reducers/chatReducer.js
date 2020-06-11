@@ -77,6 +77,12 @@ const chatReducer = (state=initialState,action)=>{
                 messages:action.messages
 
             }
+        case OPEN_CHATBOX:
+            return{
+                ...state,
+                displayBox:action.value
+
+            }
         default:
             return state;
     }
