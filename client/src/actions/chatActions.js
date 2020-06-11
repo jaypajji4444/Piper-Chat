@@ -72,3 +72,10 @@ export const addMessage = (data) => dispatch=>{
         // chatID:data.chatID
     })
 }
+
+export const openBox = (val) => {
+    return{
+        type: actions.OPEN_CHATBOX,
+        value: val
+    }
+}

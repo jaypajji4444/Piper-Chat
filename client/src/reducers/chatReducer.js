@@ -1,11 +1,12 @@
-import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN, CHAT_OPEN_ERROR, ADD_PRIVATE_MESSAGE} from "../actions/types"
+import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN, CHAT_OPEN_ERROR, ADD_PRIVATE_MESSAGE, OPEN_CHATBOX} from "../actions/types"
 const initialState={
     chat:null,
     messages:[],
     chats:null,
     users:null,
     loading:false,
-    error:null
+    error:null,
+    displayBox: 0
 }
 
 const addPrivateMessage=(state,action)=>{
