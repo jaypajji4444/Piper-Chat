@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { resetPass } from '../../actions/authActions';
+import { setAlert } from '../../actions/alertActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,44 +45,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
+function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath ,setAlert}) {
   const classes = useStyles();
 
   const { resettoken } = useParams();
 
-  const [fetchSuccess, setFetchSuccess] = React.useState(false);
+  
 
   const [values, setValues] = React.useState({
     newPassword: '',
     confirmPassword: '',
   });
 
-  function notify(text, type) {
-    switch (type) {
-      case 'info':
-        toast.info(`${text}`, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'error':
-        toast.error(`${text}`, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-        default :
-          break;
-    }
-  }
+  
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -97,18 +73,12 @@ function ResetPass({ resetPass, loggedIn, resetDone, authRedirectPath }) {
         password: values.newPassword,
         resetToken: resettoken,
       });
-      if (resetDone === true) {
-        notify('    Login Successful!', 'info');
-        setFetchSuccess(true);
-      } else {
-        notify('    Invalid Credentials', 'error');
-      }
     } else {
-      notify('    Passwords do not match', 'error');
+      setAlert("     Password Do Not Match","error")
     }
   };
 
-  if (fetchSuccess) {
+  if (resetDone) {
     return <Redirect to={authRedirectPath} />;
   }
 

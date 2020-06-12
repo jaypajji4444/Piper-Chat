@@ -1,7 +1,7 @@
 
 
 import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL} from './types';
-import { setAlert } from './alert';
+import { setAlert } from './alertActions';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
@@ -129,11 +129,14 @@ export const updateUser = ({ name, email, token }) => {
                         type:UPDATE_USER,
                         user:data.data
                     })
+                    //Alert
+                    dispatch(setAlert('    Details Updated!', 'info'))
                 } else {
                     dispatch({
                         type:UPDATE_FAIL,
                         error:data.data
                     });
+                    dispatch(setAlert("    Error! Try again', 'error"))
                 }
             })
     }
@@ -199,11 +202,13 @@ export const resetPass = (payload) => {
           dispatch({
             type: RESET_PASS,
           });
+          dispatch(setAlert('    Login Successful!', 'info'))
         } else {
           dispatch({
             type: UPDATE_FAIL,
             error: data.data,
           });
+          dispatch(setAlert('    Invalid Credentials', 'error')
         }
       });
   };

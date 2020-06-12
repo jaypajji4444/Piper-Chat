@@ -11,7 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
+
 import { updateUser, tabStatus } from '../../../actions/authActions';
 import Loader from '../../Loader';
 
@@ -90,6 +90,7 @@ function ProfilePage({
   auth: { loggedIn, user, token, error, tabVal },
   updateUser,
   tabStatus,
+  
 }) {
   const classes = useStyles();
   const classes123 = makeStyles(iconStyles)();
@@ -101,32 +102,7 @@ function ProfilePage({
 
   const [loading, setLoading] = React.useState(true);
 
-  function notify(text, type) {
-    switch (type) {
-      case 'info':
-        toast.info(`🦄${text}`, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'error':
-        toast.error(`🦄${text}`, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      default: break;
-    }
-  }
-
+  
   React.useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -146,11 +122,7 @@ function ProfilePage({
     e.preventDefault();
     const Token = localStorage.getItem('token');
     updateUser({ name: values.name, email: values.email, token: Token });
-    if (error === null) {
-      notify('    Details Updated!', 'info');
-    } else {
-      notify('    Error! Try again', 'error');
-    }
+   
   };
 
   const handleClick = (e) => {
