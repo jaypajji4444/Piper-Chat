@@ -1,20 +1,20 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL} from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS, USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL } from './types';
 import { setAlert } from './alertActions';
 
 // Load User
 export const loadUser = (token) => async dispatch => {
     try {
-        const res = await fetch("/api/v1/auth/me",{
+        const res = await fetch("/api/v1/auth/me", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Token '+token
+                'Authorization': 'Token ' + token
             },
         });
-        const data=await res.json()
-        
+        const data = await res.json()
+
         dispatch({
             type: USER_LOADED,
             user: data.data
@@ -66,12 +66,12 @@ export const authUser = (authData) => {
                 if (data.success === true) {
                     localStorage.setItem('token', data.token);
                     // Alert
-                    dispatch(setAlert("Login Successfull","info"))
+                    dispatch(setAlert("Login Successfull", "info"))
                     dispatch(authSuccess(data.token));
                     dispatch(loadUser(data.token))
                 } else {
 
-                    dispatch(setAlert(data.error,"info"))
+                    dispatch(setAlert(data.error, "error"))
                     dispatch(authFail(data.error));
                 }
             })
@@ -90,13 +90,15 @@ export const register = (formData) => dispatch => {
         }
     })
         .then((res) => res.json())
-        .then((data) => {       
+        .then((data) => {
             if (data.success === true) {
                 dispatch({
                     type: REGISTER_SUCCESS
                 })
+                dispatch(setAlert("         Registration Succesfull!"))
             } else {
                 dispatch(authFail(data.error));
+                dispatch(setAlert("      "+data.error, "error"))
             }
         })
 }
@@ -116,25 +118,25 @@ export const updateUser = ({ name, email, token }) => {
         dispatch(authStart());
         fetch(`/api/v1/auth/updatedetails`, {
             method: 'PUT',
-            body: JSON.stringify({name,email}),
+            body: JSON.stringify({ name, email }),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Token '+token
+                'Authorization': 'Token ' + token
             },
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.success === true) {
                     dispatch({
-                        type:UPDATE_USER,
-                        user:data.data
+                        type: UPDATE_USER,
+                        user: data.data
                     })
                     //Alert
                     dispatch(setAlert('    Details Updated!', 'info'))
                 } else {
                     dispatch({
-                        type:UPDATE_FAIL,
-                        error:data.data
+                        type: UPDATE_FAIL,
+                        error: data.data
                     });
                     dispatch(setAlert("    Error! Try again', 'error"))
                 }
@@ -144,7 +146,7 @@ export const updateUser = ({ name, email, token }) => {
 
 // set tab status (chat)
 export const tabStatus = (val) => {
-    return{
+    return {
         type: TAB_STATUS,
         tabVal: val
     }
@@ -160,57 +162,59 @@ export const tabSocial = (val) => {
 
 // forgot password
 export const forgotPass = (email) => {
-  return (dispatch) => {
-    dispatch(authStart());
-    fetch(`/api/v1/auth/forgotpassword`, {
-      method: 'POST',
-      body: JSON.stringify({email: email}),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success === true) {
-          dispatch({
-            type: FORGOT_PASS
-          });
-        } else {
-          dispatch({
-            type: UPDATE_FAIL,
-            error: data.data,
-          });
-        }
-      });
-  };
+    return (dispatch) => {
+        dispatch(authStart());
+        fetch(`/api/v1/auth/forgotpassword`, {
+            method: 'POST',
+            body: JSON.stringify({ email: email }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success === true) {
+                    dispatch({
+                        type: FORGOT_PASS
+                    });
+                    dispatch(setAlert('    Check you mail!', 'info'))
+                } else {
+                    dispatch({
+                        type: UPDATE_FAIL,
+                        error: data.data,
+                    });
+                    dispatch(setAlert('    This email does not exist', 'error'))
+                }
+            });
+    };
 };
 
 // change password
 export const resetPass = (payload) => {
-  return (dispatch) => {
-    dispatch(authStart());
-    fetch(`/api/v1/auth/resetpassword/${payload.resetToken}`, {
-      method: 'PUT',
-      body: JSON.stringify({ password: `${payload.password}` }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success === true) {
-          dispatch({
-            type: RESET_PASS,
-          });
-          dispatch(setAlert('    Login Successful!', 'info'))
-        } else {
-          dispatch({
-            type: UPDATE_FAIL,
-            error: data.data,
-          });
-          dispatch(setAlert('    Invalid Credentials', 'error')
+    return (dispatch) => {
+        dispatch(authStart());
+        fetch(`/api/v1/auth/resetpassword/${payload.resetToken}`, {
+            method: 'PUT',
+            body: JSON.stringify({ password: `${payload.password}` }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success === true) {
+                    dispatch({
+                        type: RESET_PASS,
+                    });
+                    dispatch(setAlert("    Login Successful!","info"))
+                } 
+                else {
+                    dispatch({type: UPDATE_FAIL,error: data.data})
+                    dispatch(setAlert('    Invalid Credentials', 'error'))
+                }
+
+            });
         }
-      });
-  };
-};
+    }        
+
 

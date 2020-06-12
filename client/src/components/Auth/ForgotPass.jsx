@@ -51,32 +51,6 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
     email: ''
   });
 
-  function notify(text, type) {
-    switch (type) {
-      case 'info':
-        toast.info(`${text}`, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-      case 'error':
-        toast.error(`${text}`, {
-          position: 'top-center',
-          autoClose: 8000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-        break;
-        default:
-          break;
-    }
-  }
 
   const handleChange = (prop) => (event) => {
     setValues({
@@ -87,11 +61,6 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
   const submitHandler = (e) => {
     e.preventDefault();
     forgotPass(values.email);
-    if (error === null) {
-      notify('    Check you mail!', 'info');
-    } else {
-      notify('    This email does not exist', 'error');
-    }
   };
 
   if (loggedIn) {

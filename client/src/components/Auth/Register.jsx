@@ -56,31 +56,6 @@ function Register({register,authRedirectPath,loggedIn,error }) {
     password: '',
   });
 
-      function notify(text, type) {
-        switch (type) {
-          case 'info':
-            toast.info(`${text}`, {
-              position: 'top-center',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
-            break;
-          case 'error':
-            toast.error(`${text}`, {
-              position: 'top-center',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-            });
-            break;
-            default: console.log("error in notification case")
-        }
-      }
     
   const handleChange = (prop) => (event) => {
     setValues({
@@ -92,11 +67,7 @@ function Register({register,authRedirectPath,loggedIn,error }) {
   const submitHandler = (e) => {
     e.preventDefault();
     register({name: values.name,email: id,password: values.password})
-    if (error === null) {
-      notify('    Registered successfully', 'info');
-    } else {
-      notify('    Connection error', 'error');
-    }
+   
   };
 
   if(authRedirectPath==="/login"){
