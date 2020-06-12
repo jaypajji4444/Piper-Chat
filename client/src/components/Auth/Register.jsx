@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { Link, Redirect, useParams, useHistory } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -78,6 +78,7 @@ function Register({register,authRedirectPath,loggedIn,error }) {
               draggable: true,
             });
             break;
+            default: console.log("error in notification case")
         }
       }
     

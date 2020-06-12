@@ -138,9 +138,6 @@ function Layout({auth:{loggedIn,user},logout,children}) {
   const [direction] = React.useState('up');
   const [open, setOpen] = React.useState(false);
 
-
-
-
   const handleClose = () => {
     setOpen(false);
   };

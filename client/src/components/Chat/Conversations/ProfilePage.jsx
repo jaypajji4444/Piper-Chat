@@ -99,8 +99,6 @@ function ProfilePage({
     email: user.email,
   });
 
-  const [update, setUpdate] = React.useState(false);
-
   const [loading, setLoading] = React.useState(true);
 
   function notify(text, type) {

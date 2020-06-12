@@ -1,7 +1,6 @@
-import React,{useEffect, useState} from 'react';
+import React,{ useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -10,14 +9,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
-import { useHistory } from 'react-router-dom';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { openBox } from '../../actions/chatActions';
 import socketIOClient from 'socket.io-client';
-import { ListItem, ListItemText } from '@material-ui/core';
 import chatSocket from "../../utils/webSockets"
 
 const useStyles = makeStyles((theme) => ({
@@ -103,22 +97,12 @@ const useStyles = makeStyles((theme) => ({
 const ChatBox = ({auth:{loggedIn,user,token},chat:{chat,messages} , otherUser, openBox}) => {
   const classes = useStyles();
   
-const history = useHistory();
-const [formData,setFormdata]=useState({
-  message:""
-})
+  const [formData,setFormdata]=useState({
+    message:""
+  })
 
-const {message} = formData;
 
-// const [ChatMessages,setMessages]=useState({
-//   messages:chat?chat.messages:[]
-// })
-
-// const messagesEndRef = React.useRef(null)
-
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-  // }
+const {message} = formData; 
 
 const goBackToFriends = (e) => {
   e.preventDefault();
@@ -182,8 +166,8 @@ const sendMessage=(message)=>event=>{
                         </div>
                       </div>
                       );
-                     }): (<div ref={messagesEndRef} />)
-                   }
+                     }): null
+                    }
                  </div>
           </Grid>
           <Grid item xs={12} className={classes.inputRow}>

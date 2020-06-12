@@ -5,22 +5,11 @@ const initialState={
     chats:null,
     users:null,
     loading:false,
-    messages: [],
     error:null,
     displayBox: 0
 }
 
 const addPrivateMessage=(state,action)=>{
-    //######## oLD @@@@@@
-    // let oldChat=state.chat
-    // if(oldChat._id===action.chatID){
-    //     oldChat.messages.push(action.message)
-    // }
-    // return{
-    //     ...state,
-    //     chat:oldChat,
-    //     error:false
-    // }
 
     return {
         ...state,
