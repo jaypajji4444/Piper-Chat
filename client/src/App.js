@@ -18,6 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Social from './components/Social/Social';
 import Admin from './components/Auth/Admin';
 import dotenv from 'dotenv'
+import Alert from './components/Alert/Alert';
 
 dotenv.config({
   path: '../config/config.env',
@@ -46,9 +47,11 @@ function App() {
     <Provider store={store} >
       <BrowserRouter>
         <React.Fragment>
+      
             <Switch>
               <Route path="/" component={Home} exact />
               <Layout>
+              <Alert />
                 <Switch>
                   <Route path="/register/:id" component={Register} exact />
                   <Route path="/login" component={Login} exact />

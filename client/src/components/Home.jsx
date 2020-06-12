@@ -12,7 +12,9 @@ import { toast } from 'react-toastify';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {connect} from "react-redux";
-import {Redirect} from "react-router-dom"
+import {Redirect} from "react-router-dom";
+import { setAlert } from "../actions/alert";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Home({loggedIn}) {
+function Home({loggedIn ,setAlert}) {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
 
@@ -122,6 +124,7 @@ function Home({loggedIn}) {
       console.log(resData)
       if(resData.success === true){
         setMailId({email: '',success: true})
+        //setAlert({msg:"Thanyou",alertType:"info"})
         notify('  Thankyou for sharing!', 'info');
       } else {
         if(resData.error === 'Duplicate entry'){
@@ -254,4 +257,4 @@ const mapStateToProps=(state)=>{
   }
 }
 
-export default connect(mapStateToProps,null)(Home);
+export default connect(mapStateToProps,{setAlert})(Home);
