@@ -45,12 +45,13 @@ app.use('/api/v1/auth', auth)
 app.use('/api/v1/chat',chat)
 app.use(errorHandler);
 
-
+if(process.env.NODE_ENV=="production"){
   app.use(express.static("client/build"))
   app.get('*', (req, res) => {
     console.log("hi")
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
+}
 
 
 

@@ -114,7 +114,7 @@ const {message} = formData;
 //   messages:chat?chat.messages:[]
 // })
 
-const messagesEndRef = React.useRef(null)
+// const messagesEndRef = React.useRef(null)
 
   // const scrollToBottom = () => {
   //   messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
