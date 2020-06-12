@@ -10,7 +10,6 @@ class SocketChat{
     establishConnection(){
         try{
             this.socket=io("http://localhost:5000")
-            console.log(this.socket)
         }
         catch(err){
             console.log(err)
@@ -27,6 +26,7 @@ class SocketChat{
 
     receiveMessage(){
         this.socket.on("privateMessage",(data)=>{
+            console.log(data)
             this.eventEmitter.emit('add-message-response', data);
         })
     }
@@ -37,11 +37,9 @@ class SocketChat{
 
     receiveChat(){
         this.socket.on("history",data=>{
-            console.log(data)
         })
 
         this.socket.on("open chat success",(data)=>{
-            console.log(data)
         })
     }
 }

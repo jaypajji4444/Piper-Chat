@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error')
 const cors = require('cors');
 const bodyParser = require("body-parser");
+const path = require("path")
 
 //load env vars
 dotenv.config({
@@ -43,6 +44,15 @@ app.use(cookieparser())
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/chat',chat)
 app.use(errorHandler);
+
+
+  app.use(express.static("client/build"))
+  app.get('*', (req, res) => {
+    console.log("hi")
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+
+
 
 
 

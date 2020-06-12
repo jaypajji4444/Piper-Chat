@@ -5,7 +5,7 @@ import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS ,USE
 // Load User
 export const loadUser = (token) => async dispatch => {
     try {
-        const res = await fetch("http://localhost:5000/api/v1/auth/me",{
+        const res = await fetch("/api/v1/auth/me",{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export const authSuccess = (token, userId) => {
 export const authUser = (authData) => {
     return dispatch => {
         dispatch(authStart());
-        fetch(`http://localhost:5000/api/v1/auth/login`, {
+        fetch(`/api/v1/auth/login`, {
             method: 'POST',
             body: JSON.stringify(authData),
             headers: {
@@ -77,7 +77,7 @@ export const authUser = (authData) => {
 // Register 
 export const register = (formData) => dispatch => {
     dispatch(authStart())
-    fetch(`http://localhost:5000/api/v1/auth/register`, {
+    fetch(`/api/v1/auth/register`, {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
@@ -109,7 +109,7 @@ export const logout = () => {
 export const updateUser = ({ name, email, token }) => {
     return dispatch => {
         dispatch(authStart());
-        fetch(`http://localhost:5000/api/v1/auth/updatedetails`, {
+        fetch(`/api/v1/auth/updatedetails`, {
             method: 'PUT',
             body: JSON.stringify({name,email}),
             headers: {
@@ -154,7 +154,7 @@ export const tabSocial = (val) => {
 export const forgotPass = (email) => {
   return (dispatch) => {
     dispatch(authStart());
-    fetch(`http://localhost:5000/api/v1/auth/forgotpassword`, {
+    fetch(`/api/v1/auth/forgotpassword`, {
       method: 'POST',
       body: JSON.stringify({email: email}),
       headers: {
@@ -181,7 +181,7 @@ export const forgotPass = (email) => {
 export const resetPass = (payload) => {
   return (dispatch) => {
     dispatch(authStart());
-    fetch(`http://localhost:5000/api/v1/auth/resetpassword/${payload.resetToken}`, {
+    fetch(`/api/v1/auth/resetpassword/${payload.resetToken}`, {
       method: 'PUT',
       body: JSON.stringify({ password: `${payload.password}` }),
       headers: {

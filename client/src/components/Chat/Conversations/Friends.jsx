@@ -71,7 +71,6 @@ const Friends = ({fetchUsers,users,openChat}) => {
   const matches = useMediaQuery('(min-width:800px)');
   
   useEffect(()=>{
-    console.log("hello")
     fetchUsers()
   },[fetchUsers])
 

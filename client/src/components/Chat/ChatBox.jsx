@@ -98,26 +98,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({auth:{loggedIn,user,token},chat:{chat, messages},displayBox , otherUser, openBox}) => {
 
-const classes = useStyles();
+
+const ChatBox = ({auth:{loggedIn,user,token},chat:{chat,messages} , otherUser, openBox}) => {
+  const classes = useStyles();
+  
 const history = useHistory();
-
 const [formData,setFormdata]=useState({
   message:""
 })
 
 const {message} = formData;
 
-const [ChatMessages,setMessages]=useState({
-  messages:chat?chat.messages:[]
-})
+// const [ChatMessages,setMessages]=useState({
+//   messages:chat?chat.messages:[]
+// })
 
 const messagesEndRef = React.useRef(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-  }
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  // }
 
 const goBackToFriends = (e) => {
   e.preventDefault();
@@ -130,28 +131,14 @@ const changeHandler=(e)=>{
     })
 }
 
-useEffect(()=>{scrollToBottom()}, [chat]);
-
-// useEffect(()=>{
-//   if(chat!==null){
-//     console.log(chat.messages)
-//   chatSocket.eventEmitter.on('add-message-response',(data)=>{
-//     setMessages({
-//       messages:chat.messages
-//     })
-
-//     scrollToBottom()
-// })
-//   }
-// },[chat])
+// useEffect(()=>{scrollToBottom()}, [chat]);
 
 const sendMessage=(message)=>event=>{
   event.preventDefault()
-
   //socket.emit("privateMessage",message)
   chatSocket.sendMessage(message)
 
-  scrollToBottom()
+  // scrollToBottom()
 
   setFormdata({message: ""})
 }
@@ -185,45 +172,19 @@ const sendMessage=(message)=>event=>{
       <Grid item xs={12}>
         <Grid container className={classes.messageContainer}>
           <Grid item xs={12} className={classes.messagesRow}>
-            <div className={classes.chatMessages}>
-              {messages && messages.length > 0 ? (
-                messages.map((message) => {
-                  return (
-                    <React.Fragment>
-                      <div
-                        className={classes.messageBoxHolder}
-                        key={message._id}
-                      >
-                        <div
-                          className={
-                            user._id === message.from
-                              ? classes.messageBox
-                              : classes.messagePartner
-                          }
-                        >
+                  <div className={classes.chatMessages}>
+                    {messages && messages.length>0?
+                    messages.map((message)=>{
+                      return (
+                      <div className={classes.messageBoxHolder} key={message._id}>
+                          <div className={user._id===message.from?classes.messageBox:classes.messagePartner}>
                           {message.body}
                         </div>
                       </div>
-                      <div ref={messagesEndRef} />
-                    </React.Fragment>
-                  );
-                })
-              ) : (
-                <div ref={messagesEndRef} />
-              )}
-              {
-                // ChatMessages.messages.length>0?(ChatMessages.messages.map(message=>{
-                //   console.log(message)
-                //   return(
-                //     <div className={classes.messageBoxHolder} key={message._id}>
-                //       <div className={user._id===message.from?classes.messageBox:classes.messagePartner}>
-                //       {message.body}
-                //       </div>
-                //     </div>
-                //   )
-                // })):null
-              }
-            </div>
+                      );
+                     }): (<div ref={messagesEndRef} />)
+                   }
+                 </div>
           </Grid>
           <Grid item xs={12} className={classes.inputRow}>
             <form className={classes.form}>

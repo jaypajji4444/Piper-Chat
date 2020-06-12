@@ -1,6 +1,7 @@
 import {FETCH_FAIL,FETCH_USERS,CHAT_OPEN, CHAT_OPEN_ERROR, ADD_PRIVATE_MESSAGE, OPEN_CHATBOX} from "../actions/types"
 const initialState={
     chat:null,
+    messages:[],
     chats:null,
     users:null,
     loading:false,
@@ -10,15 +11,24 @@ const initialState={
 }
 
 const addPrivateMessage=(state,action)=>{
+    //######## oLD @@@@@@
+    // let oldChat=state.chat
+    // if(oldChat._id===action.chatID){
+    //     oldChat.messages.push(action.message)
+    // }
+    // return{
+    //     ...state,
+    //     chat:oldChat,
+    //     error:false
+    // }
 
-    let oldChat=state.chat
-    if(oldChat._id===action.chatID){
-        oldChat.messages.push(action.message)
-    }
-    return{
+    return {
         ...state,
-        chat:oldChat,
-        error:false
+        chat:{
+            ...state.chat,
+            messages:action.messages
+        },
+        messages:action.messages
     }
 
 }
@@ -43,6 +53,7 @@ const chatReducer = (state=initialState,action)=>{
             return{
                 ...state,
                 chat:action.chat,
+                messages:action.messages,
                 otherUser:action.otherUser,
                 error:null,
                 loading:false
@@ -51,16 +62,26 @@ const chatReducer = (state=initialState,action)=>{
             return{
                 ...state,
                 chat:null,
+                messages:null,
                 otherUser:null,
                 error:action.error,
                 loading:false
             }
+        case ADD_PRIVATE_MESSAGE:
+            return{
+                ...state,
+                chat:{
+                    ...state.chat,
+                    
+                },
+                messages:action.messages
+
+            }
         case OPEN_CHATBOX:
             return{
                 ...state,
-                displayBox: action.value
+                displayBox: action.payload
             }
-        case ADD_PRIVATE_MESSAGE:addPrivateMessage(state,action)
         default:
             return state;
     }

@@ -3,11 +3,10 @@ import chatSocket from "../utils/webSockets";
 
 export const fetchUsers = () => async dispatch => {
     try {
-        const response = await fetch("http://localhost:5000/api/v1/auth/users", {
+        const response = await fetch("/api/v1/auth/users", {
             method: 'GET'
         })
         const res = await response.json();
-        console.log(res)
         dispatch({
             type: actions.FETCH_USERS,
             users: res.data
@@ -34,7 +33,7 @@ export const newChat = (user,otherUser,token) => async dispatch => {
         }
         //socket.emit("authenticate",token)
         chatSocket.authenticate(token)
-        const res = await fetch("http://localhost:5000/api/v1/chat", {
+        const res = await fetch("/api/v1/chat", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -50,8 +49,8 @@ export const newChat = (user,otherUser,token) => async dispatch => {
         dispatch({
             type: actions.CHAT_OPEN,
             chat: chat,
-            otherUser: otherUser,
-            messages: chat.messages
+            otherUser:otherUser,
+            messages:chat.messages
         })
     
     }
@@ -67,7 +66,8 @@ export const newChat = (user,otherUser,token) => async dispatch => {
 export const addMessage = (data) => dispatch=>{
     dispatch({
         type:actions.ADD_PRIVATE_MESSAGE,
-        message:data.message,
+        messages:data.messages
+        // message:data.message,
         // chatID:data.chatID
     })
 }
@@ -75,6 +75,6 @@ export const addMessage = (data) => dispatch=>{
 export const openBox = (val) => {
     return{
         type: actions.OPEN_CHATBOX,
-        value: val
+        payload: val
     }
 }

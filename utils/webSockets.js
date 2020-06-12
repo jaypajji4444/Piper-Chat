@@ -108,7 +108,7 @@ const attactChatApp = (app) => {
             console.log("To ROOM",socketChatMap[socket.id])
            // console.log(io.sockets.clients(socketChatMap[socket.id]))
             //io.to(socketChatMap[socket.id]).emit("privateMessage", messageObject)
-            io.to(socketChatMap[socket.id]).emit("privateMessage", {message:messageObject,chatID:conversation._id})
+            io.to(socketChatMap[socket.id]).emit("privateMessage", {messages:[...conversation.messages,messageObject]})
             //io.sockets.sockets[socket.id].emit("privateMessage", { msg: chat.lastMessage })
             
         })
