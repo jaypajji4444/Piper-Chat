@@ -9,18 +9,6 @@ const initialState={
     displayBox: 0
 }
 
-const addPrivateMessage=(state,action)=>{
-
-    return {
-        ...state,
-        chat:{
-            ...state.chat,
-            messages:action.messages
-        },
-        messages:action.messages
-    }
-
-}
 
 const chatReducer = (state=initialState,action)=>{
     switch (action.type) {

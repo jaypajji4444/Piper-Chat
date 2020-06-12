@@ -11,7 +11,6 @@ import Paper from '@material-ui/core/Paper';
 import {connect} from "react-redux";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { openBox } from '../../actions/chatActions';
-import socketIOClient from 'socket.io-client';
 import chatSocket from "../../utils/webSockets"
 
 const useStyles = makeStyles((theme) => ({

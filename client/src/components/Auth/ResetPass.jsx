@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { toast } from 'react-toastify';
+
 import { connect } from 'react-redux';
 import { resetPass } from '../../actions/authActions';
 import { setAlert } from '../../actions/alertActions';
@@ -138,4 +138,4 @@ const mapStateToProps = (state) => {
     error: state.auth.error,
   };
 };
-export default connect(mapStateToProps, { resetPass })(ResetPass);
+export default connect(mapStateToProps, { resetPass , setAlert })(ResetPass);
