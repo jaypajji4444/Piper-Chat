@@ -11,6 +11,8 @@ import ChatBox from './ChatBox';
 import Friends from './Conversations/Friends';
 import ProfilePage from './Conversations/ProfilePage';
 
+import  Loader from "../Loader"
+
 import { connect } from 'react-redux';
 import { newChat , addMessage, openBox } from "../../actions/chatActions"
 import chatSocket from "../../utils/webSockets"
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Chat({ auth: { loggedIn, user , token }, chat:{chat, displayBox} , newChat , addMessage, openBox}) {
+function Chat({ auth: { loading, user , token }, chat:{chat, displayBox} , newChat , addMessage, openBox}) {
   const classes = useStyles();
 
   const matches = useMediaQuery('(min-width:800px)');
@@ -79,9 +81,13 @@ function Chat({ auth: { loggedIn, user , token }, chat:{chat, displayBox} , newC
     setShowChat(1)
     setOtherUser(otherUser.name)
   }
-
+console.log(loading)
   return (
     <React.Fragment>
+   {loading ?
+     (<Loader />):
+     (
+      <React.Fragment>
       {matches ? (
         <Grid container className={classes.root}>
           <Grid item md={4} className={classes.sidebar}>
@@ -152,6 +158,9 @@ function Chat({ auth: { loggedIn, user , token }, chat:{chat, displayBox} , newC
           </Paper>
         </Grid>
       )}
+    </React.Fragment>
+     )
+   }
     </React.Fragment>
   );
 }

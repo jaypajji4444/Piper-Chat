@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { connect } from 'react-redux';
 import { forgotPass } from '../../actions/authActions';
+import Loader from '../Loader';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
+function ForgotPass({ auth: {loading, loggedIn}, forgotPass }) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
@@ -67,7 +68,12 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
   }
 
   return (
+
+      
     <Container component="main" maxWidth="xs">
+      
+      {!loading?
+      (<React.Fragment>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -114,7 +120,12 @@ function ForgotPass({ auth: {error, loggedIn}, forgotPass }) {
           </Grid>
         </form>
       </div>
-    </Container>
+      </React.Fragment>
+      ):
+      (<Loader />)
+  }
+</Container>
+
   );
 }
 

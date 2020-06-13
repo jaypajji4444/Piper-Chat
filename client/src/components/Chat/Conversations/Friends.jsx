@@ -12,6 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {connect} from "react-redux"
 import {fetchUsers} from "../../../actions/chatActions"
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Loader from '../../Loader';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +78,7 @@ const Friends = ({fetchUsers,users,openChat}) => {
   return (
     <Grid container className={classes.root}>
       <List dense className={classes.list}>
-        {users?
+        {users ?
         users.map((element,value) => {
           const labelId = `checkbox-list-secondary-label-${value}`;
           return (
@@ -111,7 +112,7 @@ const Friends = ({fetchUsers,users,openChat}) => {
             </React.Fragment>
           );
         })
-        :<div><h1>Loading....</h1></div>
+        :(<Loader />)
       }
       </List>
     </Grid>
@@ -120,7 +121,8 @@ const Friends = ({fetchUsers,users,openChat}) => {
 
 const mapStateToProps = (state)=>{
   return{
-    users : state.chat.users
+    users : state.chat.users,
+
   }
 }
 

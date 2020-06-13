@@ -17,9 +17,10 @@ class Loader extends React.Component {
   }
 
   render() {
+    console.log("hello")
     return (
       <div className="sweet-loading">
-        <ClimbingBoxLadder
+        <ClimbingBoxLadder style={{margin:"auto"}}
           css={override}
           size={20}
           color={'#123abc'}
