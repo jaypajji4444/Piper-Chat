@@ -15,7 +15,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { loadUser } from './actions/authActions';
 import NoMatchPage from './components/404';
 import ProtectedRoute from './components/ProtectedRoute';
-import Social from './components/Social/Social';
 import Admin from './components/Auth/Admin';
 import dotenv from 'dotenv'
 import Alert from './components/Alert/Alert';
@@ -57,9 +56,8 @@ function App() {
                   <Route path="/login" component={Login} exact />
                   <Route path="/forgotpassword" component={ ForgotPass } exact />
                   <Route path="/resetpassword/:resettoken" component={ ResetPass } exact />
-                  <Route path="/admin" component={Admin} exact />
+                  <ProtectedRoute path="/admin" component={Admin} exact />
                   <ProtectedRoute path="/chat" component={Chat} exact />
-                  <ProtectedRoute path="/social" component={Social} exact />
                   <Route path="*" component={ NoMatchPage } />
               </Switch>
               </Layout>

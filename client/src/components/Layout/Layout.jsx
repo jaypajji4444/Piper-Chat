@@ -150,10 +150,6 @@ function Layout({auth:{loggedIn,user},logout,children}) {
     history.push("chat")
   }
 
-  const socialCenter = () => {
-    history.push("social")
-  }
-
   const logoutUser=()=>{
     logout();
     history.push("/login")
@@ -174,13 +170,6 @@ function Layout({auth:{loggedIn,user},logout,children}) {
             <Fragment>
               <Button size="small" onClick={chats} className={classes.button}>
                 Chats
-              </Button>
-              <Button
-                size="small"
-                onClick={socialCenter}
-                className={classes.button}
-              >
-                Friends
               </Button>
               <Button size="small" onClick={logoutUser} className={classes.button}>
                 Logout

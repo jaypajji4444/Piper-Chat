@@ -101,6 +101,7 @@ function Admin({ auth : {user} }) {
         })
           .then((res) => res.json())
           .then((resData) => {
+            console.log(resData)
             if(resData.success === true){
                 notify('    Accepted!', 'info');
             }
