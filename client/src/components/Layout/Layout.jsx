@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     padding: '20px',
+    fontSize:"1.5rem",
+    fontWeight:"bold"
+  },
+  username: {
+   
+    padding: '20px',
+    fontSize:"1.5rem",
+    fontWeight:"bold"
   },
   button: {
     padding: '0.5rem',
@@ -165,6 +173,13 @@ function Layout({auth:{loggedIn,user},logout,children}) {
             <Grid item xs={6} sm={2}>
               <Typography className={classes.title}>Piper Chat</Typography>
             </Grid>
+            <Grid item xs={1} sm={2}>
+              
+            </Grid>
+            <Grid item xs={4} sm={2}>
+  <Typography className={classes.username}>Welcome,{user?`${user.name}`:null}</Typography>
+            </Grid>
+
           </Grid>
           {loggedIn ? (
             <Fragment>
