@@ -13,6 +13,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {connect} from "react-redux";
 import {Redirect} from "react-router-dom";
+import { useState } from 'react';
+import Loader from './Loader';
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -63,13 +66,20 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: 'green',
     fontSize: '15px'
-  }
+  },
+  loaderPaper: {
+    padding: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '60vh',
+  },
 }));
 
 function Home({loggedIn }) {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
-
+  const [loading,setloading]=React.useState(false)
     const [mailId, setMailId] = React.useState({
       email: '',
       success: false
@@ -111,7 +121,7 @@ function Home({loggedIn }) {
     e.preventDefault();
     const data = {email:mailId.email, by: "anonymous"}
     const reqBody = JSON.stringify(data)
-
+    setloading(true)
     fetch('/api/v1/auth/reqInvite', {
       method: 'POST',
       body: reqBody,
@@ -121,6 +131,7 @@ function Home({loggedIn }) {
     })
     .then(res=>res.json())
     .then((resData) => {
+      setloading(false)
       console.log(resData)
       if(resData.success === true){
         setMailId({email: '',success: true})
@@ -142,7 +153,9 @@ if(loggedIn){
 }
 
   return (
-    <div className={classes.root}>
+    <div>
+    {
+      !loading?(<div className={classes.root}>
       <CssBaseline />
       <AppBar position="static" styles={{ xIndex: '1' }}>
         <Toolbar>
@@ -246,8 +259,17 @@ if(loggedIn){
           </Grid>
         </Container>
       )}
-    </div>
-  );
+    </div>):
+    (
+      <Grid item xs={12}>
+        <Paper className={classes.loaderPaper} elevation={0}>
+          <Loader />
+        </Paper>
+      </Grid>
+    )
+            }
+          </div>
+  )
 }
 
 const mapStateToProps=(state)=>{

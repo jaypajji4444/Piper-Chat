@@ -10,6 +10,9 @@ import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { loadUser, adminRoute } from '../../actions/authActions';
+import Loader from '../Loader';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,9 +43,16 @@ const useStyles = makeStyles((theme) => ({
   underline: {
     textDecoration: 'none',
   },
+  loaderPaper: {
+    padding: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '60vh',
+  },
 }));
 
-function Admin({ auth : {user}, adminRoute}) {
+function Admin({ auth : {user , loading}, adminRoute}) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
@@ -92,7 +102,8 @@ function Admin({ auth : {user}, adminRoute}) {
 
 
   return (
-    <Container component="main" maxWidth="xs">
+    <React.Fragment>
+    {!loading?(<Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -137,7 +148,14 @@ function Admin({ auth : {user}, adminRoute}) {
           </Button>
         </form>
       </div>
-    </Container>
+    </Container>):
+     (<Grid item xs={12}>
+      <Paper className={classes.loaderPaper} elevation={0}>
+        <Loader />
+      </Paper>
+    </Grid>)
+}
+    </React.Fragment>
   );
 }
 

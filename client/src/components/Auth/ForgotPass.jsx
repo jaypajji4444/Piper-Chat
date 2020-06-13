@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import { connect } from 'react-redux';
 import { forgotPass } from '../../actions/authActions';
 import Loader from '../Loader';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
 
   underline: {
     textDecoration: 'none',
+  },
+  loaderPaper: {
+    padding: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '60vh',
   },
 }));
 
@@ -122,7 +130,11 @@ function ForgotPass({ auth: {loading, loggedIn}, forgotPass }) {
       </div>
       </React.Fragment>
       ):
-      (<Loader />)
+      (<Grid item xs={12}>
+        <Paper className={classes.loaderPaper} elevation={0}>
+          <Loader />
+        </Paper>
+      </Grid>)
   }
 </Container>
 
