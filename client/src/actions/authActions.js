@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS, USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL, INVITE_ACCEPTED } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS, USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL, INVITE_ACCEPTED,INVITE_FAIL } from './types';
 import { setAlert } from './alertActions';
 
 // Load User
@@ -219,6 +219,7 @@ export const resetPass = (payload) => {
 
 // Admin - accepting invites
 export const adminRoute = (reqBody) => {
+    console.log(reqBody)
     return dispatch => {
         dispatch(authStart());
         console.log(reqBody)
@@ -240,6 +241,10 @@ export const adminRoute = (reqBody) => {
                 }
                 else {
                     dispatch(setAlert("    Error! Try again', 'error"))
+                    dispatch({
+                        type: INVITE_FAIL,
+                        success: resData.data
+                    })
                 }
             })
             .catch((err) => console.log(err));

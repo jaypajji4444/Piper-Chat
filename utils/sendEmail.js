@@ -8,8 +8,8 @@ const sendEmail = async options => {
         user: process.env.FROM_EMAIL,
         pass: process.env.FROM_PASSWORD
         }
-    })  
-    console.log(options.email)
+    }) 
+
     const message = {
         from: process.env.FROM_EMAIL,
         to: options.email,

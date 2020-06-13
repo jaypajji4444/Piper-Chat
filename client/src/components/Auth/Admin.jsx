@@ -97,6 +97,7 @@ function Admin({ auth : {user , loading}, adminRoute}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(values.email)
     adminRoute({email: values.email, by: values.by})
   };
 

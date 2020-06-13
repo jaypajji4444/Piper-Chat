@@ -45,12 +45,13 @@ exports.reqInvite = async (req, res, next) => {
 exports.sendInvite = async (req, res, next) =>{
 
   const emailId = req.body.email;
+  
  
   // Create reset url
   const resetUrl = `http://localhost:3000/register/${emailId}`
 
   const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
-
+console.log(message)
   try {
     await sendEmail({
       email: emailId,
@@ -66,7 +67,10 @@ exports.sendInvite = async (req, res, next) =>{
     const invite = await Invites.findOneAndUpdate({email: emailId}, fieldsToUpdate, {
       new: true,
       runValidators: true,
+      upsert:false
     });
+    console.log("Inviterd")
+    console.log(invite)
 
     res.status(200).json({ success: true, data: 'Email sent', user: invite });
   } catch (err) {
@@ -294,28 +298,28 @@ const sendTokenResponse = (user, statusCode, res) => {
     });
 };
 
-// @desc      Send Invite
-// @route     POST /api/v1/auth/sendInvite
-// @access    Public
-exports.sendInvite = asyncHandler(async (req, res, next) =>{
+// // @desc      Send Invite
+// // @route     POST /api/v1/auth/sendInvite
+// // @access    Public
+// exports.sendInvite = asyncHandler(async (req, res, next) =>{
 
-  // Create reset url
-  const resetUrl = 'http://localhost:3000/register'
+//   // Create reset url
+//   const resetUrl = 'http://localhost:3000/register'
 
-  const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
+//   const message = `Hey, your invite has been accepted! \n\nJoin the Piper Chat now and start enjoy secure and reliable messaging. You can sign up using the url below: \n\n${resetUrl}`
 
-  try {
-    await sendEmail({
-      email: req.body.email,
-      subject: 'Invite for Piper Chat',
-      message
-    });
-    res.status(200).json({ success: true, data: 'Email sent' });
-  } catch (err) {
-   console.log(err)
-    return next(new ErrorResponse('Email could not be sent', 500));
-  }
-});
+//   try {
+//     await sendEmail({
+//       email: req.body.email,
+//       subject: 'Invite for Piper Chat',
+//       message
+//     });
+//     res.status(200).json({ success: true, data: 'Email sent' });
+//   } catch (err) {
+//    console.log(err)
+//     return next(new ErrorResponse('Email could not be sent', 500));
+//   }
+// });
 
 
 // @desc      Get all users
