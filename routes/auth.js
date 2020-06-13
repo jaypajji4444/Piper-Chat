@@ -28,6 +28,6 @@ router.put('/resetpassword/:resettoken', resetPassword);
 router.post('/sendInvite', sendInvite);
 router.get("/users", getUser)
 router.post('/reqInvite', reqInvite);
-router.put('/sendInvite/:id', sendInvite);
+router.put('/sendInvite', sendInvite);
 
 module.exports = router;

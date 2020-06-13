@@ -1,8 +1,8 @@
-import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL,TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL} from '../actions/types'
+import { AUTH_FAIL,AUTH_LOGOUT,AUTH_START,AUTH_SUCCESS,REGISTER_SUCCESS,USER_LOADED, UPDATE_USER,UPDATE_FAIL,TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL, INVITE_ACCEPTED} from '../actions/types'
 
 
 const initialState = {
-    loggedIn:false,
+    loggedIn:false,  
     token: localStorage.getItem("token")?localStorage.getItem("token"):null,
     error: null,
     loading: false,
@@ -52,6 +52,12 @@ export default ( state = initialState, action ) => {
                 ...state,
                 loading:false,
                 authRedirectPath:"/login"
+            }
+        case INVITE_ACCEPTED:
+            return{
+                ...state,
+                loading: false,
+                authRedirectPath: "/chat"
             }
         case AUTH_LOGOUT:
             return{

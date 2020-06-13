@@ -1,6 +1,6 @@
 
 
-import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS, USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL } from './types';
+import { AUTH_START, AUTH_FAIL, AUTH_SUCCESS, AUTH_LOGOUT, REGISTER_SUCCESS, USER_LOADED, UPDATE_USER, UPDATE_FAIL, TAB_STATUS, FORGOT_PASS, RESET_PASS, TAB_SOCIAL, INVITE_ACCEPTED } from './types';
 import { setAlert } from './alertActions';
 
 // Load User
@@ -117,7 +117,7 @@ export const updateUser = ({ name, email, token }) => {
     return dispatch => {
         dispatch(authStart());
         fetch(`/api/v1/auth/updatedetails`, {
-            method: 'PUT',
+            method: 'PUT',  
             body: JSON.stringify({ name, email }),
             headers: {
                 'Content-Type': 'application/json',
@@ -217,4 +217,31 @@ export const resetPass = (payload) => {
         }
     }        
 
-
+// Admin - accepting invites
+export const adminRoute = (reqBody) => {
+    return dispatch => {
+        dispatch(authStart());
+        console.log(reqBody)
+        fetch(`/api/v1/auth/sendInvite`, {
+            method: 'PUT',
+            body: JSON.stringify(reqBody),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((resData) => {
+                if (resData.success === true) {
+                    dispatch({
+                        type: INVITE_ACCEPTED,
+                        success: resData.success
+                    })
+                    dispatch(setAlert('    Invite accepted!', 'info'))
+                }
+                else {
+                    dispatch(setAlert("    Error! Try again', 'error"))
+                }
+            })
+            .catch((err) => console.log(err));
+    }
+}

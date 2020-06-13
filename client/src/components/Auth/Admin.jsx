@@ -9,8 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { loadUser } from '../../actions/authActions';
-
+import { loadUser, adminRoute } from '../../actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Admin({ auth : {user} }) {
+function Admin({ auth : {user}, adminRoute}) {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
@@ -88,29 +87,7 @@ function Admin({ auth : {user} }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    const data = { email: values.email, by: values.by };   
-    const reqBody = JSON.stringify(data);
-
-        fetch(`/api/v1/auth/sendInvite/${values.email}`, {
-          method: 'PUT',
-          body: reqBody,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then((resData) => {
-            console.log(resData)
-            if(resData.success === true){
-                notify('    Accepted!', 'info');
-            }
-            else{
-                notify('    Something went wrong', 'error');
-            }
-          })
-          .catch((err) => console.log(err));
-
+    adminRoute({email: values.email, by: values.by})
   };
 
 
@@ -122,7 +99,7 @@ function Admin({ auth : {user} }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-  {user?<div>{user.role}</div>:<div>Accept INvitess</div>}
+          {user?<div>{user.role}</div>:<div>Accept Invites</div>}
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -169,4 +146,4 @@ const mapStateToProps = (state) => {
    auth:state.auth
   };
 };
-export default connect(mapStateToProps, { loadUser })(Admin);
+export default connect(mapStateToProps, { loadUser, adminRoute })(Admin);

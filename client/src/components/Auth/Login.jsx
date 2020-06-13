@@ -46,8 +46,6 @@ const useStyles = makeStyles((theme) => ({
 function Login({authUser, loggedIn, error}) {
   const classes = useStyles();
 
-  const [admin, setAdmin] = React.useState(false)
-
   const [values, setValues] = React.useState({
     email: '',
     password: '',
@@ -64,22 +62,13 @@ function Login({authUser, loggedIn, error}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if(values.email === "iamdmin@gmail.com" && values.password === "admin123"){
-      setAdmin(true)
-    }
-    else{
-      authUser({ email: values.email, password: values.password });
-  
-    }
+    authUser({ email: values.email, password: values.password });
   };
 
   if(loggedIn){
     return <Redirect to="/chat" />
   }
 
-  if(admin){
-    return <Redirect to="/admin" />
-  }
 
   return (
     <Container component="main" maxWidth="xs">
