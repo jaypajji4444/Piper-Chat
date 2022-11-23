@@ -38,7 +38,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.4.6",
     "slugify": "^1.4.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {
     "mocha": "^7.2.0",
